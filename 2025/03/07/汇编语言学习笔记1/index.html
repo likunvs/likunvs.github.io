@@ -1,0 +1,2683 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>汇编语言学习笔记1 | Welcome to my blog</title><meta name="author" content="GoodBrain"><meta name="copyright" content="GoodBrain"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="汇编语言学习笔记1了解汇编语言本词条由“科普中国”科学百科词条编写与应用工作项目 审核 。 汇编语言（Assembly Language）是任何一种用于电子计算机、微处理器、微控制器或其他可编程器件的低级语言，亦称为符号语言。在汇编语言中，用助记符代替机器指令的操作码，用地址符号或标号代替指令或操作数的地址。在不同的设备中，汇编语言对应着不同的机器语言指令集，通过汇编过程转换成机器指令。特定的汇编">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编语言学习笔记1">
+<meta property="og:url" content="http://example.com/2025/03/07/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/index.html">
+<meta property="og:site_name" content="Welcome to my blog">
+<meta property="og:description" content="汇编语言学习笔记1了解汇编语言本词条由“科普中国”科学百科词条编写与应用工作项目 审核 。 汇编语言（Assembly Language）是任何一种用于电子计算机、微处理器、微控制器或其他可编程器件的低级语言，亦称为符号语言。在汇编语言中，用助记符代替机器指令的操作码，用地址符号或标号代替指令或操作数的地址。在不同的设备中，汇编语言对应着不同的机器语言指令集，通过汇编过程转换成机器指令。特定的汇编">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg">
+<meta property="article:published_time" content="2025-03-07T12:18:53.226Z">
+<meta property="article:modified_time" content="2025-03-07T13:21:31.372Z">
+<meta property="article:author" content="GoodBrain">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "汇编语言学习笔记1",
+  "url": "http://example.com/2025/03/07/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/",
+  "image": "https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg",
+  "datePublished": "2025-03-07T12:18:53.226Z",
+  "dateModified": "2025-03-07T13:21:31.372Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "GoodBrain",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg"><link rel="canonical" href="http://example.com/2025/03/07/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '汇编语言学习笔记1',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/wangye/cat-colorful-animal-digital-art-4k-wallpaper-uhdpaper.com-888@1@m.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Welcome to my blog</span></a><a class="nav-page-title" href="/"><span class="site-name">汇编语言学习笔记1</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">汇编语言学习笔记1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-07T12:18:53.226Z" title="发表于 2025-03-07 20:18:53">2025-03-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-07T13:21:31.372Z" title="更新于 2025-03-07 21:21:31">2025-03-07</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="汇编语言学习笔记1"><a href="#汇编语言学习笔记1" class="headerlink" title="汇编语言学习笔记1"></a>汇编语言学习笔记1</h1><h2 id="了解汇编语言"><a href="#了解汇编语言" class="headerlink" title="了解汇编语言"></a>了解汇编语言</h2><p>本词条由<a target="_blank" rel="noopener" href="https://baike.baidu.com/science">“科普中国”科学百科词条编写与应用工作项目 </a>审核 。</p>
+<p>汇编语言（Assembly Language）是任何一种用于电子<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%AE%A1%E7%AE%97%E6%9C%BA/140338?fromModule=lemma_inlink">计算机</a>、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8/104320?fromModule=lemma_inlink">微处理器</a>、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BE%AE%E6%8E%A7%E5%88%B6%E5%99%A8/6688343?fromModule=lemma_inlink">微控制器</a>或其他可编程器件的低级语言，亦称为<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%AC%A6%E5%8F%B7%E8%AF%AD%E8%A8%80/15718762?fromModule=lemma_inlink">符号语言</a>。在汇编语言中，用<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8A%A9%E8%AE%B0%E7%AC%A6/489287?fromModule=lemma_inlink">助记符</a>代替<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4/8553126?fromModule=lemma_inlink">机器指令</a>的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%93%8D%E4%BD%9C%E7%A0%81/3220418?fromModule=lemma_inlink">操作码</a>，用地址符号或<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%A0%87%E5%8F%B7/7680733?fromModule=lemma_inlink">标号</a>代替指令或<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%93%8D%E4%BD%9C%E6%95%B0/7658270?fromModule=lemma_inlink">操作数</a>的地址。在不同的设备中，汇编语言对应着不同的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80/2019225?fromModule=lemma_inlink">机器语言</a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%8C%87%E4%BB%A4%E9%9B%86/238130?fromModule=lemma_inlink">指令集</a>，通过汇编过程转换成机器指令。特定的汇编语言和特定的机器语言指令集是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E4%B8%80%E4%B8%80%E5%AF%B9%E5%BA%94/18877366?fromModule=lemma_inlink">一一对应</a>的，不同平台之间不可直接移植。</p>
+<p>汇编语言是直接在硬件之上工作的编程语言，首先要了解硬件系统的结构，才能有效的应用汇编语言对其编程。</p>
+<h2 id="1-基本原理"><a href="#1-基本原理" class="headerlink" title="1. 基本原理"></a>1. 基本原理</h2><h3 id="1-1机器语言"><a href="#1-1机器语言" class="headerlink" title="1.1机器语言"></a>1.1机器语言</h3><p>机器语言是机器指令的集合</p>
+<p>01010100001001</p>
+<p>机器指令展开来讲就是一台机器可以正确执行的命令</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715173354279-17413513546312.png" alt="image-20240715173354279"></p>
+<h3 id="1-2汇编语言的产生"><a href="#1-2汇编语言的产生" class="headerlink" title="1.2汇编语言的产生"></a>1.2汇编语言的产生</h3><ol>
+<li><p>汇编语言的主体是汇编指令</p>
+</li>
+<li><p>汇编指令和机器指令的差别在于指令的表示方法上，汇编指令是机器指令便于记忆和书写格式</p>
+</li>
+<li><p>汇编指令是机器指令的助记符</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715174057908.png" alt="image-20240715174057908"></p>
+<p>寄存器：简单的讲是cpu中可以存储数据的器件，一个cpu中有多个寄存器。AX是其中一个寄存器的代号。</p>
+<p>BX是另一个寄存器的代号。</p>
+<h3 id="1-3汇编语言的组成"><a href="#1-3汇编语言的组成" class="headerlink" title="1.3汇编语言的组成"></a>1.3汇编语言的组成</h3><p>汇编语言由以下3类组成</p>
+<ol>
+<li>汇编指令（机器码的助记符）</li>
+<li>伪指令（由编译器执行）</li>
+<li>其他指令（由编译器识别）</li>
+</ol>
+<p>汇编语言的核心是汇编指令，他决定了汇编语言的特征</p>
+<h3 id="1-4存储器"><a href="#1-4存储器" class="headerlink" title="1.4存储器"></a>1.4存储器</h3><ol>
+<li><p>cpu是计算机的核心部件，他控制整个计算机的运行并运算，要想让一个cpu工作，就必须向他提供指令和数据。</p>
+</li>
+<li><p>指令和数据在存储器中存放，也就是平时说的内存</p>
+</li>
+<li><p>一台pc中内存的作用仅次于cpu</p>
+</li>
+<li><p>离开了内存，性能再好的cpu也无法工作</p>
+</li>
+<li><p>磁盘不同于内存，磁盘上的数据或程序如果不读到内存中，就无法被cpu使用</p>
+</li>
+</ol>
+<h3 id="1-5指令和数据"><a href="#1-5指令和数据" class="headerlink" title="1.5指令和数据"></a>1.5指令和数据</h3><ol>
+<li>指令和数据是应用的概念</li>
+<li>在内存或磁盘，指令和数据没有任何区别，都是二进制信息</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715180657355.png" alt="image-20240715180657355"></p>
+<h3 id="1-6存储单元"><a href="#1-6存储单元" class="headerlink" title="1.6存储单元"></a>1.6存储单元</h3><ol>
+<li><p>存储器被划分为若干个存储单元，每个存储单元从0开始顺序编号</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715181135676.png" alt="image-20240715181135676"></p>
+</li>
+<li><p>对于大容量的存储器一般还用以下单位来计算容量（以下用B来代替byte）</p>
+</li>
+</ol>
+<ul>
+<li>1KB&#x3D;1024B</li>
+<li>1MB&#x3D;1024KB</li>
+<li>1GB&#x3D;1024MB</li>
+<li>1TB&#x3D;1024GB</li>
+</ul>
+<ol start="3">
+<li><p>磁盘的容量单位同内存的一样，实际上以上的单位是微机中常见的计量单位</p>
+</li>
+<li><p>cpu想要进行数据的读写，必须和外部器件（标准的说法是芯片）进行三类信息的交互</p>
+<ul>
+<li>存储单元的地址（地址信息）</li>
+<li>器件的选择，都或写命令（控制信息）</li>
+<li>读或写的数据（数据信息）</li>
+</ul>
+</li>
+<li><p>电子计算机能处理，传输的信息都是电信号，电信号当然要用导线传</p>
+</li>
+</ol>
+<h3 id="1-7cpu对存储器的读写"><a href="#1-7cpu对存储器的读写" class="headerlink" title="1.7cpu对存储器的读写"></a>1.7cpu对存储器的读写</h3><ol>
+<li><p>在计算机中专门有连接cpu和其他芯片的导线，通常称为总线</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715182638864.png" alt="image-20240715182638864"></p>
+</li>
+</ol>
+<h3 id="1-8地址总线"><a href="#1-8地址总线" class="headerlink" title="1.8地址总线"></a>1.8地址总线</h3><ul>
+<li>地址总线（Address Bus）的主要任务是传输内存地址或外部设备的地址信息。地址总线是单向的，即信息只能从CPU流向内存或I&#x2F;O设备，不能反向流动。地址总线的数量决定了系统可以访问的内存范围大小，例如，一个具有24根地址线的系统可以管理的最大内存空间是16MB。</li>
+</ul>
+<ol>
+<li>cpu是通过地址总线来指定存储单元的</li>
+<li>地址总线上能传送多少个不同的信息，cpu就可以对多少个存储单元进行寻址</li>
+<li>一个cpu有N根地址总线，则可以说这个cpu的地址总线的宽度为N</li>
+<li>这样的cpu最多可以寻找2的N次方个内存单元</li>
+</ol>
+<h3 id="1-9数据总线"><a href="#1-9数据总线" class="headerlink" title="1.9数据总线"></a>1.9数据总线</h3><ul>
+<li>数据总线（Data Bus）主要负责在系统内部各个部件之间传输数据。数据总线是双向的，意味着它既可以向一个方向传输数据，也可以从相反方向接收数据。数据总线的宽度（即数据线的数量）直接反映了计算机的数据处理能力，例如，具有32根数据线的计算机被称为32位机，具有64根数据线的计算机则被称为64位机。</li>
+</ul>
+<ol>
+<li><p>cpu与内存或其他器件之间的数据传送是通过数据总线来进行的</p>
+</li>
+<li><p>数据总线的宽度决定了cpu和外界的数据传送速度</p>
+</li>
+</ol>
+<h3 id="1-10控制总线"><a href="#1-10控制总线" class="headerlink" title="1.10控制总线"></a>1.10控制总线</h3><ul>
+<li>控制总线（Control Bus）则负责传输控制信号和命令，指挥计算机的各项操作。控制总线包括多种控制信号线，有些是单向的，有些是双向的。控制总线的功能是实现CPU与外部设备或其他部件之间的协调和控制，确保计算机系统的各个部分能够按照指令进行工作。</li>
+</ul>
+<ol>
+<li><p>cpu对外部器件的控制是通过控制总线来进行的。在这里控制总线是一个总称，控制总线是一些不同控制线的集合</p>
+</li>
+<li><p>有多少根控制总线，就意味着cpu提供了对外部器件的多少种控制。所以，控制总线的宽度决定了cpu对外部器件的控制能力</p>
+</li>
+<li><p>控制总线发送控制信息</p>
+</li>
+</ol>
+<h3 id="1-11内存地址空间"><a href="#1-11内存地址空间" class="headerlink" title="1.11内存地址空间"></a>1.11内存地址空间</h3><ol>
+<li>一个cpu的地址线宽度为10，那么可以寻址1024个内存单元，这1024个可寻到的内存单元就构成这个cpu的内存地址空间</li>
+</ol>
+<h3 id="1-12主板"><a href="#1-12主板" class="headerlink" title="1.12主板"></a>1.12主板</h3><ol>
+<li>在每一台pc上都有一个主板，主板上有核心器件和一些主要器件（cpu，内存….）</li>
+<li>这些器件通过总线（地址总线，数据总线，控制总线）相连</li>
+</ol>
+<h3 id="1-13接口卡"><a href="#1-13接口卡" class="headerlink" title="1.13接口卡"></a>1.13接口卡</h3><ol>
+<li>计算机系统中，所有可用程序控制其工作的设备，必须受到cpu的控制</li>
+<li>cpu对外部设备不能直接控制，如显示器，音响，打印机等。直接控制这些设备进行工作的是插在扩展插槽上的接口卡</li>
+</ol>
+<h3 id="1-14-各类存储器芯片"><a href="#1-14-各类存储器芯片" class="headerlink" title="1.14 各类存储器芯片"></a>1.14 各类存储器芯片</h3><ol>
+<li><p>从读写属性上看分为两类</p>
+<p>随机存储器（RAM）和只读存储器（ROM）</p>
+</li>
+<li><p>从功能和连接上分类：</p>
+<ol>
+<li><p>随机存储器RAM</p>
+</li>
+<li><p>装有BOIS的ROM</p>
+</li>
+<li><p>接口卡上的RAM</p>
+<ol>
+<li>装有BIOS的ROM</li>
+</ol>
+<p>BOIS:Basic Input&#x2F;Output System,基本输入输出系统。</p>
+<p>BOIS是由主板和各类接口卡（如：显卡，网卡等）厂商提供软件系统，可以通过他利用该硬件设备进行最基本的输入输出。在主板和某些接口卡上插有存储相应BOIS的ROM</p>
+</li>
+</ol>
+</li>
+<li><p>pc机中各类存储器的逻辑连接情况</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715223128415.png" alt="image-20240715223128415"></p>
+<h3 id="1-15-内存地址空间"><a href="#1-15-内存地址空间" class="headerlink" title="1.15 内存地址空间"></a>1.15 内存地址空间</h3><ol>
+<li><p>上述的哪些存储器在物理上是独立的器件</p>
+</li>
+<li><p>但是他们在以下两点上相同：</p>
+<ol>
+<li>都与cpu的总线相连</li>
+<li>cpu对他们进行读或写的时候都通过控制线发出内存读写命令</li>
+</ol>
+</li>
+<li><p>将各各类存储器看作一个逻辑存储器：</p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240715223825329.png" alt="image-20240715223825329"></p>
+</li>
+</ol>
+<p>8086PC机的内存地址空间分配</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715224345933.png" alt="image-20240715224345933"></p>
+<ol start="4">
+<li>内存地址空间：<ul>
+<li>最终运行程序的是cpu，我们用汇编编程的时候，必须要从cpu角度考虑问题</li>
+<li>对cpu来讲，系统中的所有存储器中的存储的单元都处于一个统一的逻辑存储器中，他的容量受cpu寻址能力的限制。这个给逻辑存储器即是我们所说的内存地址空间</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-寄存器（cpu工作原理）"><a href="#2-寄存器（cpu工作原理）" class="headerlink" title="2 寄存器（cpu工作原理）"></a>2 寄存器（cpu工作原理）</h2><p><strong>cpu概述</strong></p>
+<p>一个典型的cpu由计算器，控制器，寄存器等器件组成，这些器件靠内部总线相连</p>
+<p>区别</p>
+<ul>
+<li>内部总线实现cpu内部各器件之间的联系</li>
+<li>外部总线实现cpu和主板上其他器件的联系</li>
+</ul>
+<p><strong>寄存器概述</strong></p>
+<p>8086cpu有14个寄存器 他们的名称为：AX,BX,CX,DX,SI,DI,SP,BP,IP,CS,SS,DS,ES,PSW</p>
+<p>其中通用寄存器有八个，随着cpu核的增加会增加寄存器但是通用的基本不会改变</p>
+<h3 id="2-1通用寄存器"><a href="#2-1通用寄存器" class="headerlink" title="2.1通用寄存器"></a>2.1通用寄存器</h3><ol>
+<li><p>8086cpu所有的寄存器都是16位的，可以存放两个字节</p>
+</li>
+<li><p>AX,BX,CX,DX 通常用来存放一般性数据被称为通用寄存器</p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240715232814328.png" alt="image-20240715232814328"></p>
+</li>
+<li><p>一个16位寄存器可以存储一个16位的数据。（数据的存放情况）</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715233027336.png" alt="image-20240715233027336"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715233048026.png" alt="image-20240715233048026"></p>
+<p>一个16位的寄存器所能存储的数据的最大值是2的16次方减一（提示：从0开始）</p>
+<ol start="4">
+<li><p>8086上一代cpu中的寄存器都是8位的；</p>
+</li>
+<li><p>为了保证兼容性，这四个寄存器都可以分为两个独立的8位寄存器使用</p>
+</li>
+</ol>
+<ul>
+<li>AX可以分为AH和AL;(height和low)</li>
+<li>BX可以分为BH和BL；</li>
+<li>CX…..</li>
+<li>DX…..</li>
+</ul>
+<ol start="6">
+<li><p>AX的低八位（0<del>7）构成了AL寄存器，高八位（8</del>15）构成AH寄存器</p>
+</li>
+<li><p>AH和AL寄存器是可以独立使用的8位寄存器</p>
+</li>
+<li><p>8086cpu的8位寄存器数据存储情况</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240715234819187.png" alt="image-20240715234819187"></p>
+</li>
+</ol>
+<h3 id="2-2-字（word）在寄存器中的存储"><a href="#2-2-字（word）在寄存器中的存储" class="headerlink" title="2.2 字（word）在寄存器中的存储"></a>2.2 字（word）在寄存器中的存储</h3><ol>
+<li><p>一个字可以存在一个16位寄存器中，这个字的高位字节和低位字节自然就存在这个寄存器的高8位寄存器和低8位寄存器</p>
+</li>
+<li><p>关于数制的讨论</p>
+</li>
+</ol>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240715235921681.png" alt="image-20240715235921681"></p>
+<h3 id="2-3-几条汇编指令"><a href="#2-3-几条汇编指令" class="headerlink" title="2.3 几条汇编指令"></a>2.3 几条汇编指令</h3><p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716000200249.png" alt="image-20240716000200249"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716001315745.png" alt="image-20240716001315745"></p>
+<p>当进行上述运算数据超过了寄存器的上限会显示后四位，并且会将最大的一位放入进制位</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716001906232.png" alt="image-20240716001906232"></p>
+<p>与上述同理</p>
+<p>这里的丢失，指的是进位制不能再8位寄存器中保存，但是cpu不是并真的不丢弃这个进位值</p>
+<h3 id="2-4物理地址"><a href="#2-4物理地址" class="headerlink" title="2.4物理地址"></a>2.4物理地址</h3><ol>
+<li>cpu访问内存单元时要给内存单元地址。所有的内存单元构成的存储空间时一个一维的线性空间</li>
+<li>我们将这个给唯一的地址称为物理地址</li>
+</ol>
+<h3 id="2-516位结构的cpu"><a href="#2-516位结构的cpu" class="headerlink" title="2.516位结构的cpu"></a>2.516位结构的cpu</h3><p>概括的讲，16位结构描述了一个cpu具体有以下几个方面特征：</p>
+<ul>
+<li>计算机一次最多可以处理16位的数据</li>
+<li>寄存器的最大宽度为16位</li>
+<li>寄存器和运算器之间的通路为16位的</li>
+</ul>
+<h3 id="2-6-8086cpu给出物理地址的方法"><a href="#2-6-8086cpu给出物理地址的方法" class="headerlink" title="2.6 8086cpu给出物理地址的方法"></a>2.6 8086cpu给出物理地址的方法</h3><ol>
+<li><p>8086有20位地址总线，可传送20位地址，寻址能力位1M</p>
+</li>
+<li><p>8086内部位16位结构，他只能传送16位的地址，表现出的寻址能力却只有64K</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716124241339.png" alt="image-20240716124241339"></p>
+<p><strong>地址加法器工作原理</strong></p>
+<p>物理地址&#x3D;段地址*16+偏移地址</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716124709716.png" alt="image-20240716124709716"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716124934616.png" alt="image-20240716124934616"></p>
+<ol>
+<li>一个数据的二进制形式左移一位，相当于该数据乘以2</li>
+<li>一个数据的二进制形式左移N位，相当于该数据乘以2的N次方</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716125255041.png" alt="image-20240716125255041"></p>
+<h3 id="2-7物理地址-段地址-16-偏移地址的本质含义"><a href="#2-7物理地址-段地址-16-偏移地址的本质含义" class="headerlink" title="2.7物理地址&#x3D;段地址*16+偏移地址的本质含义"></a>2.7物理地址&#x3D;段地址*16+偏移地址的本质含义</h3><p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716130026964.png" alt="image-20240716130026964"></p>
+<h3 id="2-8-段的概念"><a href="#2-8-段的概念" class="headerlink" title="2.8 段的概念"></a>2.8 段的概念</h3><ol>
+<li><p>错误认识：内存被划分成一个一个的段，每个段有一个段地址</p>
+</li>
+<li><p>其实：内存并没有分段，段的划分来自于cpu，由于8086cpu用（物理地址&#x3D;段地址*16+偏移地址）的方式给出内存单元的物理地址，是的我们可以用分段的方式来管理内存</p>
+</li>
+</ol>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240716130610728.png" alt="image-20240716130610728"></p>
+<p>以后编程时可以根据需要，将若干地址连续的内存单元看作一个段，用段地址*16定位段的起始地址（基础地址），用偏移地址定位段中的内存单元</p>
+<p><strong>注意</strong></p>
+<ol>
+<li>段地址*16必然时16的倍数，所以一个段的起始地址也一定是16的倍数</li>
+<li>编译地址位16位，16位地址的寻址能力为64k，所以一个段的昌都最大为62K</li>
+</ol>
+<p>cpu可以用不同的段地址和偏移地址形成同一个地理地址</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716131817139.png" alt="image-20240716131817139"></p>
+<p>给定一个段地址最多可以定位64k内存单元</p>
+<h3 id="2-9段寄存器"><a href="#2-9段寄存器" class="headerlink" title="2.9段寄存器"></a>2.9段寄存器</h3><ol>
+<li>段寄存器就是提供段地址</li>
+</ol>
+<p>8086cpu有4个段寄存器：CS（代码段寄存器）,DS（数据段寄存器）,SS（堆栈段寄存器）,ES（附加段寄存器）</p>
+<ol start="2">
+<li><p>当8086cpu要访问内存时，由这4个段寄存器提供内存单元的段地址</p>
+</li>
+<li><p>cs和ip时8086cpu最关键的寄存器，他们指示了cpu当前要读取指令的地址</p>
+<p>cs为代码段寄存器</p>
+<p>ip为指令指针寄存器</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716133422937.png" alt="image-20240716133422937"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716134037310.png" alt="image-20240716134037310"></p>
+<h3 id="2-10-cs和ip"><a href="#2-10-cs和ip" class="headerlink" title="2.10 cs和ip"></a>2.10 cs和ip</h3><ol>
+<li><p>在任何时候，CPU将cs，ip中的内容当作指令的段地址和偏移地址，用他们合成指令的物理地址，到内存中读取指令码，执行</p>
+</li>
+<li><p>如果说，内存中的一段信息曾被CPU执行过的话，那么，他所在的内存单元必然被cs：ip指向过</p>
+</li>
+</ol>
+<h3 id="2-11-修改cs，ip的指令"><a href="#2-11-修改cs，ip的指令" class="headerlink" title="2.11 修改cs，ip的指令"></a>2.11 修改cs，ip的指令</h3><ol>
+<li><p>在cpu中，程序员能够用指令读写的部件只有寄存器，程序员可以通过改变寄存器中的内容实现对cpu的控制</p>
+</li>
+<li><p>cpu从何处执行指令是由cs，ip中的内容来控制cpu执行目标指令</p>
+</li>
+</ol>
+<p>mov指令可以改变8086cpu大部分寄存器的值，被称为转移指令（但不可以改变cs与ip）</p>
+<ol start="3">
+<li><p>转移指令</p>
+<ol>
+<li><p>同时修改cs，ip的内容：</p>
+<p>jmp 段地址：偏移地址</p>
+<p>功能：用指令中给出的段地址修改cs，偏移地址修改ip</p>
+</li>
+<li><p>仅修改ip的内容</p>
+<p>jmp 某一合法寄存器</p>
+</li>
+</ol>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716140046220.png" alt="image-20240716140046220"></p>
+<p> <strong>cpu运行流程</strong></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716140158454.png" alt="image-20240716140158454"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716140423964.png" alt="image-20240716140423964"></p>
+<h3 id="2-12-代码段"><a href="#2-12-代码段" class="headerlink" title="2.12 代码段"></a>2.12 代码段</h3><ol>
+<li><p>对于8086pc机，在编程时，可以根据需要，将一个组内存单元定义为一个段</p>
+</li>
+<li><p>可以将长度为N（N&lt;&#x3D;64kb）的一组代码，存放在一组地址连续，起始地址为16的倍数的内存单元中，这段内存是用来存放代码的，从而定义了一段代码段</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716160319596.png" alt="image-20240716160319596"></p>
+<ol start="3">
+<li>将一段内存当作代码段，仅仅时我们在编程时的一种安排，cpu并不会由于这种安排，就自动地将我们定义的代码段中的指令来执行</li>
+<li>cpu只认被cs：ip指定的内存单元中的内容为指令</li>
+<li>所以要将cs：ip指向所定义的代码段中的第一条指令的首地址</li>
+</ol>
+<h2 id="3-寄存器（内存访问）"><a href="#3-寄存器（内存访问）" class="headerlink" title="3 寄存器（内存访问）"></a>3 寄存器（内存访问）</h2><h3 id="3-1-内存中字的存储"><a href="#3-1-内存中字的存储" class="headerlink" title="3.1 内存中字的存储"></a>3.1 内存中字的存储</h3><p>从0地址处开始存放20000（4E20H）</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716222546872.png" alt="image-20240716222546872"></p>
+<p>注意：0号单元是低地址单元，1号单元是高地质单元</p>
+<ol>
+<li><p>0地址单元中存放的字节型数据是20</p>
+</li>
+<li><p>0地址字单元中存放的字型数据是4E20</p>
+</li>
+<li><p>2地址字单位中存放的字节型数据是12</p>
+</li>
+<li><p>2地址单元中存放的字型数据是0012</p>
+</li>
+<li><p>1地址字但与那中存放的字型数据是 124E</p>
+</li>
+</ol>
+<p><strong>字型数据和字节型数据的区别</strong></p>
+<p>一、指代不同</p>
+<p>1、字节型数据：是计算机信息技术用于计量存储容量的一种计量单位，作为一个单位来处理的一个二进制数字串，是构成信息的一个小单位。</p>
+<p>2、字型数据：是其用来一次性处理事务的一个固定长度的位（bit）组。</p>
+<p>二、长度不同</p>
+<p>1、字节型数据：是二进制数据的单位。一个字节8位长。</p>
+<p>2、字型数据：拥有10位或者12位的十进制数字作为字长，还有一些早期的计算机根本就没有固定字长。</p>
+<p><a target="_blank" rel="noopener" href="https://iknow-pic.cdn.bcebos.com/0823dd54564e92584a1c499f9382d158ccbf4e93"><img src="https://iknow-pic.cdn.bcebos.com/0823dd54564e92584a1c499f9382d158ccbf4e93?x-bce-process=image/resize,m_lfit,w_600,h_800,limit_1/quality,q_85/format,f_auto" alt="img"></a></p>
+<p>三、特点不同</p>
+<p>1、字节型数据：用一个字节（Byte）储存，可区别256个数字，取值范围：0到255。 Byte是从0-255的无符号类型，所以不能表示负数。</p>
+<p>2、字型数据：计算机处理的典型数值也可能是以字长为单位。CPU和内存之间的数据传送单位也通常是一个字长。还有而内存中用于指明一个存储位置的地址也经常是以字长为单位的。</p>
+<p><strong>结论</strong></p>
+<p>任何两个地址连续的内存单元，N号单元和N+1号单元，可以将他们看成两个内存单元，也可以看成一个地址为N的字单元中的高位字节单元和低位字节单元</p>
+<h3 id="3-2-DS和-address"><a href="#3-2-DS和-address" class="headerlink" title="3.2 DS和[address]"></a>3.2 DS和[address]</h3><ol>
+<li><p>cpu要读取一个内存单元的时候，必须先给出这个内存单元的地址</p>
+</li>
+<li><p>在8086pc中，内存地址由段地址和偏移地址组成</p>
+</li>
+<li><p>8086cpu中有一个DS寄存器，通常用来存放要访问的数据的段地址</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov 寄存器，数据</span><br><span class="line">mov 寄存器，寄存器</span><br><span class="line">mov 寄存器，[...]\\[...]表示一个内存单元，[...]中的数据表示内存单元的偏移地址</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>执行指令时，8086cpu自动取DS中的数据为内存单元的段地址</li>
+</ol>
+<p><strong>注意</strong></p>
+<p>不可以直接将数据送入段寄存器 只能通过通用寄存器（硬件设计的问题）</p>
+<p>数据-&gt;通用寄存器-&gt;段寄存器</p>
+<h3 id="3-3-字的传送"><a href="#3-3-字的传送" class="headerlink" title="3.3 字的传送"></a>3.3 字的传送</h3><p>因为8086cpu是16位结构，有16根数据线，所以，可一次性传送16位的数据，也就是一次性传送一个字</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240716234039206.png" alt="image-20240716234039206"></p>
+<h3 id="3-4-mov，add，sub指令"><a href="#3-4-mov，add，sub指令" class="headerlink" title="3.4 mov，add，sub指令"></a>3.4 mov，add，sub指令</h3><p><strong>mov</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov ax,数据//将数据存入寄存器</span><br><span class="line">mov ax,bx//将寄存器数据存入寄存器</span><br><span class="line">mov ax,[...]//将内存单元存入寄存器</span><br><span class="line">mov [...],ax//将寄存器数据存入内存单元</span><br><span class="line">mov ds,ax//将内存其数据存入段寄存器</span><br><span class="line">mov ax,dx//将段寄存器数据存入寄存器</span><br></pre></td></tr></table></figure>
+
+<p><strong>add和sub</strong></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717105914344.png" alt="image-20240717105914344"></p>
+<h3 id="3-5-数据段"><a href="#3-5-数据段" class="headerlink" title="3.5 数据段"></a>3.5 数据段</h3><ol>
+<li><p>我们可以根据需要将一组内存单元定义为一个段（可以是代码段，数据段）</p>
+</li>
+<li><p>我们可以将一组长度为N（N&lt;&#x3D;64K）,地址连续，起始地址为16的倍数的内存单元当作专门存储数据的内存空间，从而定义了一个数据段</p>
+</li>
+</ol>
+<p> <img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717111350669.png" alt="image-20240717111350669"></p>
+<h3 id="3-6-栈"><a href="#3-6-栈" class="headerlink" title="3.6 栈"></a>3.6 栈</h3><ol>
+<li><p>栈是一种具有特殊的访问方式的存储空间。他的特殊性就在于，最后进入这个空间的数据，最先出去</p>
+</li>
+<li><p>栈有两个基本的操作：入栈的出栈</p>
+<ul>
+<li>入栈：将一个新的元素放到栈顶</li>
+<li>出栈：从栈顶取出一个元素</li>
+</ul>
+</li>
+<li><p>栈顶的元素总是最后入栈，需要出栈是，又最先被从栈中取出</p>
+</li>
+<li><p>栈的操作规则：LIFO</p>
+<p>（Last In First Out，后进先出）</p>
+</li>
+</ol>
+<h3 id="3-7-cpu提供的栈机制"><a href="#3-7-cpu提供的栈机制" class="headerlink" title="3.7 cpu提供的栈机制"></a>3.7 cpu提供的栈机制</h3><ol>
+<li><p>现今的cpu中都有栈的设计。</p>
+</li>
+<li><p>8086cpu提供相关的指令来以栈的方式访问内存空间</p>
+</li>
+<li><p>这意味着，我们在基于8086cpu编程的时候，可以将一段内存当作栈来使用</p>
+</li>
+<li><p>8086cpu提供入栈和出栈指令：（最基本的）</p>
+<p>PUSH（入栈）</p>
+<p>POP（出栈）</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push ax//将寄存器ax中的数据送入栈中</span><br><span class="line">pop ax//从栈顶取出数据送入ax</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><p>8086cpu的入栈和出栈操作都是以字为单位进行的</p>
+</li>
+<li><p>寄存器cs和ip中存放着当前指令的段地址和偏移地址</p>
+<p>8086cpu中，有两个寄存器:</p>
+<p>​    段寄存器SS 存放栈顶的段地址</p>
+<p>​    寄存器SP 存放栈顶的偏移地址</p>
+<p>任何时刻，SS：SP指向栈顶元素</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717120732595.png" alt="image-20240717120732595"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717120810169.png" alt="image-20240717120810169"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717121208400.png" alt="image-20240717121208400"></p>
+<ol start="7">
+<li>栈为空，就相当于栈中唯一的元素出栈，出栈后，SP&#x3D;SP+2，SP原来为000EH，加2后SP&#x3D;10H</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717122256548.png" alt="image-20240717122256548"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717122355870.png" alt="image-20240717122355870"></p>
+<p>出栈是复制，不是剪切</p>
+<p>（如果说是格式化硬盘可以恢复，因为格式化硬盘是通过更改新的索引，数据任然是可以恢复的，只有通过不停的复制才能完全删除）</p>
+<h3 id="3-8-栈顶越界的问题"><a href="#3-8-栈顶越界的问题" class="headerlink" title="3.8 栈顶越界的问题"></a>3.8 栈顶越界的问题</h3><ol>
+<li><p>SS和SP只记录了栈顶的地址，依靠SS和SP可以保证在入栈和出栈时找到栈顶</p>
+</li>
+<li><p>当栈满的时候再使用push指令入栈，栈空的时候再是由pop指令出栈，都将发生栈顶超界问题</p>
+</li>
+<li><p>栈的越界是危险的</p>
+<p>因为我们既然将一段空间安排为栈，那么在栈空间之外的空间里很可能存放了具有其他用途的数据，代码等，这些数据，代码可能是我们自己的程序的，也可能是别的程序的（毕竟一个计算机系统并不是只有我们自己的程序在运行）</p>
+</li>
+<li><p><strong>但是由于我们在入栈出栈时的不小心，而将这些数据，代码以外地改写，将会引发一连串的错误</strong></p>
+</li>
+</ol>
+<p><strong>结论</strong></p>
+<ol>
+<li>我们在编程的时候要自己操心栈顶超界的问题，要根据可能用到的最大栈空间，来安排栈的大小，防止入栈的数据太多而导致的超界</li>
+<li>执行出栈操作的时候也要注意，以防栈空的时候哦继续出栈而倒导致的超界</li>
+</ol>
+<h3 id="3-9-push，pop指令"><a href="#3-9-push，pop指令" class="headerlink" title="3.9 push，pop指令"></a>3.9 push，pop指令</h3><ol>
+<li>push和pop指令是可以在寄存器和内存之间传送数据的</li>
+</ol>
+<p><strong>栈和内存</strong></p>
+<p>栈空间当然也是内存空间的一部分，他只是一段可以以一种特殊的方式进行访问的内存空间</p>
+<ol start="2">
+<li><p>push和pop指令的格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push 寄存器//将一个寄存器中的数据入栈</span><br><span class="line">pop 寄存器//出栈，用一个寄存器接收出栈的数据</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push 段寄存器//将一个段寄存器中的数据入栈</span><br><span class="line">pop 段寄存器//出栈，用一个段寄存器接收出栈的数据</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push 内存单元//[...]将一个内存单元处的字入栈（栈操作都是以字为单位）</span><br><span class="line">pop 内存单元//出栈，用一个内存字单元接收出栈的数据</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>注意</strong></p>
+<p>汇编语言不能直接向段寄存器传入数据</p>
+<p><strong>寄存器清零</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sub 寄存器，寄存器//机器码是两个字节</span><br><span class="line">mov 寄存器，0//机器码是一个字节</span><br><span class="line">xor 寄存器，寄存器//异或</span><br></pre></td></tr></table></figure>
+
+<p><strong>结论</strong></p>
+<ul>
+<li><p>push，pop实质上就是一种内存传送指令，可以在寄存器和内存之间传送数据，与mov指令不同的是，push和pop指令访问的是内存单元的地址不是在指令中给出的，而是由SS：SP指出的</p>
+</li>
+<li><p>同时，push和pop指令还要改变sp中的内容</p>
+</li>
+<li><p>cpu在执行mov指令和指令push，pop指令是不同的，mov指令只需一步完成，就是传送。而push和pop要两步完成</p>
+<ul>
+<li><p>执行push时</p>
+<p>先改变sp，在向SS：SP处传送</p>
+</li>
+<li><p>执行pop时</p>
+<p>先读取值，再改变</p>
+</li>
+</ul>
+</li>
+<li><p>push，pop等栈操作指令，修改的只有SP，也就是说，栈顶的变化范围最大为：0000~FFFF（<strong>注意：这里针对的是16位的cpu</strong>）</p>
+</li>
+</ul>
+<h3 id="3-10-栈段"><a href="#3-10-栈段" class="headerlink" title="3.10 栈段"></a>3.10 栈段</h3><ol>
+<li><p>我们可以根据需要将一组内存单元定义为一个段（可以是代码段，数据段）</p>
+</li>
+<li><p>我们可以将一组长度为N（N&lt;&#x3D;64K）,地址连续，起始地址为16的倍数的内存单元，当作栈来用，从而定义了一个栈段</p>
+</li>
+<li><p>将一段内存当作栈段，<strong>仅仅是我们在编程时的一种安排</strong>，cpu并不会由于这种安排，就在执行push，pop等栈操作指令时就自动地将我们定义的栈段当作栈空间来访问，cpu只认栈顶</p>
+</li>
+<li><p>一段内存，可以既是代码的存储空间，又是数据的存储空间，还可以是栈空间，也可以什么都不是（关键在与cpu中寄存器的设置，即：cs，ip，ss，sp，ds的指向）</p>
+</li>
+</ol>
+<h2 id="4-第一个程序"><a href="#4-第一个程序" class="headerlink" title="4 第一个程序"></a>4 第一个程序</h2><h3 id="4-1-一个源程序从写出到执行的过程"><a href="#4-1-一个源程序从写出到执行的过程" class="headerlink" title="4.1 一个源程序从写出到执行的过程"></a>4.1 一个源程序从写出到执行的过程</h3><ol>
+<li><p>一个汇编语言程序从写出到最终执行的简要过程：</p>
+<ol>
+<li><p>编写</p>
+<ol>
+<li>使用文本编辑器（如记事本，notepad++，ultraedit等），用汇编语言编写汇编源程序</li>
+</ol>
+</li>
+<li><p>编译连接</p>
+<ol>
+<li>使用汇编语言编译程序（MASM.EXE）对源程序文件中的源程序进行编译，产生目标文件</li>
+<li>再用连接程序（LINK.EXE）对目标文件进行连接，生成可在操作系统中直接运行的可执行文件</li>
+</ol>
+<p><strong>可执行文件</strong></p>
+<p>   可执行文件中包含两个部分内容</p>
+<ol>
+<li>程序（从源程序中的汇编指令翻译过来的机器码）和数据（源程序中定义的数据）</li>
+<li>相关的描述信息（比如：程序有多大,要占多少内存空间等）</li>
+</ol>
+</li>
+<li><p>执行</p>
+<ol>
+<li>在操作系统中，执行可执行文件中的程序</li>
+<li>操作系统依然可执行文件中的描述信息，将可执行文件中的机器码和数据加载入内存，并进行相关的初始化（比如：设置CS：IP指向第一条要执行的指令），然后由cpu执行程序</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717204842487.png" alt="image-20240717204842487"></p>
+<h3 id="4-2-源程序"><a href="#4-2-源程序" class="headerlink" title="4.2 源程序"></a>4.2 源程序</h3><p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240717210111636.png" alt="image-20240717210111636"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">code 代码</span><br><span class="line">segment 段</span><br><span class="line">assume 假定</span><br><span class="line">start 开始</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>汇编指令</p>
+<p>有对应的机器码的指令，可以被编译为机器指令，最终为cpu所执行</p>
+</li>
+<li><p>伪指令</p>
+<p>伪指令是没有对应的机器码的指令，最终不被cpu所执行</p>
+<p>伪指令是由编译器来执行的指令，编译器根据伪代码来进行相关的编译工作</p>
+</li>
+</ol>
+<h4 id="定义一个段"><a href="#定义一个段" class="headerlink" title="定义一个段"></a><strong>定义一个段</strong></h4><ul>
+<li><p>segment和ends是一对成双使用的伪指令，这是在写可被编译器编译的汇编程序时，必须要用到的一堆伪指令</p>
+</li>
+<li><p>segment和ends的功能是定义一个段，segment说明一个段开始，ends说明一个段结束</p>
+</li>
+<li><p>一个段必须有一个名称来标识，使用格式为：</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">段名 segment</span><br><span class="line">段名 ends</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一个汇编程序是由多个段组成的，这些段被用来存放代码，数据或当作栈空间来使用</li>
+<li>一个有意义的汇编程序中至少要有一个段，这个段用来存放代码</li>
+</ul>
+<h4 id="真正的没了"><a href="#真正的没了" class="headerlink" title="真正的没了"></a><strong>真正的没了</strong></h4><ul>
+<li><p>end时一个汇编程序的结束标记，编译器在编译汇编程序的过程中，如果碰到了伪指令end，就结束对源程序的编译</p>
+</li>
+<li><p>如果程序写完了，要在结尾处加上伪指令end。否则，编译器在编译程序时，无法知道程序在何处结束</p>
+</li>
+</ul>
+<p>​      <strong>切记：不要把end和ends搞混了</strong></p>
+<h4 id="寄存器与段的关联"><a href="#寄存器与段的关联" class="headerlink" title="寄存器与段的关联"></a><strong>寄存器与段的关联</strong></h4><ul>
+<li><p>assume：含义为“假设”</p>
+</li>
+<li><p>他假设某一段寄存器和程序中的某一个用segemnt···ends定义的段相关联</p>
+</li>
+<li><p>通过assume说明这种关联，在需要的情况下，编译程序可以将段寄存器和某一个具体的段相联系</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assume cs：codesg</span><br></pre></td></tr></table></figure>
+
+<h4 id="源程序中的“程序“"><a href="#源程序中的“程序“" class="headerlink" title="源程序中的“程序“"></a><strong>源程序中的“程序“</strong></h4><p>汇编源程序：</p>
+<p>​	伪指令 （编译器处理）</p>
+<p>​	汇编指令（编译为机器码）</p>
+<p>程序：源代码中最终由计算机执行，处理的指令或数据</p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a><strong>注意</strong></h4><ul>
+<li>我们可以将源程序文件中的所有内容称为源程序，将源程序中最终由计算机执行处理的指令或数据，称为程序</li>
+<li>程序最先以汇编指令的形式存在源程序中，经编译，连接后转变为机器码，存储在可执行文件中</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717213909966.png" alt="image-20240717213909966"></p>
+<h4 id="标号"><a href="#标号" class="headerlink" title="标号"></a><strong>标号</strong></h4><ul>
+<li>一个标号指代了一个地址</li>
+<li>codesg：放在segment的前面，作为一个段的名称，这个段的名称最终将被编译，连接程序处理为一个段的段地址</li>
+</ul>
+<h4 id="程序返回"><a href="#程序返回" class="headerlink" title="程序返回"></a><strong>程序返回</strong></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DOS中的程序运行</span><br><span class="line"></span><br><span class="line">dos是一个单任务操作系统</span><br><span class="line"></span><br><span class="line">一个程序P2在可执行文件中，则必须有一个正在运行的程序P1，将P2从可执行文件中加载入内存后，将cpu的控制权交给P2，P2才能得以运行。P2开始运行后，P1暂停运行</span><br><span class="line"></span><br><span class="line">而当P2运行完毕后，应该将cpu的控制权交还给使他可以运行的P1，此后，P1继续运行</span><br></pre></td></tr></table></figure>
+
+<p>由此可知，一个程序结束后，将cpu的控制权交还给使他第一运行的程序，我们称这个过程为：<strong>程序返回</strong></p>
+<ul>
+<li><p>应该在程序的末尾添加返回的程序段</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov ax，4c00</span><br><span class="line"></span><br><span class="line">int 21//这两条指令所实现的功能就是程序返回</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="段结束，程序结束，程序返回"><a href="#段结束，程序结束，程序返回" class="headerlink" title="段结束，程序结束，程序返回"></a><strong>段结束，程序结束，程序返回</strong></h4><p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717220802288.png" alt="image-20240717220802288"></p>
+<h4 id="语法错误，逻辑错误"><a href="#语法错误，逻辑错误" class="headerlink" title="语法错误，逻辑错误"></a><strong>语法错误，逻辑错误</strong></h4><p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717221002974.png" alt="image-20240717221002974"></p>
+<h3 id="4-3-编辑源程序"><a href="#4-3-编辑源程序" class="headerlink" title="4.3 编辑源程序"></a>4.3 编辑源程序</h3><ol>
+<li>创建一个asm文件</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717224435474.png" alt="image-20240717224435474"></p>
+<ol start="2">
+<li>打开notepad++并拖入asm文件</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717224517486.png" alt="image-20240717224517486"></p>
+<ol start="3">
+<li>将语言选为assembly</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717224706389.png" alt="image-20240717224706389"></p>
+<ol start="4">
+<li>写入内容</li>
+</ol>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240717231315939.png" alt="image-20240717231315939"></p>
+<p><strong>两类错误</strong></p>
+<ul>
+<li><p>severe errors</p>
+</li>
+<li><p>找不带所给出的源文件</p>
+</li>
+</ul>
+<ol start="5">
+<li><p>编译</p>
+<p>将编写好的程序拖入MASM文件夹</p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240717230312820.png" alt="image-20240717230312820"></p>
+<p>打开dos，创建虚拟c盘，c盘地址为MASM文件地址</p>
+</li>
+</ol>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240717230338353.png" alt="image-20240717230338353"></p>
+<p>​	输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">masm 目标文件//开始编译</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717231344079.png" alt="image-20240717231344079"></p>
+<p>输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">link 目标文件.OBJ//开始连接</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717231613964.png" alt="image-20240717231613964"></p>
+<p>得到exe文件</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717231633881.png" alt="image-20240717231633881"></p>
+<p>运行成功</p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240717231755487.png" alt="image-20240717231755487"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">程序没有像显示器输出任何信息，程序只是做了一些将数据送入寄存器和假发的操作，而这些事情，我们不可能从显示屏上看出来</span><br><span class="line"></span><br><span class="line">程序执行完成后，返回，屏幕上再次出现操作系统的提示符</span><br><span class="line"></span><br><span class="line">沃兹基.索德说过：只要没有报错，就是成功</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-以简化的方式进行编译和连接"><a href="#4-4-以简化的方式进行编译和连接" class="headerlink" title="4.4 以简化的方式进行编译和连接"></a>4.4 以简化的方式进行编译和连接</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在masm link后加；</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240717232629671.png" alt="image-20240717232629671"></p>
+<p>加了 <code>;</code>后我们发现他就没有让我们确定太多东西了</p>
+<h4 id="关于编译和连接"><a href="#关于编译和连接" class="headerlink" title="关于编译和连接"></a><strong>关于编译和连接</strong></h4><p>连接的作用有以下几个</p>
+<ul>
+<li>当源程序很大时，可以将他分成多个源程序文件来编译，每个源程序编译成为目标文件后，再用连接程序将他们来连接到一起，生成一个可执行文件</li>
+<li>程序中带哦用某个库文件中的子程序，需要将这个库文件和该程序生成的目标连接到一起，生成一个可执行文件</li>
+<li>一个源程序编译后，得到了存有机器码的目标文件，目标文件中的有些内容还不能直接用来生成可执行文件，连接程序将这此内容处理为最终的可执行信息。<br>所以，在只有一个源程序文件，而又不需要调用某个库中的子程序的情况下，也必须用连接程序对目标文件进行处理，生成可执行文件</li>
+</ul>
+<p><strong>注意</strong>：对于连接的过程，可执行文件是我们要得到的最终结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">编辑器（Edit），编译器（masm），连接器（link），调试工具（debug）等所有工具，而这些工具都是在操作系统之上运行的程序，所以我们的学习过程必须在操作系统的环境中运行</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-5可执行文件中的程序装入内存并运行的原理"><a href="#4-5可执行文件中的程序装入内存并运行的原理" class="headerlink" title="4.5可执行文件中的程序装入内存并运行的原理"></a>4.5可执行文件中的程序装入内存并运行的原理</h3><p>DOS中的程序运行</p>
+<p>dos是一个单任务操作系统</p>
+<p>一个程序P2在可执行文件中，则必须有一个正在运行的程序P1，将P2从可执行文件中加载入内存后，将cpu的控制权交给P2，P2才能得以运行。P2开始运行后，P1暂停运行</p>
+<p>而当P2运行完毕后，应该将cpu的控制权交还给使他可以运行的P1，此后，P1继续运行</p>
+<h4 id="操作系统的外壳"><a href="#操作系统的外壳" class="headerlink" title="操作系统的外壳"></a><strong>操作系统的外壳</strong></h4><ol>
+<li><p>操作系统是由多个功能模块组成的庞大，复杂的软件系统。任何通用的操作系统，都要提供一个称为shell（外壳）的程序，用户（操作人员）使用这个程序来操作计算机系统工作</p>
+</li>
+<li><p>DOS中有一个程序command.com（命令解释器）,这个程序在DOS中称为命令解释器，也就是DOS系统的shell</p>
+<ul>
+<li>我们在DOS中直接执行1.exe时，是正在运行的command将1.exe中的程序加载入内存</li>
+<li>command设置cpu的cs:ip指向程序的第一条指令（即程序的入口），从而使程序得以运行</li>
+<li>程序运行结束后，返回command中，cpu继续运行command</li>
+</ul>
+</li>
+<li><p>汇编程序从写出到执行的过程：</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718102755380.png" alt="image-20240718102755380"></p>
+</li>
+</ol>
+<h3 id="4-6-程序执行过程的追踪"><a href="#4-6-程序执行过程的追踪" class="headerlink" title="4.6 程序执行过程的追踪"></a>4.6 程序执行过程的追踪</h3><ul>
+<li><p>为了观察程序的运行过程，我们可以使用debug</p>
+</li>
+<li><p>debug可以将程序加载入内存，设置CS：IP指向程序的入口，但Debug并不放弃对CPU的控制，这样，我们就可以使用Debug的相关命令来单步执行程序，查看每条指令和指令的执行结果</p>
+</li>
+</ul>
+<ol>
+<li>编写一个有入口的程序（start）</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718110634519.png" alt="image-20240718110634519"></p>
+<ol start="2">
+<li><p>快速编译连接程序</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718110926700.png" alt="image-20240718110926700"></p>
+</li>
+<li><p>将strat换为其他仍可以运行</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718111437776.png" alt="image-20240718111437776"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718111458557.png" alt="image-20240718111458557"></p>
+<p><strong>问题</strong></p>
+<p>没有程序入口debug可以调试吗</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718112146885.png" alt="image-20240718112146885"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718112159077.png" alt="image-20240718112159077"></p>
+<p>我们发现仍然可调</p>
+<p>这是我们再回到有 <code>strat</code>的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">debug 程序.exe//进入程序</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718113230708.png" alt="image-20240718113230708"></p>
+<p>可以看见，debug将程序从可执行文件加载入内存后，cx中存放的是程序的长度。1.exe中程序的机器吗共有12个字节</p>
+<p><strong>exe文件中的程序的加载过程</strong></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718114352142.png" alt="image-20240718114352142"></p>
+<p>我们查看 <code>psp</code>区发现都是些字节</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718160645926.png" alt="image-20240718160645926"></p>
+<p>看代码也看不出来什么</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718161223188.png" alt="image-20240718161223188"></p>
+<p>查看<strong>代码段</strong>的数据，发现我们写的代码</p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240718160914896.png" alt="image-20240718160914896"></p>
+<p><strong>总结</strong></p>
+<ol>
+<li><p>程序加载后，ds中存放着程序所在内存区的段地址，这个内存区的偏移地址为0，则程序所在的内存区的地址为 <code>ds：0</code></p>
+</li>
+<li><p>这个内存区的前256个字节中存放的是PSP，dos用来和程序进行通信。</p>
+</li>
+<li><p>从256字节处向后的空间存放的就是程序了</p>
+</li>
+<li><p>所以，我们从ds中可以得到PSP的段地址SA，PSP的偏移地址为0，则物理地址为SA*16+0</p>
+</li>
+<li><p>因为PSP占256（100H）字节，所以程序的物理地址</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718161934546.png" alt="image-20240718161934546"></p>
+<p><strong>回到程序的追踪</strong></p>
+<p>用 <code>t</code>命令执行到 <code>int 21H</code>处</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718162342822.png" alt="image-20240718162342822"></p>
+<p>用 <code>p</code>指令正常结束程序</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718162456021.png" alt="image-20240718162456021"></p>
+<p>用 <code>q</code>退出 <code>debug</code>，回到command中</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718163055563.png" alt="image-20240718163055563"></p>
+<ul>
+<li><p>我们在DOS中用 <code>debug 1.exe</code>运行debug对 <code>1.exe</code>进行跟踪时，程序加载的顺序是：command加载debug，debug加载 <code>1.exe</code></p>
+</li>
+<li><p>返回的顺序是：从 <code>1.exe</code>中的程序返回到debug，从debug返回到command</p>
+</li>
+</ul>
+<h2 id="5-BX-和loop指令"><a href="#5-BX-和loop指令" class="headerlink" title="5 [BX]和loop指令"></a>5 [BX]和loop指令</h2><p><strong>小实验</strong></p>
+<p>我们先写一个小程序</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718171638567.png" alt="image-20240718171638567"></p>
+<p>用debug单步调试后我们发现，系统并没有识别到中括号</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718171855870.png" alt="image-20240718171855870"></p>
+<p>我们用debug写的汇编却可以被识别</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718172121252.png" alt="image-20240718172121252"></p>
+<ul>
+<li><p>描述一个内存单元，需要两个信息：</p>
+<ol>
+<li><p>内存单元的地址</p>
+</li>
+<li><p>内存单元的长度（类型）</p>
+</li>
+</ol>
+</li>
+<li><p>我们用[0]表示一个内存单元时，0表示单元的偏移地址，段地址默认在ds中，单元的长度（类型）可以由具体指令中的其他操作对象（比如说寄存器）指出，如前边的AX，AL</p>
+</li>
+<li><p>[bx]同样也表示一个内存单元，他的偏移地址在bx中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov bx，偏移地址</span><br><span class="line">mov ax，[bx]</span><br><span class="line">mov al，[bx]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>loop</strong></p>
+<ul>
+<li>英文单词“loop”有循环的含义，显然这个指令和循环有关</li>
+</ul>
+<p><strong>描述性符号“（）”</strong>&#x2F;&#x2F;只是方便平时描述，汇编没有用</p>
+<ul>
+<li><p>为了描述上的简洁，在以后的课程中，我们将使用一个描述性的符号“（）”来表示一个寄存器或一个内存单元中的内容</p>
+</li>
+<li><p>应用</p>
+<ol>
+<li>ax中的内容为0010h，可以用：（ax）&#x3D;0010H</li>
+<li>2000：1000内容为0100H可为（21000H）&#x3D;0100H</li>
+<li>mov ax,[2]可为（ax）&#x3D;（（ds）*16+2）</li>
+<li>mov [2],ax可为（（ds）*16+2）&#x3D;（ax）</li>
+<li>add ax，2可为（ax）&#x3D;（ax）+2</li>
+<li>add ax，bx可为（ax）&#x3D;（ax）+（bx）</li>
+<li>push ax可为(sp)&#x3D;(sp)-2   ((ss)*16+(sp))&#x3D;(ax)</li>
+<li>pop ax可为 ((ss)*16+(sp))&#x3D;(ax)  (sp)&#x3D;(sp)+2</li>
+</ol>
+</li>
+</ul>
+<p><strong>约定符号idata表示常量</strong></p>
+<p>我们在debug中写过类似的指令：mov ax，[0]表示将ds：0处的数据送入ax中。指令中，在“[…]”里用一个常量0表示内存单元的偏移地址，以后我们用idata表示常量</p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240718175100440.png" alt="image-20240718175100440"></p>
+<h3 id="5-1-bx"><a href="#5-1-bx" class="headerlink" title="5.1 [bx]"></a>5.1 [bx]</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[bx]</span><br></pre></td></tr></table></figure>
+
+<p>功能：bx中存放的数据作为一个偏移地址EA，段地址SA默认在ds中，将SA：EA处的数据送入ax中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ea，sa偏移地址和段地址的英文缩写//作者在装逼</span><br></pre></td></tr></table></figure>
+
+<p>即：（ax）&#x3D;（(ds)*16+（bx））</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov [bx],ax</span><br></pre></td></tr></table></figure>
+
+<p>功能：bx中存放的数据作为一个偏移地址EA，段地址SA默认在ds中，将ax中的数据送入内存SA：EA中</p>
+<p>即：（(ds)*16+（bx））&#x3D;（ax）</p>
+<p><strong>inc</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inc ax或值//用于将寄存器或内存位置的值增加 1</span><br></pre></td></tr></table></figure>
+
+<p><strong>小提示</strong>：编写汇编语言的时候，16进制的数据必须在后面加H，如 <code>2000H</code>，十进制不用加（debug中编写默认16进制）</p>
+<h3 id="5-2-Loop指令"><a href="#5-2-Loop指令" class="headerlink" title="5.2 Loop指令"></a>5.2 Loop指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  mov cx，循环次数</span><br><span class="line">标号:</span><br><span class="line">  循环执行的程序段</span><br><span class="line">  loop 标号</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>cpu执行loop指令的时候，要进行两步操作</p>
+<ol>
+<li>（cx）&#x3D;（cx）-1</li>
+<li>判断cx中的值，不为零则转至执行程序，如果为零则向下执行</li>
+</ol>
+</li>
+<li><p>cx会影响loop指令的执行结果</p>
+</li>
+<li><p>通常我们用loop指令实现循环功能，cx中存放循环次数</p>
+</li>
+</ul>
+<p><strong>实操</strong></p>
+<p>计算2的12次方</p>
+<ol>
+<li><p>编写程序</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718231359078.png" alt="image-20240718231359078"></p>
+<p>代码解释</p>
+<p>（1）标号</p>
+<p>在汇编语言中，标号代表一个地址，此程序中有一个标号是。它实际上标识了一个地址，这个地址处有一条指令：add ax，ax</p>
+<p>（2）loop s</p>
+<p>cpu执行loop s指令的时候，要进行两步操作</p>
+<ol>
+<li>（cx）&#x3D;（cx）-1</li>
+<li>判断cx中的值，不为零则转至执行程序（add ax，ax），如果为零则向下执行</li>
+</ol>
+</li>
+</ol>
+<p>2.编译连接程序</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718232410720.png" alt="image-20240718232410720"></p>
+<ol start="3">
+<li>debug调试</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240718233038483.png" alt="image-20240718233038483"></p>
+<p>发现经过很多t后，循环结束后，ax值变为1000</p>
+<h3 id="5-3-在debug中跟踪用loop指令实现的循环程序"><a href="#5-3-在debug中跟踪用loop指令实现的循环程序" class="headerlink" title="5.3 在debug中跟踪用loop指令实现的循环程序"></a>5.3 在debug中跟踪用loop指令实现的循环程序</h3><p><strong>注意</strong></p>
+<ul>
+<li>我们说的是“赋值”，就是说，让ax中的数据的值（数据的大小）和ffff：0006单元中的数据的值（数据的大小）相等</li>
+<li>8位数据01H和16位数据0001H的数据长度不一样，但他们的值是相等的</li>
+</ul>
+<p><strong>如何赋值</strong></p>
+<ul>
+<li><p>ffff:0006单元中的数据是XXH，若要ax中的值和ffff:0006单元中的相等，ax中的数据应为00XXH 。<br>所以，若实现ffff:0006单元向ax赋值，我们应该令(ah)&#x3D;0，(al)&#x3D;(ffff6H)</p>
+<p><strong>有什么用？，避免越位赋值？</strong></p>
+<p>编写一个包含大部分情况的代码</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719002049387.png" alt="image-20240719002049387"></p>
+<p>debug调试</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719002136866.png" alt="image-20240719002136866"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719002237307.png" alt="image-20240719002237307"></p>
+<p>我们发现在执行mov [BX],1234H时出现了 <code>WOED PTR</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WORD PTR表示指令访问的内存单元是两个字节单元，这是强制定义为字大小。由于只是给出一个内存地址，不知道希望赋予ax的，是byte还是word，所以需要用word明确指出，ptr是显示申明。</span><br></pre></td></tr></table></figure>
+
+<p>通过上述代码我们发现并不存在越位赋值的问题，就算存在也会声明后进行强制赋值</p>
+</li>
+</ul>
+<p><strong>注意</strong></p>
+<p>在汇编语言的编写过程中不能以字母开头</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719003032933.png" alt="image-20240719003032933"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719003045306.png" alt="image-20240719003045306"></p>
+<p>出现error</p>
+<p>加上0</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719003210809.png" alt="image-20240719003210809"></p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240719003220857.png" alt="image-20240719003220857"></p>
+<p><strong>当然</strong>，这些问题在直接在dedug中编程不存在</p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240719003331528.png" alt="image-20240719003331528"></p>
+<h4 id="（关键终于来了）debug中对循环的跟踪"><a href="#（关键终于来了）debug中对循环的跟踪" class="headerlink" title="（关键终于来了）debug中对循环的跟踪"></a>（关键终于来了）debug中对循环的跟踪</h4><p>面对多次的循环我们在进行debug调试的时候不可能真的一步一步的调试，哪有什么办法呢</p>
+<ol>
+<li><p>首先编写一个有多次循环的程序</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719165040592.png" alt="image-20240719165040592"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ds的地址不能乱选，我之前用段地址f000和ffff都不能写入数据</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>编译连接，debug调试，先个f000：0006的内存单元赋值我就赋 <code>1</code></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719165301124.png" alt="image-20240719165301124"></p>
+<p>先使用 <code>t</code>调试，之后<strong>有两种方式退出循环</strong></p>
+<p><strong>（1）新指令 <code>g</code>调试</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g 偏移地址//debug中的指令运行到内存指定位置的代码后暂停</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719165639768.png" alt="image-20240719165639768"></p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719165703454.png" alt="image-20240719165703454"></p>
+<p>成功</p>
+<p><strong>（2）用指令 <code>p</code></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p命令也称为（步进命令）允许用户逐步执行程序，但与t命令（步入命令）不同，p命令在遇到函数调用时不会进入函数内部，而是直接执行完整个函数调用，这有助于快速跳过某些不需要详细检查的代码段</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719170310592.png" alt="image-20240719170310592"></p>
+<h3 id="5-4-debug和汇编编译器masm对指令的不同处理"><a href="#5-4-debug和汇编编译器masm对指令的不同处理" class="headerlink" title="5.4 debug和汇编编译器masm对指令的不同处理"></a>5.4 debug和汇编编译器masm对指令的不同处理</h3><p><strong>区别</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在debug中编写代码[...]可直接被识别为单元内存</span><br><span class="line">在masm中编写代码[...]会被识别为...，可以通过bx作为媒介，如mov bx，1H   mov ax，[bx],也可以加上段地址，如，mov al，ds：[...]才能被正常的识别为内存单元</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-5-loop和-bx-的联合应用"><a href="#5-5-loop和-bx-的联合应用" class="headerlink" title="5.5 loop和[bx]的联合应用"></a>5.5 loop和[bx]的联合应用</h3><p><strong>问题</strong></p>
+<p>如何对8位的数据进行累加，若直接使用内存单元的话，虽然内存单元是8位的但是当其赋值或加给寄存器的时候我自动带上下一个内存单元给寄存器赋值，但是如果用如 <code>al</code>或 <code>ah</code>的话又会有存不下的可能</p>
+<p><strong>所以</strong>，我们要用一个 <code>al</code>接收数据，再把它加给一个16位的寄存器</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719212738563.png" alt="image-20240719212738563"></p>
+<p>但这样写代码又太长了</p>
+<p>这时就需要我们用 <code>loop</code>和 <code>[bx]</code>来解决问题了</p>
+<ol>
+<li>程序实现</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719214506456.png" alt="image-20240719214506456"></p>
+<p>我试了下面这种也行我觉得把 <code>ah</code>放上去还要好一点</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719215345848.png" alt="image-20240719215345848"></p>
+<ol start="2">
+<li>编译连接，debug调试，修改2000：0~12的数据</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719214609109.png" alt="image-20240719214609109"></p>
+<p>成功</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719215117158.png" alt="image-20240719215117158"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240719215150779.png" alt="image-20240719215150779"></p>
+<h3 id="5-6-段前缀"><a href="#5-6-段前缀" class="headerlink" title="5.6 段前缀"></a>5.6 段前缀</h3><ul>
+<li><p>指令“mov ax,[bx]”中，内存单元的偏移地址由bx给出，而段地址默认在ds中</p>
+</li>
+<li><p>我们可以在访问内存单元的指令中显式地给出内存单元的段地址所在的段寄存器</p>
+</li>
+<li><p>这些出现在访问内存单元的指令中，用于显式地指明内存单元的段地址的“ds：”，“cs：”，“ss：”或“es：”，在汇编语言中称为段前缀</p>
+<p>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov ax,cs:[...]</span><br><span class="line">mov bx,es:[...]</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>没有段前缀默认为 <code>ds:</code></p>
+</li>
+</ul>
+<h3 id="5-7-一段安全的空间"><a href="#5-7-一段安全的空间" class="headerlink" title="5.7 一段安全的空间"></a>5.7 一段安全的空间</h3><ul>
+<li><p>在8086模式中，任意向一段内存空间写入内容是很危险的，因为这段空间中可能存放着重要的系统数据或代码</p>
+</li>
+<li><p>比如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax，1000h</span><br><span class="line">mov ds，ax</span><br><span class="line">mov al，0</span><br><span class="line">mov ds:[0],al</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+<li><p>我们来试试</p>
+<ol>
+<li><p>先编写程序</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720001815194.png" alt="image-20240720001815194"></p>
+</li>
+<li><p>编译连接，debug调试，系统卡死</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720001924518.png" alt="image-20240720001924518"></p>
+</li>
+</ol>
+</li>
+<li><p>在操作系统的环境中工作，操作系统管理所有的资源，也包括内存</p>
+</li>
+<li><p>通过汇编语言获得底层的编程体验，理解计算机计算机底层的基本工作机理</p>
+</li>
+</ul>
+<p>注意</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我们在纯DOS方式（实模式）下，可以不理会DOS，直接用汇编语言去操作真实的硬件，因为运行在cpu实模式下的dos，没有能力对操作系统进行全面，严格地管理，同时也很容易对系统造成伤害，但在Windows XP\2000、UNIX这些运行于CPU保护模式下的操作系统中，不理会操作系统，用汇编语言去操作真实的硬件，是根本不可能的。硬件已被这些操作系统利用CPU保护模式所提供的功能全面而严格地管理了。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在一般的PC机中，DOS方式下，DOS和其他合法的程序一般都不会使用0:200<del>0:2FF(0:200h</del>0:2FFh)的256个字节的空间。所以，我们使用这段空间是安全的。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720130133516.png" alt="image-20240720130133516"></p>
+<h3 id="5-8-段前缀的使用"><a href="#5-8-段前缀的使用" class="headerlink" title="5.8 段前缀的使用"></a>5.8 段前缀的使用</h3><p><strong>问题</strong></p>
+<p>如果我们需要将一段内存单元的数据放到另一段内存单元中可以怎么处理</p>
+<p>可以这么处理</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720170103638.png" alt="image-20240720170103638"></p>
+<p>但是这么处理明显效率低下</p>
+<p>这时我们就可以引用附加段寄存器 <code>es</code></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720170709909.png" alt="image-20240720170709909"></p>
+<h2 id="6-包括多个段的程序"><a href="#6-包括多个段的程序" class="headerlink" title="6 包括多个段的程序"></a>6 包括多个段的程序</h2><h3 id="6-1-在代码段中使用数据举例"><a href="#6-1-在代码段中使用数据举例" class="headerlink" title="6.1 在代码段中使用数据举例"></a>6.1 在代码段中使用数据举例</h3><p><strong>dw</strong></p>
+<p>定义字型数据，define word，类推，定义字节型数据 <code>db  define byte </code></p>
+<p>使用 <code>dw</code>时数据间用<strong>逗号</strong>隔开</p>
+<p><strong>小实验</strong></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720174138156.png" alt="image-20240720174138156"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720174127981.png" alt="image-20240720174127981"></p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240720174345365.png" alt="image-20240720174345365"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720174506450.png" alt="image-20240720174506450"></p>
+<p>我们发现 <code>dw</code>写入的数据是直接接着代码写入内存单元的，并没有重新找个地址，这种就会出现cpu误将数据当成指令读的情况</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720175107222.png" alt="image-20240720175107222"></p>
+<p>为了避免cpu误读取指令，我们可以选择在真正指令开始的地方和最后 <code>end</code> 加上一个 <strong>标号</strong>表示开始</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720175336114.png" alt="image-20240720175336114"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">end</span><br><span class="line">除了通知编译器程序结束外，还可以通知编译器程序的入口在什么地方</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-在代码段中使用栈"><a href="#6-2-在代码段中使用栈" class="headerlink" title="6.2 在代码段中使用栈"></a>6.2 在代码段中使用栈</h3><p>栈的地址是我们自己定的，同样我们也不能随便将他放在内存的任意地址，这时我们就可以利用6.1讲过的 <code>dw</code>来为我们定义一个栈空间</p>
+<p><strong>演示</strong></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720181846769.png" alt="image-20240720181846769"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720182346945.png" alt="image-20240720182346945"></p>
+<p>经过一系列的 <code>p</code>后</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240720182458172.png" alt="image-20240720182458172"></p>
+<p>成功将<code>076a:0 f</code>的数据按字倒转</p>
+<h3 id="6-3-将数据，代码，栈放入不同的段"><a href="#6-3-将数据，代码，栈放入不同的段" class="headerlink" title="6.3 将数据，代码，栈放入不同的段"></a>6.3 将数据，代码，栈放入不同的段</h3><p>在编程的过程中我们将数据，栈和代码都放在一个段中，我们在编程的时候要注意何处是数据，何处是栈，何处是代码</p>
+<p>这时就存在两个问题</p>
+<ol>
+<li>把他们放在一个段中使程序显得混乱</li>
+<li>前面程序中处理的数据很少，用到的栈空间也小，加上没有多长的代码，放到一个段里面没有问题</li>
+</ol>
+<ul>
+<li>但如果数据、栈和代码需要的空间超过64KB，就不能放在一个段中(一个段的容量不能大于64KB，是我们在学习中所用的8086模式的限制，并不是所有的处理器都这样)中</li>
+</ul>
+<p><strong>如何创建多个段呢</strong></p>
+<ol>
+<li>首先我们要定义段</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">assume cs:a,ds:b,ss:c//这个不慌学，后面应该会仔细讲一次</span><br><span class="line">//如果你不使用段中的变量名，可以不关联这个段的段名与寄存器。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">assume语句，是伪指令，仅仅是写给编译软件的。编译软件，并不把它生成机器码。</span><br><span class="line"></span><br><span class="line">assume对除了CS以外的其它段寄存器，仅仅只是关联了段名，以便在访问段内变量（目前还没学）时程序可以知道用哪个段寄存器，并没有在程序加载时将段地址装入段寄存器。</span><br><span class="line"></span><br><span class="line">所以，将段地址装入段寄存器的工作，必须由用户在程序中自己编写代码，并在程序开始运行时执行代码完成装入工作。</span><br><span class="line">仅仅对CS段寄存器，会在关联段名的同时，在程序加载时自动将段地址装入段寄存器。</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li>我们要给段写入信息</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">b segment</span><br><span class="line">dw shuju,shuju,shuju,shuju,shuju,shuju,shuju,shuju,shuju</span><br><span class="line">b ends</span><br><span class="line"></span><br><span class="line">c segment</span><br><span class="line">dw 0,0,0,0,0,0,0,0</span><br><span class="line">c ends</span><br><span class="line"></span><br><span class="line">a segment</span><br><span class="line">d: mov ax,b//b和下面的c表示的是数据段，栈段的地址</span><br><span class="line">   mov ds,ax//不能直接给段寄存器赋值</span><br><span class="line">   mov ax,c</span><br><span class="line">   mov ss,ax</span><br><span class="line">   mov sp,16</span><br><span class="line">a ends</span><br><span class="line">end d//d用于给编译器识别代码的开始，将开始地址赋值给cs：ip</span><br></pre></td></tr></table></figure>
+
+<p><strong>问题</strong></p>
+<ol>
+<li><strong>每个段都有不同的段地址吗？</strong></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721003450600.png" alt="image-20240721003450600"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721003532121.png" alt="image-20240721003532121"></p>
+<p>我们发现数据段的段地址是代码段段地址减2，栈段的段地址是代码段段地址减1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">汇编语言中不同的段确实有不同的段地址。</span><br><span class="line"></span><br><span class="line">在汇编语言中，程序内存地址被分为若干逻辑段，每个逻辑段的起始地址称为段地址。这些段包括数据段，代码段和栈段等，每个段都有其特定的用途和功能。例如，数据段用于存储程序的数据，代码段用于存储程序的指令，而栈段则用于存储局部变量和函数调用的信息。每个段都有其独立的段地址，这些地址在程序执行时用于定位到相应的数据或指令。</span><br><span class="line"></span><br><span class="line">此外，每个段的最大占用空间为64KB，但最小分配空间是16个字节，并且总是以16的倍数来分配空间。如果段里面没有定义任何数据，则不分配空间。这意味着，虽然每个段都有其特定的用途和地址，但它们的实际内存占用是根据需要动态分配的。（假如字节数有N个，占用的空间就是（16*（N/16+1））</span><br><span class="line"></span><br><span class="line">逻辑地址由段地址和偏移地址两部分组成，其中段地址指出是哪一段，而偏移地址标明是段中的哪一个单元。这种分段机制使得CPU能够有效地管理内存，尤其是在处理大量数据时，可以更加灵活地分配和管理内存资源。</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>如果不加 d （start：表示代码的开始）有多个段的代码还能运行吗？</strong></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721003803175.png" alt="image-20240721003803175"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721003752494.png" alt="image-20240721003752494"></p>
+<p>我们发现找不到入口，当然这些都是基于数据和栈比较小的情况下</p>
+<ol start="3">
+<li><strong>如果代码段在最前面呢？</strong></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721011221348.png" alt="image-20240721011221348"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721011302015.png" alt="image-20240721011302015"></p>
+<p>我们发现数据段和栈段的段寄存器地址跑到后面去了，我们发现数据段的段地址是代码段段地址加2，栈段的段地址是代码段段地址加3</p>
+<ol start="4">
+<li><strong>代码段在前面的时候不加d会怎么样</strong></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721011605890.png" alt="image-20240721011605890"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721011615611.png" alt="image-20240721011615611"></p>
+<p>这次我们发现程序可以运行</p>
+<h2 id="7-更灵活的定位内存地址的方法"><a href="#7-更灵活的定位内存地址的方法" class="headerlink" title="7 更灵活的定位内存地址的方法"></a>7 更灵活的定位内存地址的方法</h2><h3 id="7-1-and和or指令"><a href="#7-1-and和or指令" class="headerlink" title="7.1 and和or指令"></a>7.1 and和or指令</h3><p><strong>and</strong></p>
+<p>and指令：逻辑与指令，按位进行与运算</p>
+<p>如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov al，01100011B</span><br><span class="line">and al，00111011B</span><br><span class="line">执行后al=00100011B</span><br><span class="line">0 and 0=0</span><br><span class="line">0 and 1=0</span><br><span class="line">1 and 0=0</span><br><span class="line">1 and 1=1</span><br></pre></td></tr></table></figure>
+
+<p><strong>and的功能</strong></p>
+<ol>
+<li><p>通过该指令可将操作对象的相应位设为0，其他位不变</p>
+<p>如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">将al的第6位设为0：and al，10111111B</span><br><span class="line">将al的第7位设为0：and al，01111111B</span><br><span class="line">以此类推</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>or</strong></p>
+<p>or指令：逻辑或指令，按位进行或运算</p>
+<p>如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  mov al，01100011B</span><br><span class="line">   or al，00111011B</span><br><span class="line">执行后：al=01111011B</span><br><span class="line">0 or 0=0</span><br><span class="line">0 or 1=1</span><br><span class="line">1 or 0=1</span><br><span class="line">1 or 1=1</span><br></pre></td></tr></table></figure>
+
+<p><strong>or的功能</strong></p>
+<ol>
+<li>通过该指令可将操作对象的相应位设为1，其他位不变</li>
+</ol>
+<p>如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">将al的第6位设为1：or al，01000000B</span><br><span class="line">将al的第7位设为1：or al，10000000B</span><br><span class="line">以此类推</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong></p>
+<p>and和or都不能直接对内存单元使用，必须有寄存器作为媒介</p>
+<h3 id="7-2-关于ASCII码"><a href="#7-2-关于ASCII码" class="headerlink" title="7.2 关于ASCII码"></a>7.2 关于ASCII码</h3><ul>
+<li>世界上有很多编码方案，有种方案叫做ASCII编码，是在计算机系统中通常被采用的</li>
+<li>ASCII码表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Bin(二进制)</th>
+<th>Oct(八进制)</th>
+<th>Dec(十进制)</th>
+<th>Hex(十六进制)</th>
+<th>缩写&#x2F;字符</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0000 0000</td>
+<td>00</td>
+<td>0</td>
+<td>0x00</td>
+<td>NUL(null)</td>
+<td>空字符</td>
+</tr>
+<tr>
+<td>0000 0001</td>
+<td>01</td>
+<td>1</td>
+<td>0x01</td>
+<td>SOH(start of headline)</td>
+<td>标题开始</td>
+</tr>
+<tr>
+<td>0000 0010</td>
+<td>02</td>
+<td>2</td>
+<td>0x02</td>
+<td>STX (start of text)</td>
+<td>正文开始</td>
+</tr>
+<tr>
+<td>0000 0011</td>
+<td>03</td>
+<td>3</td>
+<td>0x03</td>
+<td>ETX (end of text)</td>
+<td>正文结束</td>
+</tr>
+<tr>
+<td>0000 0100</td>
+<td>04</td>
+<td>4</td>
+<td>0x04</td>
+<td>EOT (end of transmission)</td>
+<td>传输结束</td>
+</tr>
+<tr>
+<td>0000 0101</td>
+<td>05</td>
+<td>5</td>
+<td>0x05</td>
+<td>ENQ (enquiry)</td>
+<td>请求</td>
+</tr>
+<tr>
+<td>0000 0110</td>
+<td>06</td>
+<td>6</td>
+<td>0x06</td>
+<td>ACK (acknowledge)</td>
+<td>收到通知</td>
+</tr>
+<tr>
+<td>0000 0111</td>
+<td>07</td>
+<td>7</td>
+<td>0x07</td>
+<td>BEL (bell)</td>
+<td>响铃</td>
+</tr>
+<tr>
+<td>0000 1000</td>
+<td>010</td>
+<td>8</td>
+<td>0x08</td>
+<td>BS (backspace)</td>
+<td>退格</td>
+</tr>
+<tr>
+<td>0000 1001</td>
+<td>011</td>
+<td>9</td>
+<td>0x09</td>
+<td>HT (horizontal tab)</td>
+<td>水平制表符</td>
+</tr>
+<tr>
+<td>0000 1010</td>
+<td>012</td>
+<td>10</td>
+<td>0x0A</td>
+<td>LF (NL line feed, new line)</td>
+<td>换行键</td>
+</tr>
+<tr>
+<td>0000 1011</td>
+<td>013</td>
+<td>11</td>
+<td>0x0B</td>
+<td>VT (vertical tab)</td>
+<td>垂直制表符</td>
+</tr>
+<tr>
+<td>0000 1100</td>
+<td>014</td>
+<td>12</td>
+<td>0x0C</td>
+<td>FF (NP form feed, new page)</td>
+<td>换页键</td>
+</tr>
+<tr>
+<td>0000 1101</td>
+<td>015</td>
+<td>13</td>
+<td>0x0D</td>
+<td>CR (carriage return)</td>
+<td>回车键</td>
+</tr>
+<tr>
+<td>0000 1110</td>
+<td>016</td>
+<td>14</td>
+<td>0x0E</td>
+<td>SO (shift out)</td>
+<td>不用切换</td>
+</tr>
+<tr>
+<td>0000 1111</td>
+<td>017</td>
+<td>15</td>
+<td>0x0F</td>
+<td>SI (shift in)</td>
+<td>启用切换</td>
+</tr>
+<tr>
+<td>0001 0000</td>
+<td>020</td>
+<td>16</td>
+<td>0x10</td>
+<td>DLE (data link escape)</td>
+<td>数据链路转义</td>
+</tr>
+<tr>
+<td>0001 0001</td>
+<td>021</td>
+<td>17</td>
+<td>0x11</td>
+<td>DC1 (device control 1)</td>
+<td>设备控制1</td>
+</tr>
+<tr>
+<td>0001 0010</td>
+<td>022</td>
+<td>18</td>
+<td>0x12</td>
+<td>DC2 (device control 2)</td>
+<td>设备控制2</td>
+</tr>
+<tr>
+<td>0001 0011</td>
+<td>023</td>
+<td>19</td>
+<td>0x13</td>
+<td>DC3 (device control 3)</td>
+<td>设备控制3</td>
+</tr>
+<tr>
+<td>0001 0100</td>
+<td>024</td>
+<td>20</td>
+<td>0x14</td>
+<td>DC4 (device control 4)</td>
+<td>设备控制4</td>
+</tr>
+<tr>
+<td>0001 0101</td>
+<td>025</td>
+<td>21</td>
+<td>0x15</td>
+<td>NAK (negative acknowledge)</td>
+<td>拒绝接收</td>
+</tr>
+<tr>
+<td>0001 0110</td>
+<td>026</td>
+<td>22</td>
+<td>0x16</td>
+<td>SYN (synchronous idle)</td>
+<td>同步空闲</td>
+</tr>
+<tr>
+<td>0001 0111</td>
+<td>027</td>
+<td>23</td>
+<td>0x17</td>
+<td>ETB (end of trans. block)</td>
+<td>结束传输块</td>
+</tr>
+<tr>
+<td>0001 1000</td>
+<td>030</td>
+<td>24</td>
+<td>0x18</td>
+<td>CAN (cancel)</td>
+<td>取消</td>
+</tr>
+<tr>
+<td>0001 1001</td>
+<td>031</td>
+<td>25</td>
+<td>0x19</td>
+<td>EM (end of medium)</td>
+<td>媒介结束</td>
+</tr>
+<tr>
+<td>0001 1010</td>
+<td>032</td>
+<td>26</td>
+<td>0x1A</td>
+<td>SUB (substitute)</td>
+<td>代替</td>
+</tr>
+<tr>
+<td>0001 1011</td>
+<td>033</td>
+<td>27</td>
+<td>0x1B</td>
+<td>ESC (escape)</td>
+<td>换码(溢出)</td>
+</tr>
+<tr>
+<td>0001 1100</td>
+<td>034</td>
+<td>28</td>
+<td>0x1C</td>
+<td>FS (file separator)</td>
+<td>文件分隔符</td>
+</tr>
+<tr>
+<td>0001 1101</td>
+<td>035</td>
+<td>29</td>
+<td>0x1D</td>
+<td>GS (group separator)</td>
+<td>分组符</td>
+</tr>
+<tr>
+<td>0001 1110</td>
+<td>036</td>
+<td>30</td>
+<td>0x1E</td>
+<td>RS (record separator)</td>
+<td>记录分隔符</td>
+</tr>
+<tr>
+<td>0001 1111</td>
+<td>037</td>
+<td>31</td>
+<td>0x1F</td>
+<td>US (unit separator)</td>
+<td>单元分隔符</td>
+</tr>
+<tr>
+<td>0010 0000</td>
+<td>040</td>
+<td>32</td>
+<td>0x20</td>
+<td>(space)</td>
+<td>空格</td>
+</tr>
+<tr>
+<td>0010 0001</td>
+<td>041</td>
+<td>33</td>
+<td>0x21</td>
+<td>!</td>
+<td>叹号</td>
+</tr>
+<tr>
+<td>0010 0010</td>
+<td>042</td>
+<td>34</td>
+<td>0x22</td>
+<td>“</td>
+<td>双引号</td>
+</tr>
+<tr>
+<td>0010 0011</td>
+<td>043</td>
+<td>35</td>
+<td>0x23</td>
+<td>#</td>
+<td>井号</td>
+</tr>
+<tr>
+<td>0010 0100</td>
+<td>044</td>
+<td>36</td>
+<td>0x24</td>
+<td>$</td>
+<td>美元符</td>
+</tr>
+<tr>
+<td>0010 0101</td>
+<td>045</td>
+<td>37</td>
+<td>0x25</td>
+<td>%</td>
+<td>百分号</td>
+</tr>
+<tr>
+<td>0010 0110</td>
+<td>046</td>
+<td>38</td>
+<td>0x26</td>
+<td>&amp;</td>
+<td>和号</td>
+</tr>
+<tr>
+<td>0010 0111</td>
+<td>047</td>
+<td>39</td>
+<td>0x27</td>
+<td>‘</td>
+<td>单引号</td>
+</tr>
+<tr>
+<td>0010 1000</td>
+<td>050</td>
+<td>40</td>
+<td>0x28</td>
+<td>(</td>
+<td>开括号</td>
+</tr>
+<tr>
+<td>0010 1001</td>
+<td>051</td>
+<td>41</td>
+<td>0x29</td>
+<td>)</td>
+<td>闭括号</td>
+</tr>
+<tr>
+<td>0010 1010</td>
+<td>052</td>
+<td>42</td>
+<td>0x2A</td>
+<td>*</td>
+<td>星号</td>
+</tr>
+<tr>
+<td>0010 1011</td>
+<td>053</td>
+<td>43</td>
+<td>0x2B</td>
+<td>+</td>
+<td>加号</td>
+</tr>
+<tr>
+<td>0010 1100</td>
+<td>054</td>
+<td>44</td>
+<td>0x2C</td>
+<td>,</td>
+<td>逗号</td>
+</tr>
+<tr>
+<td>0010 1101</td>
+<td>055</td>
+<td>45</td>
+<td>0x2D</td>
+<td>-</td>
+<td>减号&#x2F;破折号</td>
+</tr>
+<tr>
+<td>0010 1110</td>
+<td>056</td>
+<td>46</td>
+<td>0x2E</td>
+<td>.</td>
+<td>句号</td>
+</tr>
+<tr>
+<td>0010 1111</td>
+<td>057</td>
+<td>47</td>
+<td>0x2F</td>
+<td>&#x2F;</td>
+<td>斜杠</td>
+</tr>
+<tr>
+<td>0011 0000</td>
+<td>060</td>
+<td>48</td>
+<td>0x30</td>
+<td>0</td>
+<td>字符0</td>
+</tr>
+<tr>
+<td>0011 0001</td>
+<td>061</td>
+<td>49</td>
+<td>0x31</td>
+<td>1</td>
+<td>字符1</td>
+</tr>
+<tr>
+<td>0011 0010</td>
+<td>062</td>
+<td>50</td>
+<td>0x32</td>
+<td>2</td>
+<td>字符2</td>
+</tr>
+<tr>
+<td>0011 0011</td>
+<td>063</td>
+<td>51</td>
+<td>0x33</td>
+<td>3</td>
+<td>字符3</td>
+</tr>
+<tr>
+<td>0011 0100</td>
+<td>064</td>
+<td>52</td>
+<td>0x34</td>
+<td>4</td>
+<td>字符4</td>
+</tr>
+<tr>
+<td>0011 0101</td>
+<td>065</td>
+<td>53</td>
+<td>0x35</td>
+<td>5</td>
+<td>字符5</td>
+</tr>
+<tr>
+<td>0011 0110</td>
+<td>066</td>
+<td>54</td>
+<td>0x36</td>
+<td>6</td>
+<td>字符6</td>
+</tr>
+<tr>
+<td>0011 0111</td>
+<td>067</td>
+<td>55</td>
+<td>0x37</td>
+<td>7</td>
+<td>字符7</td>
+</tr>
+<tr>
+<td>0011 1000</td>
+<td>070</td>
+<td>56</td>
+<td>0x38</td>
+<td>8</td>
+<td>字符8</td>
+</tr>
+<tr>
+<td>0011 1001</td>
+<td>071</td>
+<td>57</td>
+<td>0x39</td>
+<td>9</td>
+<td>字符9</td>
+</tr>
+<tr>
+<td>0011 1010</td>
+<td>072</td>
+<td>58</td>
+<td>0x3A</td>
+<td>:</td>
+<td>冒号</td>
+</tr>
+<tr>
+<td>0011 1011</td>
+<td>073</td>
+<td>59</td>
+<td>0x3B</td>
+<td>;</td>
+<td>分号</td>
+</tr>
+<tr>
+<td>0011 1100</td>
+<td>074</td>
+<td>60</td>
+<td>0x3C</td>
+<td>&lt;</td>
+<td>小于</td>
+</tr>
+<tr>
+<td>0011 1101</td>
+<td>075</td>
+<td>61</td>
+<td>0x3D</td>
+<td>&#x3D;</td>
+<td>等号</td>
+</tr>
+<tr>
+<td>0011 1110</td>
+<td>076</td>
+<td>62</td>
+<td>0x3E</td>
+<td>&gt;</td>
+<td>大于</td>
+</tr>
+<tr>
+<td>0011 1111</td>
+<td>077</td>
+<td>63</td>
+<td>0x3F</td>
+<td>?</td>
+<td>问号</td>
+</tr>
+<tr>
+<td>0100 0000</td>
+<td>0100</td>
+<td>64</td>
+<td>0x40</td>
+<td>@</td>
+<td>电子邮件符号</td>
+</tr>
+<tr>
+<td>0100 0001</td>
+<td>0101</td>
+<td>65</td>
+<td>0x41</td>
+<td>A</td>
+<td>大写字母A</td>
+</tr>
+<tr>
+<td>0100 0010</td>
+<td>0102</td>
+<td>66</td>
+<td>0x42</td>
+<td>B</td>
+<td>大写字母B</td>
+</tr>
+<tr>
+<td>0100 0011</td>
+<td>0103</td>
+<td>67</td>
+<td>0x43</td>
+<td>C</td>
+<td>大写字母C</td>
+</tr>
+<tr>
+<td>0100 0100</td>
+<td>0104</td>
+<td>68</td>
+<td>0x44</td>
+<td>D</td>
+<td>大写字母D</td>
+</tr>
+<tr>
+<td>0100 0101</td>
+<td>0105</td>
+<td>69</td>
+<td>0x45</td>
+<td>E</td>
+<td>大写字母E</td>
+</tr>
+<tr>
+<td>0100 0110</td>
+<td>0106</td>
+<td>70</td>
+<td>0x46</td>
+<td>F</td>
+<td>大写字母F</td>
+</tr>
+<tr>
+<td>0100 0111</td>
+<td>0107</td>
+<td>71</td>
+<td>0x47</td>
+<td>G</td>
+<td>大写字母G</td>
+</tr>
+<tr>
+<td>0100 1000</td>
+<td>0110</td>
+<td>72</td>
+<td>0x48</td>
+<td>H</td>
+<td>大写字母H</td>
+</tr>
+<tr>
+<td>0100 1001</td>
+<td>0111</td>
+<td>73</td>
+<td>0x49</td>
+<td>I</td>
+<td>大写字母I</td>
+</tr>
+<tr>
+<td>01001010</td>
+<td>0112</td>
+<td>74</td>
+<td>0x4A</td>
+<td>J</td>
+<td>大写字母J</td>
+</tr>
+<tr>
+<td>0100 1011</td>
+<td>0113</td>
+<td>75</td>
+<td>0x4B</td>
+<td>K</td>
+<td>大写字母K</td>
+</tr>
+<tr>
+<td>0100 1100</td>
+<td>0114</td>
+<td>76</td>
+<td>0x4C</td>
+<td>L</td>
+<td>大写字母L</td>
+</tr>
+<tr>
+<td>0100 1101</td>
+<td>0115</td>
+<td>77</td>
+<td>0x4D</td>
+<td>M</td>
+<td>大写字母M</td>
+</tr>
+<tr>
+<td>0100 1110</td>
+<td>0116</td>
+<td>78</td>
+<td>0x4E</td>
+<td>N</td>
+<td>大写字母N</td>
+</tr>
+<tr>
+<td>0100 1111</td>
+<td>0117</td>
+<td>79</td>
+<td>0x4F</td>
+<td>O</td>
+<td>大写字母O</td>
+</tr>
+<tr>
+<td>0101 0000</td>
+<td>0120</td>
+<td>80</td>
+<td>0x50</td>
+<td>P</td>
+<td>大写字母P</td>
+</tr>
+<tr>
+<td>0101 0001</td>
+<td>0121</td>
+<td>81</td>
+<td>0x51</td>
+<td>Q</td>
+<td>大写字母Q</td>
+</tr>
+<tr>
+<td>0101 0010</td>
+<td>0122</td>
+<td>82</td>
+<td>0x52</td>
+<td>R</td>
+<td>大写字母R</td>
+</tr>
+<tr>
+<td>0101 0011</td>
+<td>0123</td>
+<td>83</td>
+<td>0x53</td>
+<td>S</td>
+<td>大写字母S</td>
+</tr>
+<tr>
+<td>0101 0100</td>
+<td>0124</td>
+<td>84</td>
+<td>0x54</td>
+<td>T</td>
+<td>大写字母T</td>
+</tr>
+<tr>
+<td>0101 0101</td>
+<td>0125</td>
+<td>85</td>
+<td>0x55</td>
+<td>U</td>
+<td>大写字母U</td>
+</tr>
+<tr>
+<td>0101 0110</td>
+<td>0126</td>
+<td>86</td>
+<td>0x56</td>
+<td>V</td>
+<td>大写字母V</td>
+</tr>
+<tr>
+<td>0101 0111</td>
+<td>0127</td>
+<td>87</td>
+<td>0x57</td>
+<td>W</td>
+<td>大写字母W</td>
+</tr>
+<tr>
+<td>0101 1000</td>
+<td>0130</td>
+<td>88</td>
+<td>0x58</td>
+<td>X</td>
+<td>大写字母X</td>
+</tr>
+<tr>
+<td>0101 1001</td>
+<td>0131</td>
+<td>89</td>
+<td>0x59</td>
+<td>Y</td>
+<td>大写字母Y</td>
+</tr>
+<tr>
+<td>0101 1010</td>
+<td>0132</td>
+<td>90</td>
+<td>0x5A</td>
+<td>Z</td>
+<td>大写字母Z</td>
+</tr>
+<tr>
+<td>0101 1011</td>
+<td>0133</td>
+<td>91</td>
+<td>0x5B</td>
+<td>[</td>
+<td>开方括号</td>
+</tr>
+<tr>
+<td>0101 1100</td>
+<td>0134</td>
+<td>92</td>
+<td>0x5C</td>
+<td>\</td>
+<td>反斜杠</td>
+</tr>
+<tr>
+<td>0101 1101</td>
+<td>0135</td>
+<td>93</td>
+<td>0x5D</td>
+<td>]</td>
+<td>闭方括号</td>
+</tr>
+<tr>
+<td>0101 1110</td>
+<td>0136</td>
+<td>94</td>
+<td>0x5E</td>
+<td>^</td>
+<td>脱字符</td>
+</tr>
+<tr>
+<td>0101 1111</td>
+<td>0137</td>
+<td>95</td>
+<td>0x5F</td>
+<td>_</td>
+<td>下划线</td>
+</tr>
+<tr>
+<td>0110 0000</td>
+<td>0140</td>
+<td>96</td>
+<td>0x60</td>
+<td>&#96;</td>
+<td>开单引号</td>
+</tr>
+<tr>
+<td>0110 0001</td>
+<td>0141</td>
+<td>97</td>
+<td>0x61</td>
+<td>a</td>
+<td>小写字母a</td>
+</tr>
+<tr>
+<td>0110 0010</td>
+<td>0142</td>
+<td>98</td>
+<td>0x62</td>
+<td>b</td>
+<td>小写字母b</td>
+</tr>
+<tr>
+<td>0110 0011</td>
+<td>0143</td>
+<td>99</td>
+<td>0x63</td>
+<td>c</td>
+<td>小写字母c</td>
+</tr>
+<tr>
+<td>0110 0100</td>
+<td>0144</td>
+<td>100</td>
+<td>0x64</td>
+<td>d</td>
+<td>小写字母d</td>
+</tr>
+<tr>
+<td>0110 0101</td>
+<td>0145</td>
+<td>101</td>
+<td>0x65</td>
+<td>e</td>
+<td>小写字母e</td>
+</tr>
+<tr>
+<td>0110 0110</td>
+<td>0146</td>
+<td>102</td>
+<td>0x66</td>
+<td>f</td>
+<td>小写字母f</td>
+</tr>
+<tr>
+<td>0110 0111</td>
+<td>0147</td>
+<td>103</td>
+<td>0x67</td>
+<td>g</td>
+<td>小写字母g</td>
+</tr>
+<tr>
+<td>0110 1000</td>
+<td>0150</td>
+<td>104</td>
+<td>0x68</td>
+<td>h</td>
+<td>小写字母h</td>
+</tr>
+<tr>
+<td>0110 1001</td>
+<td>0151</td>
+<td>105</td>
+<td>0x69</td>
+<td>i</td>
+<td>小写字母i</td>
+</tr>
+<tr>
+<td>0110 1010</td>
+<td>0152</td>
+<td>106</td>
+<td>0x6A</td>
+<td>j</td>
+<td>小写字母j</td>
+</tr>
+<tr>
+<td>0110 1011</td>
+<td>0153</td>
+<td>107</td>
+<td>0x6B</td>
+<td>k</td>
+<td>小写字母k</td>
+</tr>
+<tr>
+<td>0110 1100</td>
+<td>0154</td>
+<td>108</td>
+<td>0x6C</td>
+<td>l</td>
+<td>小写字母l</td>
+</tr>
+<tr>
+<td>0110 1101</td>
+<td>0155</td>
+<td>109</td>
+<td>0x6D</td>
+<td>m</td>
+<td>小写字母m</td>
+</tr>
+<tr>
+<td>0110 1110</td>
+<td>0156</td>
+<td>110</td>
+<td>0x6E</td>
+<td>n</td>
+<td>小写字母n</td>
+</tr>
+<tr>
+<td>0110 1111</td>
+<td>0157</td>
+<td>111</td>
+<td>0x6F</td>
+<td>o</td>
+<td>小写字母o</td>
+</tr>
+<tr>
+<td>0111 0000</td>
+<td>0160</td>
+<td>112</td>
+<td>0x70</td>
+<td>p</td>
+<td>小写字母p</td>
+</tr>
+<tr>
+<td>0111 0001</td>
+<td>0161</td>
+<td>113</td>
+<td>0x71</td>
+<td>q</td>
+<td>小写字母q</td>
+</tr>
+<tr>
+<td>0111 0010</td>
+<td>0162</td>
+<td>114</td>
+<td>0x72</td>
+<td>r</td>
+<td>小写字母r</td>
+</tr>
+<tr>
+<td>0111 0011</td>
+<td>0163</td>
+<td>115</td>
+<td>0x73</td>
+<td>s</td>
+<td>小写字母s</td>
+</tr>
+<tr>
+<td>0111 0100</td>
+<td>0164</td>
+<td>116</td>
+<td>0x74</td>
+<td>t</td>
+<td>小写字母t</td>
+</tr>
+<tr>
+<td>0111 0101</td>
+<td>0165</td>
+<td>117</td>
+<td>0x75</td>
+<td>u</td>
+<td>小写字母u</td>
+</tr>
+<tr>
+<td>0111 0110</td>
+<td>0166</td>
+<td>118</td>
+<td>0x76</td>
+<td>v</td>
+<td>小写字母v</td>
+</tr>
+<tr>
+<td>0111 0111</td>
+<td>0167</td>
+<td>119</td>
+<td>0x77</td>
+<td>w</td>
+<td>小写字母w</td>
+</tr>
+<tr>
+<td>0111 1000</td>
+<td>0170</td>
+<td>120</td>
+<td>0x78</td>
+<td>x</td>
+<td>小写字母x</td>
+</tr>
+<tr>
+<td>0111 1001</td>
+<td>0171</td>
+<td>121</td>
+<td>0x79</td>
+<td>y</td>
+<td>小写字母y</td>
+</tr>
+<tr>
+<td>0111 1010</td>
+<td>0172</td>
+<td>122</td>
+<td>0x7A</td>
+<td>z</td>
+<td>小写字母z</td>
+</tr>
+<tr>
+<td>0111 1011</td>
+<td>0173</td>
+<td>123</td>
+<td>0x7B</td>
+<td>{</td>
+<td>开花括号</td>
+</tr>
+<tr>
+<td>0111 1100</td>
+<td>0174</td>
+<td>124</td>
+<td>0x7C</td>
+<td>|</td>
+<td>垂线</td>
+</tr>
+<tr>
+<td>0111 1101</td>
+<td>0175</td>
+<td>125</td>
+<td>0x7D</td>
+<td>}</td>
+<td>闭花括号</td>
+</tr>
+<tr>
+<td>0111 1110</td>
+<td>0176</td>
+<td>126</td>
+<td>0x7E</td>
+<td>~</td>
+<td>波浪号</td>
+</tr>
+<tr>
+<td>0111 1111</td>
+<td>0177</td>
+<td>127</td>
+<td>0x7F</td>
+<td>DEL (delete)</td>
+<td>删除</td>
+</tr>
+</tbody></table>
+<ul>
+<li>一个文本编辑过程中，就包含着按照ASCII编码规则进行的编码和解码</li>
+</ul>
+<h3 id="7-3-以字符形式给出数据"><a href="#7-3-以字符形式给出数据" class="headerlink" title="7.3 以字符形式给出数据"></a>7.3 以字符形式给出数据</h3><ul>
+<li>我们在汇编程序的过程中，用<code>&#39;.....&#39;</code>的方式指明数据是以字符的形式给出的，编译器将他们转化为相对应的ASCII码</li>
+</ul>
+<p>如</p>
+<h3 id="7-4-大小写转换的问题"><a href="#7-4-大小写转换的问题" class="headerlink" title="7.4 大小写转换的问题"></a><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721150631078.png" alt="image-20240721150631078">7.4 大小写转换的问题</h3><p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721151457943.png" alt="image-20240721151457943"></p>
+<p>我们发现字母的大小ASCII码在二进制唯一的区别就是在第五位多了一个  <code>1</code>，也就是十六进制的大 <code>20H</code></p>
+<p><strong>问题</strong></p>
+<p>如果我们想将一个有大写有小写的英文如 <code>AbC</code> 全部转变成大写或小写怎么办?</p>
+<p>这时就可以用我们之前学的 <code>and</code>和 <code>or</code>来解决问题了</p>
+<ol>
+<li>代码编写</li>
+</ol>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240721155308744.png" alt="image-20240721155308744"></p>
+<ol start="2">
+<li><p>编译连接，debug调试</p>
+</li>
+<li><p>我们先查看内存单元的数据</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721155430336.png" alt="image-20240721155430336"></p>
+<ol start="4">
+<li><p>再将程序运行到第一个循环 <code>s</code>循环结束，再查看内存</p>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240721155700537.png" alt="image-20240721155700537"></p>
+</li>
+</ol>
+<p>发现全部变大写的ascii码</p>
+<ol start="5">
+<li><p>再将程序运行到第一个循环 <code>s0</code>循环结束，再查看内存</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721155812727.png" alt="image-20240721155812727"></p>
+<p>发现全部变小写ascii码，这里有个问题，我忘了给cx再次赋值他居然没有立马停止循环而是cx的值变成fffe继续循环了79次在地址 076D：0039物理地址771F停下来了，而且cx的值还自动归零，我猜测这应该是dos系统的自我保护机制（这个后面要讲，记住有这个问题就行了）</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">小知识</span><br><span class="line">1、ascii编码是1个字节，而unicode编码通常是2个字节。2、ascii是单字节编码，无法用来表示中文；而unicode可以表示所有语言。3、用unicode编码比ascii编码需要多一倍的存储空间。</span><br><span class="line"></span><br><span class="line">Unicode 编码，因其支持全球多个国家的文字符号，故而称之为万国码。到现在为止，Unicode 编码已经有多个实施版本，具体有 UTF-8、UTF-16 和 UTF-32，UTF 缩写自Unicode Transformation Format，表示数据长度可变，通常一个 UTF-8 字符可以占 1~4 个字节。</span><br><span class="line"></span><br><span class="line">目前中文输入法通常使用的是 UTF-8</span><br><span class="line"></span><br><span class="line">使用ascii码无法表示中文，所以中文使用的是其他编码，故我们在编程的时候用中文输入法输入一些字符不能被识别</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-5-bx-idata"><a href="#7-5-bx-idata" class="headerlink" title="7.5 [bx+idata]"></a>7.5 [bx+idata]</h3><p>用[bx]的方式来指明一个内存单元，我们还可以用一种更为灵活的方式来指明内存单元</p>
+<p>[bx+idata]表示一个内存单元，它的偏移地址为(bx)+idata(bx中的数值加上idata)</p>
+<p><strong>mov ax,[bx+200]的含义</strong></p>
+<ul>
+<li>将一个内存单元的内容送入ax，这个内存单元的长度为2字节(字单元)，存放一个字，偏移地址为bx中的数值加上200，段地址在ds中。</li>
+<li>数学化的描述为:(ax)&#x3D;((ds)*16+(bx)+200)</li>
+</ul>
+<p><strong>mov ax,[bx+200]不同的格式</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[bx+200]</span><br><span class="line">mov ax,[200+bx]</span><br><span class="line">mov ax,200[bx]</span><br><span class="line">mov ax,[bx].200</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-6-用-bx-idata-的方式进行数值的处理"><a href="#7-6-用-bx-idata-的方式进行数值的处理" class="headerlink" title="7.6 用[bx+idata]的方式进行数值的处理"></a>7.6 用[bx+idata]的方式进行数值的处理</h3><ul>
+<li>有了[bx+idata]这种表示内存单元的方式，我们就可以用更高级的结构来看待所要处理的数据。</li>
+</ul>
+<p><strong>问题</strong></p>
+<p>在7.4我们用了两个循环分别将一串字母全部转变为大写，全部转变为小写，那如果现在需要你在一次循环中将两串字母分别转化为大写的小写又该怎么处理？</p>
+<p>我们可以用[idata1+bx]和[idata2+bx]的形式来解决问题</p>
+<ol>
+<li>编写代码</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721165111992.png" alt="image-20240721165111992"></p>
+<ol start="2">
+<li><p>编译连接，debug调试</p>
+</li>
+<li><p>先查看数据段内存</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721165223740.png" alt="image-20240721165223740"></p>
+</li>
+<li><p>运行程序到结束</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240721165341650.png" alt="image-20240721165341650"></p>
+</li>
+<li><p>检查内存，成功</p>
+</li>
+</ol>
+<p><strong>C语言和汇编语言的定位方式</strong></p>
+<p>C语言定位方式：a[i],b[i]</p>
+<p>汇编语言定位方式：0[bx],5[bx]</p>
+<h3 id="7-7-SI和DI"><a href="#7-7-SI和DI" class="headerlink" title="7.7 SI和DI"></a>7.7 SI和DI</h3><ul>
+<li>SI和DI是8086CPU中和bx功能相近的寄存器，但是SI和DI不能够分成两个8位寄存器来使用</li>
+</ul>
+<p>以下三组指令实现了相同的功能：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. mov bx,0</span><br><span class="line">   mov ax,[bx]</span><br><span class="line">2. mov si,0</span><br><span class="line">   mov ax,[si]</span><br><span class="line">3. mov di,0</span><br><span class="line">   mov ax,[di]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. mov bx,0</span><br><span class="line">   mov ax,[bx+123]</span><br><span class="line">2. mov si,0</span><br><span class="line">   mov ax,[si+123]</span><br><span class="line">3. mov di,0</span><br><span class="line">   mov ax,[di+123]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>功能 <code>si</code>和 <code>di</code>可以作为偏移地址快速的完成数据的复制</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722174324706.png" alt="image-20240722174324706"></p>
+<p>更简洁的代码</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722174243798.png" alt="image-20240722174243798"></p>
+<p>更加灵活的方式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[bx+si]</span><br><span class="line">[bx+di]</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-8-bx-si-和-bx-di"><a href="#7-8-bx-si-和-bx-di" class="headerlink" title="7.8 [bx+si]和[bx+di]"></a>7.8 [bx+si]和[bx+di]</h3><ul>
+<li><p>[bx+si]表示一个内存单元，他的偏移地址为（bx）+（si）(表示bx中的值加上si中的数值)</p>
+</li>
+<li><p>指令mov ax,[bx+si]的含义:<br>将一个内存单元的内容送入ax，这个内存单元的长度为2字节(字单元)，存放一个字，偏移地址为bx中的数值加上si中的数值，段地址在ds中。</p>
+<p>数字化：(ax)&#x3D;((ds)*16+(bx)+(si))</p>
+<p>也可以这么写：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[bx][si]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>注意</strong></p>
+<p>不能[di+si],[di] [si],[bx+ax]</p>
+<h3 id="7-9-bx-si-idata-和-bx-di-idata"><a href="#7-9-bx-si-idata-和-bx-di-idata" class="headerlink" title="7.9 [bx+si+idata]和[bx+di+idata]"></a>7.9 [bx+si+idata]和[bx+di+idata]</h3><ul>
+<li><p>[bx+si+idata]和[bx+di+idata]的含义相似，都表示一个内存单元</p>
+</li>
+<li><p>以[bx+si+idata]为例，他的偏移地址为 <code>(bx)+(si)+idata</code></p>
+</li>
+<li><p>指令mov ax,[bx+si+idata]的含义:<br>将一个内存单元的内容送入ax，这个内存单元的长度为2字节(字单元)，存放一个字，偏移地址为bx中的数值加上si中的数值再加上idata，段地址在ds中。</p>
+<p>数字化：(ax)&#x3D;((ds)*16+(bx)+(si)+idata)</p>
+<p>也可以这么写：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov ax,idata[bx][si]</span><br><span class="line">mov ax,[bx].idata[si]</span><br><span class="line">mov ax,[bx+idata+si]</span><br><span class="line">mov ax,[idata+bx+si]</span><br><span class="line">....//排列组合一共有12种</span><br><span class="line">注意常数在后面的时候前面要加.</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="7-10-不同的寻址方式的灵活应用"><a href="#7-10-不同的寻址方式的灵活应用" class="headerlink" title="7.10 不同的寻址方式的灵活应用"></a>7.10 不同的寻址方式的灵活应用</h3><ul>
+<li><p>我们以知道的几种寻址方式</p>
+<ol>
+<li>[idata]用一个常量来表示地址，可用于直接定位一个内存单元，但是这个在编写程序的时候不能直接使用，要加上段地址</li>
+<li>[bx]用一个变量来表示内存地址，可用于间接定位一个内存单元</li>
+<li>[bx+idata]用一个变量和常量表示地址，可在一个起始地址的基础上用变量间接定位一个内存单元</li>
+<li>[bx+si]用两个变量表示地址</li>
+<li>[bx+si+idata]用两个变量和一个常量表示地址</li>
+</ol>
+</li>
+<li><p>从1到5我们逐渐用更加灵活的方式来定位一个内存单元，这使我们可以从更加结构化的角度来看待要处理的数据</p>
+</li>
+</ul>
+<p><strong>问题</strong></p>
+<p>将数据段每一个单词头一个字母改写为大写字母</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722183536945.png" alt="image-20240722183536945"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722183602716.png" alt="image-20240722183602716"></p>
+<p>这时可以用一个变量来定位行，一个常量来定位列</p>
+<p><strong>实验1</strong></p>
+<p>将每个英文单词的第一个字母转为大写</p>
+<ol>
+<li><p>编写代码</p>
+</li>
+<li><p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240722202257836.png" alt="image-20240722202257836">编译连接，debug调试</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722202114170.png" alt="image-20240722202114170"></p>
+</li>
+<li><p>运行程序</p>
+</li>
+<li><p>查看数据段数据</p>
+</li>
+</ol>
+<p><img src="C:\Users\lkh_2\AppData\Roaming\Typora\typora-user-images\image-20240722202353710.png" alt="image-20240722202353710"></p>
+<p>发现第四位数据刚好减20H</p>
+<p><strong>实验2</strong></p>
+<p>将几个英语单词转化为大写</p>
+<ol>
+<li><p>编写代码</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722211529049.png" alt="image-20240722211529049"></p>
+</li>
+<li><p>编译连接，debug调试</p>
+</li>
+<li><p>查看数据段内存</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722205802838.png" alt="image-20240722205802838"></p>
+</li>
+<li><p>运行程序后查看内存</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722210936662.png" alt="image-20240722210936662"></p>
+</li>
+<li><p>使用嵌套循环解决问题</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722212509568.png" alt="image-20240722212509568"></p>
+<p>我们发现cx出现了ffff的问题，因为嵌套循环，内层直接将cx归零了</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722211951784.png" alt="image-20240722211951784"></p>
+<p> 但还是正常大写</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722213845048.png" alt="image-20240722213845048"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722213904442.png" alt="image-20240722213904442"></p>
+<p>我们发现这种情况下没有循环了应该是触碰到了代码段</p>
+<p><strong>解决cx:ffff的问题</strong></p>
+<p> ffff的问题是一个bug，是因为loop机制的问题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">当CX=0时，LOOP指令将执行65536次。</span><br><span class="line"></span><br><span class="line">这个结论基于LOOP指令的工作原理。LOOP指令在执行时会检查CX寄存器的值。当CX=0时，指令首先会执行一次循环体内的语句，然后CX的值减1。由于此时CX的值为0，LOOP指令会再次检查CX的值，发现仍然为0（在16位系统中，0-1的结果仍然是0），因此会继续循环。这个过程会一直重复，直到达到16位无符号整数的最大值，即65535次。然而，由于初始时CX已经为0，所以实际上循环会多执行一次，总次数达到65536次。这个过程体现了LOOP指令在处理CX=0时的特殊行为，即先执行一次循环体内的语句，然后由于CX的值没有变化（仍然是0），导致无限循环，直到达到无符号整数的上限</span><br></pre></td></tr></table></figure>
+
+<p><strong>嵌套循环要怎么办呢</strong></p>
+<p>因为cx和loop是绑定的所以不能通过增加寄存器的方法来解决</p>
+<p>我们可以选择把cx的值先保存下来，再结束内层循环的时候把cx的值恢复</p>
+<p>代码实现</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722223152752.png" alt="image-20240722223152752"></p>
+<p>问题解决</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240722223206443.png" alt="image-20240722223206443"></p>
+<p>但是si、cx、ax、bx，显然不能用来暂存cx中的值，因为这些寄存器在循环中也要使用;<br>cs、ip、ds也不能用，因为cs:ip时刻指向当前指令，ds指向数据段;<br>可用的就只有:dx、di、es、ss、sp、bp等6个寄存器了，但是这些寄存器也很少，使用寄存器并不是一个很好的解决方案</p>
+<p>这时就可以使用内存来解决问题 </p>
+<p>使用内存来暂存数据，这一点是确定了的，但是值得推敲的是，我们用怎样的结构来保存这些数据，而使得我们的程序更加清晰，更容易读懂和被接受?</p>
+<p>这时候我们就可以用<strong>栈</strong></p>
+<p><strong>使用栈来做嵌套循环</strong></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723141803429.png" alt="image-20240723141803429"></p>
+<ol start="2">
+<li>…….</li>
+<li><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723141837244.png" alt="image-20240723141837244"></li>
+</ol>
+<h2 id="8-数据处理的两个基本问题"><a href="#8-数据处理的两个基本问题" class="headerlink" title="8 数据处理的两个基本问题"></a>8 数据处理的两个基本问题</h2><ul>
+<li><p>计算机是进行数据处理，运算的机器，那么就有两个基本问题包含在其中</p>
+<ol>
+<li><p>处理的数据在什么地方</p>
+</li>
+<li><p>要处理的数据有多长</p>
+</li>
+</ol>
+</li>
+<li><p>这两个问题，在机器指令中必须给以明确或隐含的说明，否则计算机就无法工作</p>
+</li>
+<li><p>我们定义的描述性符号：reg和sreg</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg：register寄存器</span><br><span class="line">sreg：segment register段寄存器</span><br></pre></td></tr></table></figure>
+</li>
+<li><ul>
+<li><p>reg的集台包括:ax、bx、cx、dx、ah、al、bh、bl、ch、cl、dh、dl、sp、bp、si、di ;</p>
+</li>
+<li><p>sreg的集合包括:ds、ss、cs、es</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-1-bx-si-di-bp"><a href="#8-1-bx-si-di-bp" class="headerlink" title="8.1 bx,si,di,bp"></a>8.1 bx,si,di,bp</h3><ul>
+<li><p>在8086cpu中，只有这四个寄存器（bx，bp，si，di）可以用在<code>[...]</code>中来进行内存单元的寻址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">正确</span><br><span class="line">mov ax,[bx]</span><br><span class="line">mov ax,[bp]</span><br><span class="line">mov ax,[si]</span><br><span class="line">mov ax,[di]</span><br><span class="line">mov ax,[bp+si]</span><br><span class="line">mov ax,[bp+di]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+di]</span><br><span class="line">mov ax,[bp+si+idata]</span><br><span class="line">mov ax,[bp+di+idata]</span><br><span class="line">mov ax,[bx+si+idata]</span><br><span class="line">mov ax,[bx+di+idata]</span><br><span class="line">错误</span><br><span class="line">mov ax,[cx]</span><br><span class="line">mov ax,[ax]</span><br><span class="line">mov ax,[dx]</span><br><span class="line">mov ax,[ds]</span><br><span class="line">mov ax,[di+si]</span><br><span class="line">mov ax,[bx+bp]</span><br><span class="line">mov ax,[bx+si+di]</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>只要在<code>[...]</code>中使用寄存器bp，而指令中没有显性的给出段地址，段地址就默认在ss中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[bp]</span><br><span class="line">含义:(ax)=((ss)*16+(bp))</span><br><span class="line">mov ax,[bp+idata]</span><br><span class="line">含义:(ax)=((ss)*16+(bp)+idata)</span><br><span class="line">mov ax,[bp+si]</span><br><span class="line">含义:(ax)=((ss)*16+(bp)+(si))</span><br><span class="line">mov ax,[bp+si+data]</span><br><span class="line">含义:(ax)=((ss)*16+(bp)+(si)+idata)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="8-2-机器指令处理的数据所在位置"><a href="#8-2-机器指令处理的数据所在位置" class="headerlink" title="8.2 机器指令处理的数据所在位置"></a>8.2 机器指令处理的数据所在位置</h3><ul>
+<li><p>绝大部分机器指令都是进行数据处理的指令，处理大致可分为三类：</p>
+<p><strong>读取，写入，运算</strong></p>
+</li>
+<li><p>在机器指令这一层来讲，并不关心数据的值是多少，而是关心指令执行前一刻，他要处理的数据所在的位置</p>
+</li>
+<li><p>指令在执行前，所要处理的数据可以在三个地方，cpu的内部，内存，端口</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723152747461.png" alt="image-20240723152747461"></p>
+<h3 id="8-3-汇编语言中数据位置的表达"><a href="#8-3-汇编语言中数据位置的表达" class="headerlink" title="8.3 汇编语言中数据位置的表达"></a>8.3 汇编语言中数据位置的表达</h3><p>汇编语言中用三个概念来表达数据的位置</p>
+<ol>
+<li>立即数（idata）</li>
+<li>寄存器</li>
+<li>段地址（SA）和偏移地址（EA）</li>
+</ol>
+<p><strong>1. 立即数（idata）</strong></p>
+<p>对于直接包含在机器指令中的数据（执行前在cpu的指令缓冲器中），在汇编语言中称为：立即数（idata），在汇编语言中直接给出。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov ax，1    机器码：B80100（B8表示mov ax ；0100表示0001）</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.寄存器</strong></p>
+<p>指令要处理的数据在寄存器中，在汇编语言中给出相应的寄存器名。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov ax,bx   机器码：89D8   执行结果：(ax)=(bx)</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.段寄存器（SA）和偏移寄存器（EA）</strong></p>
+<p>指令要处理的数据在内存中，在汇编语言中可用[X]的格式给出EA，SA在某段寄存器中</p>
+<ul>
+<li>存放段地址的寄存器可以是默认的</li>
+<li>存放段地址的寄存器也可以是显性的给出</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">默认在ds</span><br><span class="line">mov ax,[bx]</span><br><span class="line">mov ax,[si]</span><br><span class="line">mov ax,[di]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+di]</span><br><span class="line">mov ax,[bx+si+idata]</span><br><span class="line">mov ax,[bx+di+idata]</span><br><span class="line">mov ax,[0]//在记事本编写的代码，还是不能被识别为偏移地址</span><br><span class="line">默认在ss</span><br><span class="line">mov ax,[bp]</span><br><span class="line">mov ax,[bp+si]</span><br><span class="line">mov ax,[bp+di]</span><br><span class="line">mov ax,[bp+si+idata]</span><br><span class="line">mov ax,[bp+di+idata]</span><br><span class="line">显性</span><br><span class="line">mov ax,ds:[bp]		   含义:(ax)=((ds)*16+(bp))</span><br><span class="line">mov ax,es:[bx]		   含义:(ax)=((es)*16+(bx))</span><br><span class="line">mov ax,ss:[bx+si]      含义:(ax)=((ss)*16+(bx)+(si))</span><br><span class="line">mov ax,cs:[bx+si+idata]含义:(ax)=((cs)*16+(bx)+(si)+idata)</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-4-寻址方式"><a href="#8-4-寻址方式" class="headerlink" title="8.4 寻址方式"></a>8.4 寻址方式</h3><ul>
+<li>当数据存放在内存中的时候，我们可以用多种方式来给定这个内存单元的偏移地址，这种定位内存单元的方法一般被称为寻址方式。</li>
+</ul>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240723155351825.png" alt="image-20240723155351825"></p>
+<h3 id="8-5-指令要处理的数据有多长？"><a href="#8-5-指令要处理的数据有多长？" class="headerlink" title="8.5 指令要处理的数据有多长？"></a>8.5 指令要处理的数据有多长？</h3><ul>
+<li><p>8086CPU的指令，可以处理两种尺寸的数据，byte和word。所以在机器指令中要指明，指令进行的是字操作还是字节操作。</p>
+</li>
+<li><p>如何确定指令有多长</p>
+<ol>
+<li><p>通过寄存器名指明要处理的数据的尺寸 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">如</span><br><span class="line">mov ax,bx</span><br><span class="line">mov al,ds:[idata]</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>在没有寄存器名存在的情况下，用操作符X ptr指明内存单元，X在汇编指令中可以为word或byte</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov word ptr ds:[0],1</span><br><span class="line">inc word ptr [bx]</span><br><span class="line">inc word ptr ds:[0]</span><br><span class="line">add word ptr [bx],2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在没有寄存器参与的内存单元访问指令中，用word ptr或byte ptr显性地指明所要访问的内存单元的长度是很必要的。</li>
+<li>否则，cpu无法得知所要访问的单元是字单元，还是字节单元</li>
+</ul>
+</li>
+<li><p>其他方法</p>
+<p>有些指令默认了访问的是字节单元还是字单元，比如 ：</p>
+<p><code>push [1000H]</code>就不用指明访问的是字单元还是字节单元，因为push指令只进行字操作</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="8-6-寻址方式的综合应用"><a href="#8-6-寻址方式的综合应用" class="headerlink" title="8.6 寻址方式的综合应用"></a>8.6 寻址方式的综合应用</h3><p><strong>问题</strong></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723183715044.png" alt="image-20240723183715044"></p>
+<p>我们要修改的数据</p>
+<p>(1)(DEC公司记录)的(排名字段)</p>
+<p>(2)(DEC公司记录)的(收入字段)</p>
+<p>(3)(DEC公司记录)的(产品字段)的(第一个字符)、(第二个字符)、(第三个字符)</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723183830627.png" alt="image-20240723183830627"></p>
+<p>修改方法</p>
+<p>(1)我们要访问的数据是DEC公司的记录，所以，首先要确定DEC公司记录的位置R&#x3D;seg:60<br>确定了公司记录的位置后，我们下面就进一步确定要访问的内容在记录中的位置。</p>
+<p>(2)确定排名字段在记录中的位置:0CH</p>
+<p>(3)修改R+0CH处的数据。</p>
+<p>(4)确定收入字段在记录中的位置:0EH</p>
+<p>(5)修改R+0EH处的数据。</p>
+<p>(6)确定产品字段在记录中的位置:10H。修改的产品字段是一个字符串(或一个数组)，需要访问字符串中的每一个字符。所以我们要进一步确定每一个字符在字符串中的位置。</p>
+<p>(7)确定第一个字符在产品字段中的位置:P&#x3D;0。</p>
+<p>(8)修改R+10H+P处的数:P&#x3D;P+1。</p>
+<p>(9)修改R+10H+P处的数:P&#x3D;P+1。</p>
+<p>(10)…</p>
+<p>程序实现</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723184550349.png" alt="image-20240723184550349"></p>
+<p>对比C语言</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723184630444.png" alt="image-20240723184630444"></p>
+<ul>
+<li><p>我们可以看到，8086CPU提供的如[bx+si+idata]的寻址方式为结构化数据的处理提供了方便。</p>
+</li>
+<li><p>使得我们可以在编程的时候，从结构化的角度去看待所要处理的数据。</p>
+</li>
+<li><p>从上面我们可以看到，一个结构化的数据包合了多个数据项，而数据项的类型又不相同，有的是字型数据，有的是字节型数据，有的是数组(字符串)</p>
+</li>
+<li><p>一般来说，我们可以用[bx+idata+si]的方式来访问结构体中的数据。</p>
+<p><strong>用bx定位整个结构体，用idata定位结构体中的某一个数据项，用si定位数组项中的每个元素</strong></p>
+</li>
+<li><p>在C语言程序中我们看到，如:dec.cp[i]，deg是一个变量名，指明了结构体变量的地址，cp是一个名称，指明了数据项cp的地址，而i用来定位cp中的每一个字符。<br>汇编语言中的做法是:bx.10h[si]</p>
+</li>
+</ul>
+<h3 id="8-7-div指令"><a href="#8-7-div指令" class="headerlink" title="8.7 div指令"></a>8.7 div指令</h3><ul>
+<li><p>div是除法指令(division)，使用div作除法的时候</p>
+<ul>
+<li><p>除数：8位或16位，在寄存器或内存单元中</p>
+</li>
+<li><p>被除数：（默认）放在AX或DX和AX中</p>
+</li>
+<li><p>商：如果被除数为16位，进行除法运算时al保存商，ah保存余数。如果被除数为32位时，进行除法运算时，ax保存商，dx保存余数</p>
+<table>
+<thead>
+<tr>
+<th>除数</th>
+<th>被除数</th>
+<th>商</th>
+<th>余数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8位</td>
+<td>16位（AX）</td>
+<td>AL</td>
+<td>AH</td>
+</tr>
+<tr>
+<td>16位</td>
+<td>32位（DX+AX）</td>
+<td>AX</td>
+<td>DX</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">为什么被除数要比除数大</span><br><span class="line">16位的数据除8位的数据时，最终得到的商可能大于8位，al保存不下会产生除法溢出。</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>div指令格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">div reg</span><br><span class="line">div 内存单元</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>div指令示例</p>
+<ul>
+<li><pre><code>div byte ptr ds:[0]
+含义为：
+(al)=(ax)/((ds)*16+0)的商
+(ah)=(ax)/((ds)*16+0)的余数
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* ```</span><br><span class="line">  div word ptr es:[0]</span><br><span class="line">  含义为:</span><br><span class="line">  (ax)=[(dx)*10000H+(ax)]/((ds)*16+0)的商</span><br><span class="line">  (dx)=[(dx)*10000H+(ax)]/((ds)*16+0)的余数</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><pre><code>div byte ptr [bx+si+8]
+含义为：
+(al)=(ax)/((ds)*16+(bx)+(si)+8)的商
+(ah)=(ax)/((ds)*16+(bx)+(si)+8)的余数
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* ```</span><br><span class="line">  div word ptr [bx+si+8]</span><br><span class="line">  含义为：</span><br><span class="line">  (ax)=[(dx)*10000H+(ax)]/((ds)*16+(bx)+(si)+8)的商</span><br><span class="line">  (dx)=[(dx)*10000H+(ax)]/((ds)*16+(bx)+(si)+8)的余数 </span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>除数小于255，可以在一个8位寄存器中存放，但具体要看被除数的大小</p>
+</li>
+</ul>
+<p><strong>试试</strong></p>
+<p><strong>1. 假设我们要计算100001&#x2F;100</strong></p>
+<ol>
+<li>编写程序</li>
+</ol>
+<p><img src="C:/Users/lkh_2/AppData/Roaming/Typora/typora-user-images/image-20240723204009759.png" alt="image-20240723204009759"></p>
+<ol start="2">
+<li>编译连接，debug调试</li>
+<li>单步调试得到结果</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723204239053.png" alt="image-20240723204239053"></p>
+<p><strong>2. 计算1001&#x2F;100</strong></p>
+<p>我们先用bl，表示用使用8位的除数，发现商和余数被储存在ax中</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723204853302.png" alt="image-20240723204853302"></p>
+<p><img src="C:\Users\lkh_2\AppData\Roaming\Typora\typora-user-images\image-20240723204841960.png" alt="image-20240723204841960"></p>
+<p>我们在用bx作为除数，表示用16位的除数，发现商和余数分别别储存在ax，dx中</p>
+<p><img src="C:\Users\lkh_2\AppData\Roaming\Typora\typora-user-images\image-20240723204732967.png" alt="image-20240723204732967"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723204752910.png" alt="image-20240723204752910"></p>
+<p>**小结论：**我们发现被除数的位数是由除数决定的</p>
+<h3 id="8-8-伪指令-dd"><a href="#8-8-伪指令-dd" class="headerlink" title="8.8 伪指令 dd"></a>8.8 伪指令 dd</h3><ul>
+<li>我们用db和dw定义字节型数据和字型数据</li>
+<li>dd是用来定义dword（double word双字）型数据的</li>
+</ul>
+<p><strong>上机</strong></p>
+<ol>
+<li><p>编写程序</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723210226500.png" alt="image-20240723210226500"></p>
+</li>
+<li><p>编译连接，debug调试</p>
+</li>
+<li><p>查看数据段内存</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20240723210210190.png" alt="image-20240723210210190"></p>
+</li>
+<li><p>我们发现数据的存入方式不同</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db 内存单元</span><br><span class="line">dw 低位内存单元：高位内存单元</span><br><span class="line">dd 低低位内存单元：低高位内存单元：高低位内存单元：高高位内存单元//叫法是我编的，知道什么意思就行</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="8-9-dup"><a href="#8-9-dup" class="headerlink" title="8.9 dup"></a>8.9 dup</h3><ul>
+<li><p>dup是一个操作符，在汇编语言中同db，dw，dd等一样，也是由编译器识别处理的符号</p>
+</li>
+<li><p>它是和db，dw，dd等数据定义伪指令配合使用的，用来进行数据的重复</p>
+</li>
+<li><p>示例：</p>
+<ul>
+<li><pre><code>db 3 dup(0)
+定义了三个字节，他们的值都是0
+相当于db 0,0,0
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* ```</span><br><span class="line">  db 3 dup(0,1,2)</span><br><span class="line">  定义了九个字节 012012012</span><br><span class="line">  相当于 db 0,1,2,0,1,2,0,1,2</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><pre><code>db 3 dup (&#39;abc&#39;, &#39;ABC&#39;)
+定义了18个字节，它们是abcABCabcABCabcABC
+相当于db&#39;abeABCabcARCabcABC&#39;
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>dup的使用格式</p>
+<ul>
+<li>db 重复的次数 dup （重复的字节型数据）</li>
+<li>dw 重复的次数 dup （重复的字型数据）</li>
+<li>dd 重复的次数 dup （重复的双字型数据）</li>
+</ul>
+</li>
+<li><p>dup是一个十分有用的操作符，比如我们要定义一个容量为 200 个字节的栈段，只需要 <code>db 200 dup(0)</code></p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">GoodBrain</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/03/07/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/">http://example.com/2025/03/07/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Welcome to my blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/03/07/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/" title="汇编语言学习笔记2"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">汇编语言学习笔记2</div></div><div class="info-2"><div class="info-item-1">汇编语言学习笔记2实验七 就是将一数据段拆开放进另一个数据段，但是有很多坑，建议自己写出来了再对比 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152assume cs:adata segmentdb &#x27;1975&#x27;,&#x27;1976&#x27;,&#x27;1977&#x27;,&#x27;1978&#x27;,&#x27;1979&#x27;,&#x27;1980&#x27;,&#x27;1981&#x27;,&#x27;1982&#x27;,&#x27;1983&#x27;db &#x27;1984&#x27;,&#x27;1985&#x27;,&#x27;1986&#x27;,&#x27;1987&#x27;,&#x27;1988&#x27;,&#x27;1989&#x27;,&#x27;1990&#x27;,&#x27;1991&#x27;,&#x27;1992&#x27;db...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">GoodBrain</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="/lkh_258@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01"><span class="toc-number">1.</span> <span class="toc-text">汇编语言学习笔记1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">了解汇编语言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">1. 基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.1机器语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2汇编语言的产生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%9A%84%E7%BB%84%E6%88%90"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.3汇编语言的组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">1.2.4.</span> <span class="toc-text">1.4存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5%E6%8C%87%E4%BB%A4%E5%92%8C%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.5.</span> <span class="toc-text">1.5指令和数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83"><span class="toc-number">1.2.6.</span> <span class="toc-text">1.6存储单元</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7cpu%E5%AF%B9%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E8%AF%BB%E5%86%99"><span class="toc-number">1.2.7.</span> <span class="toc-text">1.7cpu对存储器的读写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-8%E5%9C%B0%E5%9D%80%E6%80%BB%E7%BA%BF"><span class="toc-number">1.2.8.</span> <span class="toc-text">1.8地址总线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BA%BF"><span class="toc-number">1.2.9.</span> <span class="toc-text">1.9数据总线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-10%E6%8E%A7%E5%88%B6%E6%80%BB%E7%BA%BF"><span class="toc-number">1.2.10.</span> <span class="toc-text">1.10控制总线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-11%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="toc-number">1.2.11.</span> <span class="toc-text">1.11内存地址空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-12%E4%B8%BB%E6%9D%BF"><span class="toc-number">1.2.12.</span> <span class="toc-text">1.12主板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-13%E6%8E%A5%E5%8F%A3%E5%8D%A1"><span class="toc-number">1.2.13.</span> <span class="toc-text">1.13接口卡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-14-%E5%90%84%E7%B1%BB%E5%AD%98%E5%82%A8%E5%99%A8%E8%8A%AF%E7%89%87"><span class="toc-number">1.2.14.</span> <span class="toc-text">1.14 各类存储器芯片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-15-%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="toc-number">1.2.15.</span> <span class="toc-text">1.15 内存地址空间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AF%84%E5%AD%98%E5%99%A8%EF%BC%88cpu%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">2 寄存器（cpu工作原理）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1通用寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%AD%97%EF%BC%88word%EF%BC%89%E5%9C%A8%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.2 字（word）在寄存器中的存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%87%A0%E6%9D%A1%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.3 几条汇编指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80"><span class="toc-number">1.3.4.</span> <span class="toc-text">2.4物理地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-516%E4%BD%8D%E7%BB%93%E6%9E%84%E7%9A%84cpu"><span class="toc-number">1.3.5.</span> <span class="toc-text">2.516位结构的cpu</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-8086cpu%E7%BB%99%E5%87%BA%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.6.</span> <span class="toc-text">2.6 8086cpu给出物理地址的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80-%E6%AE%B5%E5%9C%B0%E5%9D%80-16-%E5%81%8F%E7%A7%BB%E5%9C%B0%E5%9D%80%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%90%AB%E4%B9%89"><span class="toc-number">1.3.7.</span> <span class="toc-text">2.7物理地址&#x3D;段地址*16+偏移地址的本质含义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-%E6%AE%B5%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.3.8.</span> <span class="toc-text">2.8 段的概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.3.9.</span> <span class="toc-text">2.9段寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-cs%E5%92%8Cip"><span class="toc-number">1.3.10.</span> <span class="toc-text">2.10 cs和ip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-11-%E4%BF%AE%E6%94%B9cs%EF%BC%8Cip%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">1.3.11.</span> <span class="toc-text">2.11 修改cs，ip的指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-12-%E4%BB%A3%E7%A0%81%E6%AE%B5"><span class="toc-number">1.3.12.</span> <span class="toc-text">2.12 代码段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AF%84%E5%AD%98%E5%99%A8%EF%BC%88%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">3 寄存器（内存访问）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%86%85%E5%AD%98%E4%B8%AD%E5%AD%97%E7%9A%84%E5%AD%98%E5%82%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 内存中字的存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-DS%E5%92%8C-address"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 DS和[address]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%AD%97%E7%9A%84%E4%BC%A0%E9%80%81"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.3 字的传送</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-mov%EF%BC%8Cadd%EF%BC%8Csub%E6%8C%87%E4%BB%A4"><span class="toc-number">1.4.4.</span> <span class="toc-text">3.4 mov，add，sub指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E6%95%B0%E6%8D%AE%E6%AE%B5"><span class="toc-number">1.4.5.</span> <span class="toc-text">3.5 数据段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E6%A0%88"><span class="toc-number">1.4.6.</span> <span class="toc-text">3.6 栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-cpu%E6%8F%90%E4%BE%9B%E7%9A%84%E6%A0%88%E6%9C%BA%E5%88%B6"><span class="toc-number">1.4.7.</span> <span class="toc-text">3.7 cpu提供的栈机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-8-%E6%A0%88%E9%A1%B6%E8%B6%8A%E7%95%8C%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.4.8.</span> <span class="toc-text">3.8 栈顶越界的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-9-push%EF%BC%8Cpop%E6%8C%87%E4%BB%A4"><span class="toc-number">1.4.9.</span> <span class="toc-text">3.9 push，pop指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-10-%E6%A0%88%E6%AE%B5"><span class="toc-number">1.4.10.</span> <span class="toc-text">3.10 栈段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.5.</span> <span class="toc-text">4 第一个程序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E4%B8%80%E4%B8%AA%E6%BA%90%E7%A8%8B%E5%BA%8F%E4%BB%8E%E5%86%99%E5%87%BA%E5%88%B0%E6%89%A7%E8%A1%8C%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">1.5.1.</span> <span class="toc-text">4.1 一个源程序从写出到执行的过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%BA%90%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.5.2.</span> <span class="toc-text">4.2 源程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E6%AE%B5"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">定义一个段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%B2%A1%E4%BA%86"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">真正的没了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E6%AE%B5%E7%9A%84%E5%85%B3%E8%81%94"><span class="toc-number">1.5.2.3.</span> <span class="toc-text">寄存器与段的关联</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BA%90%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E2%80%9C%E7%A8%8B%E5%BA%8F%E2%80%9C"><span class="toc-number">1.5.2.4.</span> <span class="toc-text">源程序中的“程序“</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-number">1.5.2.5.</span> <span class="toc-text">注意</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%87%E5%8F%B7"><span class="toc-number">1.5.2.6.</span> <span class="toc-text">标号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E8%BF%94%E5%9B%9E"><span class="toc-number">1.5.2.7.</span> <span class="toc-text">程序返回</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AE%B5%E7%BB%93%E6%9D%9F%EF%BC%8C%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9D%9F%EF%BC%8C%E7%A8%8B%E5%BA%8F%E8%BF%94%E5%9B%9E"><span class="toc-number">1.5.2.8.</span> <span class="toc-text">段结束，程序结束，程序返回</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95%E9%94%99%E8%AF%AF%EF%BC%8C%E9%80%BB%E8%BE%91%E9%94%99%E8%AF%AF"><span class="toc-number">1.5.2.9.</span> <span class="toc-text">语法错误，逻辑错误</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E7%BC%96%E8%BE%91%E6%BA%90%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.5.3.</span> <span class="toc-text">4.3 编辑源程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E4%BB%A5%E7%AE%80%E5%8C%96%E7%9A%84%E6%96%B9%E5%BC%8F%E8%BF%9B%E8%A1%8C%E7%BC%96%E8%AF%91%E5%92%8C%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.5.4.</span> <span class="toc-text">4.4 以简化的方式进行编译和连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%BC%96%E8%AF%91%E5%92%8C%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.5.4.1.</span> <span class="toc-text">关于编译和连接</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%A8%8B%E5%BA%8F%E8%A3%85%E5%85%A5%E5%86%85%E5%AD%98%E5%B9%B6%E8%BF%90%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.5.5.</span> <span class="toc-text">4.5可执行文件中的程序装入内存并运行的原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%A4%96%E5%A3%B3"><span class="toc-number">1.5.5.1.</span> <span class="toc-text">操作系统的外壳</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%E7%9A%84%E8%BF%BD%E8%B8%AA"><span class="toc-number">1.5.6.</span> <span class="toc-text">4.6 程序执行过程的追踪</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-BX-%E5%92%8Cloop%E6%8C%87%E4%BB%A4"><span class="toc-number">1.6.</span> <span class="toc-text">5 [BX]和loop指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-bx"><span class="toc-number">1.6.1.</span> <span class="toc-text">5.1 [bx]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-Loop%E6%8C%87%E4%BB%A4"><span class="toc-number">1.6.2.</span> <span class="toc-text">5.2 Loop指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E5%9C%A8debug%E4%B8%AD%E8%B7%9F%E8%B8%AA%E7%94%A8loop%E6%8C%87%E4%BB%A4%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%BE%AA%E7%8E%AF%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.6.3.</span> <span class="toc-text">5.3 在debug中跟踪用loop指令实现的循环程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%88%E5%85%B3%E9%94%AE%E7%BB%88%E4%BA%8E%E6%9D%A5%E4%BA%86%EF%BC%89debug%E4%B8%AD%E5%AF%B9%E5%BE%AA%E7%8E%AF%E7%9A%84%E8%B7%9F%E8%B8%AA"><span class="toc-number">1.6.3.1.</span> <span class="toc-text">（关键终于来了）debug中对循环的跟踪</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-debug%E5%92%8C%E6%B1%87%E7%BC%96%E7%BC%96%E8%AF%91%E5%99%A8masm%E5%AF%B9%E6%8C%87%E4%BB%A4%E7%9A%84%E4%B8%8D%E5%90%8C%E5%A4%84%E7%90%86"><span class="toc-number">1.6.4.</span> <span class="toc-text">5.4 debug和汇编编译器masm对指令的不同处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-loop%E5%92%8C-bx-%E7%9A%84%E8%81%94%E5%90%88%E5%BA%94%E7%94%A8"><span class="toc-number">1.6.5.</span> <span class="toc-text">5.5 loop和[bx]的联合应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-%E6%AE%B5%E5%89%8D%E7%BC%80"><span class="toc-number">1.6.6.</span> <span class="toc-text">5.6 段前缀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-%E4%B8%80%E6%AE%B5%E5%AE%89%E5%85%A8%E7%9A%84%E7%A9%BA%E9%97%B4"><span class="toc-number">1.6.7.</span> <span class="toc-text">5.7 一段安全的空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-8-%E6%AE%B5%E5%89%8D%E7%BC%80%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.6.8.</span> <span class="toc-text">5.8 段前缀的使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%8C%85%E6%8B%AC%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.7.</span> <span class="toc-text">6 包括多个段的程序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%9C%A8%E4%BB%A3%E7%A0%81%E6%AE%B5%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E4%B8%BE%E4%BE%8B"><span class="toc-number">1.7.1.</span> <span class="toc-text">6.1 在代码段中使用数据举例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%9C%A8%E4%BB%A3%E7%A0%81%E6%AE%B5%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%A0%88"><span class="toc-number">1.7.2.</span> <span class="toc-text">6.2 在代码段中使用栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E5%B0%86%E6%95%B0%E6%8D%AE%EF%BC%8C%E4%BB%A3%E7%A0%81%EF%BC%8C%E6%A0%88%E6%94%BE%E5%85%A5%E4%B8%8D%E5%90%8C%E7%9A%84%E6%AE%B5"><span class="toc-number">1.7.3.</span> <span class="toc-text">6.3 将数据，代码，栈放入不同的段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.8.</span> <span class="toc-text">7 更灵活的定位内存地址的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-and%E5%92%8Cor%E6%8C%87%E4%BB%A4"><span class="toc-number">1.8.1.</span> <span class="toc-text">7.1 and和or指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E5%85%B3%E4%BA%8EASCII%E7%A0%81"><span class="toc-number">1.8.2.</span> <span class="toc-text">7.2 关于ASCII码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%E4%BB%A5%E5%AD%97%E7%AC%A6%E5%BD%A2%E5%BC%8F%E7%BB%99%E5%87%BA%E6%95%B0%E6%8D%AE"><span class="toc-number">1.8.3.</span> <span class="toc-text">7.3 以字符形式给出数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-4-%E5%A4%A7%E5%B0%8F%E5%86%99%E8%BD%AC%E6%8D%A2%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.8.4.</span> <span class="toc-text">7.4 大小写转换的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-5-bx-idata"><span class="toc-number">1.8.5.</span> <span class="toc-text">7.5 [bx+idata]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-6-%E7%94%A8-bx-idata-%E7%9A%84%E6%96%B9%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">1.8.6.</span> <span class="toc-text">7.6 用[bx+idata]的方式进行数值的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-7-SI%E5%92%8CDI"><span class="toc-number">1.8.7.</span> <span class="toc-text">7.7 SI和DI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-8-bx-si-%E5%92%8C-bx-di"><span class="toc-number">1.8.8.</span> <span class="toc-text">7.8 [bx+si]和[bx+di]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-9-bx-si-idata-%E5%92%8C-bx-di-idata"><span class="toc-number">1.8.9.</span> <span class="toc-text">7.9 [bx+si+idata]和[bx+di+idata]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-10-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F%E7%9A%84%E7%81%B5%E6%B4%BB%E5%BA%94%E7%94%A8"><span class="toc-number">1.8.10.</span> <span class="toc-text">7.10 不同的寻址方式的灵活应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="toc-number">1.9.</span> <span class="toc-text">8 数据处理的两个基本问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-bx-si-di-bp"><span class="toc-number">1.9.1.</span> <span class="toc-text">8.1 bx,si,di,bp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4%E5%A4%84%E7%90%86%E7%9A%84%E6%95%B0%E6%8D%AE%E6%89%80%E5%9C%A8%E4%BD%8D%E7%BD%AE"><span class="toc-number">1.9.2.</span> <span class="toc-text">8.2 机器指令处理的数据所在位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%9A%84%E8%A1%A8%E8%BE%BE"><span class="toc-number">1.9.3.</span> <span class="toc-text">8.3 汇编语言中数据位置的表达</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">1.9.4.</span> <span class="toc-text">8.4 寻址方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-5-%E6%8C%87%E4%BB%A4%E8%A6%81%E5%A4%84%E7%90%86%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9C%89%E5%A4%9A%E9%95%BF%EF%BC%9F"><span class="toc-number">1.9.5.</span> <span class="toc-text">8.5 指令要处理的数据有多长？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-6-%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F%E7%9A%84%E7%BB%BC%E5%90%88%E5%BA%94%E7%94%A8"><span class="toc-number">1.9.6.</span> <span class="toc-text">8.6 寻址方式的综合应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-7-div%E6%8C%87%E4%BB%A4"><span class="toc-number">1.9.7.</span> <span class="toc-text">8.7 div指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-8-%E4%BC%AA%E6%8C%87%E4%BB%A4-dd"><span class="toc-number">1.9.8.</span> <span class="toc-text">8.8 伪指令 dd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-9-dup"><span class="toc-number">1.9.9.</span> <span class="toc-text">8.9 dup</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/07/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/" title="汇编语言学习笔记2">汇编语言学习笔记2</a><time datetime="2025-03-07T12:18:59.947Z" title="发表于 2025-03-07 20:18:59">2025-03-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/07/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/" title="汇编语言学习笔记1">汇编语言学习笔记1</a><time datetime="2025-03-07T12:18:53.226Z" title="发表于 2025-03-07 20:18:53">2025-03-07</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By GoodBrain</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
