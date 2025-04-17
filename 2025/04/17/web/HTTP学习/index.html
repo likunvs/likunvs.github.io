@@ -1,0 +1,356 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>HTTP协议学习笔记 | G00DBrain blog</title><meta name="author" content="GoodBrain"><meta name="copyright" content="GoodBrain"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="HTTP协议学习笔记HTTP协议是什么HTTP：（Hyper Text Transfer Protocol：超文本传输协议） 用于万维网的服务器传输超文本到本地浏览器的传输协议 是作用于应用层的协议 1协议： 为了使数据在网络上从源头到达目的，网络通信的参与方必须遵循相同的规则，这套规则称为协议，它最终体现为在网络上传输的数据包的格式。  HTTP的工作流程我们通过浏览器访问一个网站，会向哪个网站">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP协议学习笔记">
+<meta property="og:url" content="http://example.com/2025/04/17/web/HTTP%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="G00DBrain blog">
+<meta property="og:description" content="HTTP协议学习笔记HTTP协议是什么HTTP：（Hyper Text Transfer Protocol：超文本传输协议） 用于万维网的服务器传输超文本到本地浏览器的传输协议 是作用于应用层的协议 1协议： 为了使数据在网络上从源头到达目的，网络通信的参与方必须遵循相同的规则，这套规则称为协议，它最终体现为在网络上传输的数据包的格式。  HTTP的工作流程我们通过浏览器访问一个网站，会向哪个网站">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg">
+<meta property="article:published_time" content="2025-04-17T14:12:12.740Z">
+<meta property="article:modified_time" content="2025-04-17T14:14:18.618Z">
+<meta property="article:author" content="GoodBrain">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "HTTP协议学习笔记",
+  "url": "http://example.com/2025/04/17/web/HTTP%E5%AD%A6%E4%B9%A0/",
+  "image": "https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg",
+  "datePublished": "2025-04-17T14:12:12.740Z",
+  "dateModified": "2025-04-17T14:14:18.618Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "GoodBrain",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg"><link rel="canonical" href="http://example.com/2025/04/17/web/HTTP%E5%AD%A6%E4%B9%A0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'HTTP协议学习笔记',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">G00DBrain blog</span></a><a class="nav-page-title" href="/"><span class="site-name">HTTP协议学习笔记</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">HTTP协议学习笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-17T14:12:12.740Z" title="发表于 2025-04-17 22:12:12">2025-04-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-17T14:14:18.618Z" title="更新于 2025-04-17 22:14:18">2025-04-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/HTTP/">HTTP</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="HTTP协议学习笔记"><a href="#HTTP协议学习笔记" class="headerlink" title="HTTP协议学习笔记"></a>HTTP协议学习笔记</h1><h2 id="HTTP协议是什么"><a href="#HTTP协议是什么" class="headerlink" title="HTTP协议是什么"></a>HTTP协议是什么</h2><p><strong>HTTP</strong>：（Hyper Text Transfer Protocol：超文本传输协议）</p>
+<p>用于万维网的<strong>服务器传输超文本到本地浏览器</strong>的传输协议</p>
+<p>是作用于应用层的协议</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">协议： 为了使数据在网络上从源头到达目的，网络通信的参与方必须遵循相同的规则，这套规则称为协议，它最终体现为在网络上传输的数据包的格式。</span><br></pre></td></tr></table></figure>
+
+<h2 id="HTTP的工作流程"><a href="#HTTP的工作流程" class="headerlink" title="HTTP的工作流程"></a>HTTP的工作流程</h2><p>我们通过浏览器访问一个网站，会向哪个网站发送一个HTTP请求，网站接收到这个请求后会为我们回应一个HTTP响应，在我们实际的访问中不止一次请求和响应</p>
+<p><strong>术语：</strong></p>
+<ul>
+<li>客户端：主动发起网络请求的一方</li>
+<li>服务端：被动接收网络请求的一方</li>
+<li>请求：客户端向服务端发送的数据</li>
+<li>响应：服务端向客户断发送的数据</li>
+</ul>
+<p><strong>重要特点：</strong></p>
+<p>一发一收，一问一答</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250408225728602.png" alt="image-20250408225728602"></p>
+<p>除此之外还有</p>
+<p>多发一收：发送大文件时</p>
+<p>一发多收：搜索内容时</p>
+<p>多发多收：串流</p>
+<h2 id="HTTP请求报文和HTTP响应报文示例总览"><a href="#HTTP请求报文和HTTP响应报文示例总览" class="headerlink" title="HTTP请求报文和HTTP响应报文示例总览"></a>HTTP请求报文和HTTP响应报文示例总览</h2><p>这里我使用的是Burp Suite来抓取报文</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/   </span><br><span class="line"></span><br><span class="line">#官方测试域名</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><h4 id="请求报文"><a href="#请求报文" class="headerlink" title="请求报文"></a>请求报文</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.127 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="响应报文"><a href="#响应报文" class="headerlink" title="响应报文"></a>响应报文</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Content-Type: text/html</span><br><span class="line">ETag: &quot;84238dfc8092e5d9c0dac8ef93371a07:1736799080.121134&quot;</span><br><span class="line">Last-Modified: Mon, 13 Jan 2025 20:11:20 GMT</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">Content-Length: 1256</span><br><span class="line">Cache-Control: max-age=2857</span><br><span class="line">Date: Wed, 09 Apr 2025 14:01:52 GMT</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Example Domain&lt;/title&gt;</span><br><span class="line"></span><br><span class="line">    &lt;meta charset=&quot;utf-8&quot; /&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;Content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot; /&gt;</span><br><span class="line">    &lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">    body &#123;</span><br><span class="line">        background-color: #f0f0f2;</span><br><span class="line">        margin: 0;</span><br><span class="line">        padding: 0;</span><br><span class="line">        font-family: -apple-system, system-ui, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    div &#123;</span><br><span class="line">        width: 600px;</span><br><span class="line">        margin: 5em auto;</span><br><span class="line">        padding: 2em;</span><br><span class="line">        background-color: #fdfdff;</span><br><span class="line">        border-radius: 0.5em;</span><br><span class="line">        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);</span><br><span class="line">    &#125;</span><br><span class="line">    a:link, a:visited &#123;</span><br><span class="line">        color: #38488f;</span><br><span class="line">        text-decoration: none;</span><br><span class="line">    &#125;</span><br><span class="line">    @media (max-width: 700px) &#123;</span><br><span class="line">        div &#123;</span><br><span class="line">            margin: 0 auto;</span><br><span class="line">            width: auto;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &lt;/style&gt;    </span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Example Domain&lt;/h1&gt;</span><br><span class="line">    &lt;p&gt;This domain is for use in illustrative examples in documents. You may use this</span><br><span class="line">    domain in literature without prior coordination or asking for permission.&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;&lt;a href=&quot;https://www.iana.org/domains/example&quot;&gt;More information...&lt;/a&gt;&lt;/p&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="格式总览"><a href="#格式总览" class="headerlink" title="格式总览"></a>格式总览</h3><h4 id="请求报文-1"><a href="#请求报文-1" class="headerlink" title="请求报文"></a>请求报文</h4><p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250409200123655.png" alt="image-20250409200123655"></p>
+<h4 id="响应报文-1"><a href="#响应报文-1" class="headerlink" title="响应报文"></a>响应报文</h4><p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250409200149846.png" alt="image-20250409200149846"></p>
+<h2 id="HTTP请求（Request）"><a href="#HTTP请求（Request）" class="headerlink" title="HTTP请求（Request）"></a>HTTP请求（Request）</h2><h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><h4 id="什么是URL"><a href="#什么是URL" class="headerlink" title="什么是URL"></a>什么是URL</h4><p>URL也就是我们平时看见的网址，英文（Uniform Resource Locator：统一资源定位符），在互联网上每个文件都有一个唯一URL用于表示这个文件的位置，以及浏览器应该怎么处理他</p>
+<h4 id="URL的格式"><a href="#URL的格式" class="headerlink" title="URL的格式"></a>URL的格式</h4><p><strong>标准格式</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">协议类型:[//服务器地址[:端口号]][/资源层级 UNIX 文件路径]文件名[?查询字符串][#片段标识符]</span><br></pre></td></tr></table></figure>
+
+<p><strong>完整格式</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">协议类型:[//[访问资源需要的凭证信息@]服务器地址[:端口号]][/资源层级 UNIX 文件路径]文件名[?查询字符串][#片段标识符]</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250409201316510.png" alt="image-20250409201316510"></p>
+<p><strong>参数介绍</strong></p>
+<p>由于本篇文章主要学习HTTP，URL参数就简单介绍</p>
+<ul>
+<li><strong>Protocol（协议）</strong>：协议是用于指定传输数据的规矩和标准，在URL的最前面，通常以 <code>://</code>结尾</li>
+<li><strong>Sub Domain（子域名）</strong>： 子域名是主域名之前的部分，他的作用是将主域名的一部分或者子网独立开来，通常用来创建站带你的不同部分，它可以用于区分不同服务，地区划分，语言划分</li>
+<li><strong>Domain name（域名）</strong>：域名是互联网的标识符，由两部分组成，顶级域名（TLD）和二级域名（SLD）他们之间的关系是父子关系，他们一起组成主域名</li>
+<li><strong>Port（端口）</strong>： 通过域名我们就可以确定一个服务器了，而通过端口用于区分同一服务器的不同服务与域名由 <code>:</code>分隔</li>
+<li><strong>Path（路径）</strong>： 路径用于标识资源在服务器上的具体位置，在域名和端口号之后，以 <code>\</code>分格</li>
+<li><strong>Query（查询字符串）</strong>： 在路径之后由 <code>?</code>开始后面是 <code>key=value</code>的键值对，多个键值对之间使用 <code>&amp;</code>分隔</li>
+<li><strong>Parameters（参数）</strong>：通常以键值对的形式出现，与查询字符串有一点重叠，但相较概念更广泛，包括路径参数，查询参数，头部参数</li>
+<li><strong>Fragment（片段标识符）</strong>：最后的最后是片段标识符，用来定位页面中的特殊片段，以 <code>#</code>开头 ，用于跳转到页面中的特定部分，单页应用（SPA）中的路由，表单校验与提示</li>
+</ul>
+<p>这里挂出我的博客举例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://likunvs.github.io/</span><br></pre></td></tr></table></figure>
+
+<h4 id="URLencode"><a href="#URLencode" class="headerlink" title="URLencode"></a>URLencode</h4><p>我们复制一个搜索时的url</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://cn.bing.com/search?pglt=161&amp;q=URL%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3&amp;cvid=2d52a81c20294ab794c0c657acd9f5e8&amp;gs_lcrp=EgRlZGdlKgYIABBFGDkyBggAEEUYOTIGCAEQABhAMgYIAhAAGEAyBggDEAAYQDIGCAQQABhAMgYIBRAAGEAyBggGEAAYQDIGCAcQABhAMgYICBAAGEDSAQg1NTE5ajBqMagCCLACAQ&amp;FORM=ANNTA1&amp;adppc=EDGEDBB&amp;PC=CNNDDB</span><br></pre></td></tr></table></figure>
+
+<p>观察上面的url我们会发现有些数据是以%开头的 <code>%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3</code>为什么会出现这种情况呢，我们先将这些数据urlencode</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250409210256912.png" alt="image-20250409210256912"></p>
+<p>发现他是普通的中文字符</p>
+<p><strong>为什么要以这种形式表达</strong></p>
+<p>在URL 的规范（RFC 3986）定义了保留字符（Reserved Characters）和非保留字符（Unreserved Characters）：</p>
+<ul>
+<li><strong>保留字符</strong>：在 URL 中有特殊含义，不能直接使用，如：<ul>
+<li><code>/</code>（路径分隔符）</li>
+<li><code>?</code>（查询参数起始符）</li>
+<li><code>&amp;</code>（参数分隔符）</li>
+<li><code>=</code>（键值对连接符）</li>
+<li><code>#</code>（片段标识符）</li>
+<li><code>%</code>（编码标识符）</li>
+<li>空格（必须转义为 <code>%20</code> 或 <code>+</code>）</li>
+</ul>
+</li>
+<li><strong>非保留字符</strong>：可以直接使用，如字母（<code>A-Za-z</code>）、数字（<code>0-9</code>）、<code>-</code>, <code>_</code>, <code>.</code>, <code>~</code>。</li>
+</ul>
+<p>如果参数值中包含这些保留字符或非 ASCII 字符（如中文），就必须进行 URL 编码。</p>
+<h3 id="认识”方法“（method）"><a href="#认识”方法“（method）" class="headerlink" title="认识”方法“（method）"></a>认识”方法“（method）</h3><p><strong>方法</strong>是HTTP请求报文中首行第一部分的内容，原本HTTP设计者是想通过不同的方法来表示不同的语义，但是并没有怎么用，实现的功能完全由程序员在代码中决定，最常用的方法是 <strong>GET ， POST</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+<th>适用版本号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>获取资源</td>
+<td>HTTP 1.0、HTTP 1.1</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>传输实体主体</td>
+<td>HTTP 1.0、HTTP 1.1</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>传输文件</td>
+<td>HTTP 1.0、HTTP 1.1</td>
+</tr>
+<tr>
+<td>HEAD</td>
+<td>获得报文首部</td>
+<td>HTTP 1.0、HTTP 1.1</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>删除文件</td>
+<td>HTTP 1.0、HTTP 1.1</td>
+</tr>
+<tr>
+<td>OPTIONS</td>
+<td>访问支持的方法</td>
+<td>HTTP 1.1</td>
+</tr>
+<tr>
+<td>TRACE</td>
+<td>追踪路径</td>
+<td>HTTP 1.1</td>
+</tr>
+<tr>
+<td>CONNECT</td>
+<td>要求用隧道协议连接代理</td>
+<td>HTTP 1.1</td>
+</tr>
+<tr>
+<td>LINK</td>
+<td>建立和资源之间的联系</td>
+<td>HTTP 1.1</td>
+</tr>
+<tr>
+<td>UNLINE</td>
+<td>断开连接关系</td>
+<td>HTTP 1.1</td>
+</tr>
+</tbody></table>
+<h3 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h3><p>GET是HTTP最常用的方法，常用于获取服务器上的某个资源</p>
+<p><strong>GET特点</strong></p>
+<ul>
+<li>请求报文首行的第一部分</li>
+<li>对URL中的query不要求</li>
+<li>GET请求header中有若干个键值对</li>
+<li>GET中的bady一般为空</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: example.com</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.127 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h3><p>post也是HTTP常用的方法，常常用于将用户输入的数据传输给服务器</p>
+<p><strong>POST特点</strong></p>
+<ul>
+<li>首行第一部分</li>
+<li>对URL中的query不要求</li>
+<li>header有若干键值对</li>
+<li>body一般有值</li>
+</ul>
+<h3 id="请求报头（header）"><a href="#请求报头（header）" class="headerlink" title="请求报头（header）"></a>请求报头（header）</h3><p>header的格式是键值对的结构，每个键值对占一行，键和值之间使用 <code>:</code>分隔</p>
+<p><strong>常见报头：</strong></p>
+<ul>
+<li><p>**Host：**表示服务器主机的地址和端口</p>
+</li>
+<li><p>**Content-Length：**表示body的数据长度</p>
+</li>
+<li><p>**Content-Type：**表示body的数据格式</p>
+</li>
+<li><p>**User-Agent：**表示浏览器或者操作系统的属性</p>
+</li>
+<li><p>**Referer：**表示这个页面是从那个页面跳转过来的</p>
+</li>
+<li><p>**X-Forwarded-For:**用于伪造ip地址</p>
+</li>
+<li><p>**via：**表示代理</p>
+</li>
+<li><p>**location：**表示要跳转的地址</p>
+</li>
+</ul>
+<h2 id="HTTP响应（Response）"><a href="#HTTP响应（Response）" class="headerlink" title="HTTP响应（Response）"></a>HTTP响应（Response）</h2><h3 id="状态码（status-code）"><a href="#状态码（status-code）" class="headerlink" title="状态码（status code）"></a>状态码（status code）</h3><p>状态码表示访问一个页面的结果，按照第一位数分为5大类（1xx,2xx,3xx,4xx,5xx），每个大类含义不同</p>
+<p><strong>200 OK</strong></p>
+<p>表示访问成功</p>
+<p><strong>404 Not Found</strong></p>
+<p>表示没有找到资源</p>
+<p><strong>403 Forbidden</strong></p>
+<p>表示访问被拒绝</p>
+<p><strong>405 Mrthod Not Allowed</strong></p>
+<p>表示访问的服务器不能支持请求中的方法或者不能使用请求中的方法</p>
+<p><strong>500 Internal Server Error</strong></p>
+<p>表示服务器内部错误</p>
+<p><strong>504 Gateway Timeout</strong></p>
+<p>表示当前服务器负载比较大导致的超时</p>
+<p><strong>302 Move temporarily</strong></p>
+<p>表示临时重定向</p>
+<p><strong>301 Moved Permanently</strong></p>
+<p>表示永久重定向</p>
+<h3 id="响应”报文“（header）"><a href="#响应”报文“（header）" class="headerlink" title="响应”报文“（header）"></a>响应”报文“（header）</h3><p>请求报文和响应报文的格式基本一致，主要是Content-Type参数不对</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51367845/article/details/123313047?ops_request_misc=%7B%22request_id%22:%2243790c5e947552e08242aa3c05d97c3a%22,%22scm%22:%2220140713.130102334..%22%7D&request_id=43790c5e947552e08242aa3c05d97c3a&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-123313047-null-null.142%5Ev102%5Econtrol&utm_term=HTTP&spm=1018.2226.3001.4187">【计算机网络】HTTP 协议详解_3.简述浏览器请求一个网址的过程中用到的网络协议,以及协议的用途(写关键点即可)-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1631431">一张图带你彻底了解URL的结构，非常形象！-阿里云开发者社区</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">GoodBrain</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/04/17/web/HTTP%E5%AD%A6%E4%B9%A0/">http://example.com/2025/04/17/web/HTTP%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">G00DBrain blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/web/">web</a></div><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/04/09/LLVM/LLVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="LLVM学习笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">LLVM学习笔记</div></div><div class="info-2"><div class="info-item-1">LLVM学习笔记LLVM是什么ai说： LLVM（Low Level Virtual Machine，最初的含义，现已作为正式名称）是一个开源的编译器基础设施，用于构建编程语言的编译器、优化器、代码生成工具和相关开发工具。它提供了一套模块化的、可重用的工具链，使开发者能够高效地设计编译器前端（如词法分析、语法分析）并利用其强大的后端（如优化、代码生成）来支持多种硬件架构。 我说： 在编译性语言从代码到变为可执行文件的过程中会经过编译，链接，而通过LLVM便可实现了编译的过程，在这个过程中他将高级语言转化为他使用的低级语言（LLVM IR），再对代码进行优化，最后转为电脑可以识别的机器语言  LLVM主要组成LLVM IR一种与硬件无关的低级编译语言，类似汇编 可序列化为文本或二进制格式（.ll 或 .bc 文件） 前端作用：将高级语言转为LLVM IR 示例工具：  Clang（C&#x2F;C++&#x2F;Objective-C 编译器，比 GCC 更快且更模块化）。 Rustc（Rust 编译器使用 LLVM 作为后端）。 Swift 编译器（Swift...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">GoodBrain</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="/lkh_258@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">文章插图需搭梯子</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0"><span class="toc-text">HTTP协议学习笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E5%8D%8F%E8%AE%AE%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">HTTP协议是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">HTTP的工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87%E5%92%8CHTTP%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87%E7%A4%BA%E4%BE%8B%E6%80%BB%E8%A7%88"><span class="toc-text">HTTP请求报文和HTTP响应报文示例总览</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87"><span class="toc-text">请求报文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87"><span class="toc-text">响应报文</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E6%80%BB%E8%A7%88"><span class="toc-text">格式总览</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87-1"><span class="toc-text">请求报文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87-1"><span class="toc-text">响应报文</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E8%AF%B7%E6%B1%82%EF%BC%88Request%EF%BC%89"><span class="toc-text">HTTP请求（Request）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#URL"><span class="toc-text">URL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFURL"><span class="toc-text">什么是URL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#URL%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="toc-text">URL的格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#URLencode"><span class="toc-text">URLencode</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86%E2%80%9D%E6%96%B9%E6%B3%95%E2%80%9C%EF%BC%88method%EF%BC%89"><span class="toc-text">认识”方法“（method）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GET"><span class="toc-text">GET</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST"><span class="toc-text">POST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E5%A4%B4%EF%BC%88header%EF%BC%89"><span class="toc-text">请求报头（header）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E5%93%8D%E5%BA%94%EF%BC%88Response%EF%BC%89"><span class="toc-text">HTTP响应（Response）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E7%A0%81%EF%BC%88status-code%EF%BC%89"><span class="toc-text">状态码（status code）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E2%80%9D%E6%8A%A5%E6%96%87%E2%80%9C%EF%BC%88header%EF%BC%89"><span class="toc-text">响应”报文“（header）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-text">参考文章</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/17/web/HTTP%E5%AD%A6%E4%B9%A0/" title="HTTP协议学习笔记">HTTP协议学习笔记</a><time datetime="2025-04-17T14:12:12.740Z" title="发表于 2025-04-17 22:12:12">2025-04-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/09/LLVM/LLVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="LLVM学习笔记">LLVM学习笔记</a><time datetime="2025-04-09T10:47:49.760Z" title="发表于 2025-04-09 18:47:49">2025-04-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/10/%E7%BC%96%E7%A0%81%E5%92%8C%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/TEA%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" title="TEA加密算法">TEA加密算法</a><time datetime="2025-03-10T12:33:12.511Z" title="发表于 2025-03-10 20:33:12">2025-03-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/10/%E7%BC%96%E7%A0%81%E5%92%8C%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/MD5%E5%8A%A0%E5%AF%86%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="MD5加密学习笔记">MD5加密学习笔记</a><time datetime="2025-03-10T12:33:12.496Z" title="发表于 2025-03-10 20:33:12">2025-03-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/10/%E7%BC%96%E7%A0%81%E5%92%8C%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/base64%E7%BC%96%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="base64编码学习笔记">base64编码学习笔记</a><time datetime="2025-03-10T12:33:12.476Z" title="发表于 2025-03-10 20:33:12">2025-03-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-color: rgba(0, 0, 0, 0);"><div id="footer-wrap"><div class="copyright">&copy;2025 By GoodBrain</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
