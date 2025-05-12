@@ -1,0 +1,643 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>ARM汇编语言学习笔记 | G00DBrain blog</title><meta name="author" content="GoodBrain"><meta name="copyright" content="GoodBrain"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ARM汇编前言 在学习ARM汇编之前，笔者已经在快一年前学过X86汇编，当时是跟着B站小甲鱼的视频将王爽老的第四版汇编语言过了一遍，花了十多天，所以笔者在有些地方会加入自己的理解，若这篇文章有幸被您看见，遇见不对的地方尽可告诉笔者 基础知识指令集一个计算机编程语言中有很多不同的命令，不同的计算机编程语言有不同的命令，而我们的CPU不可能将所有的命令都录入硬件，他只会提供最基础的功能，如加，减，乘，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARM汇编语言学习笔记">
+<meta property="og:url" content="http://example.com/2025/05/12/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/ARM%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="G00DBrain blog">
+<meta property="og:description" content="ARM汇编前言 在学习ARM汇编之前，笔者已经在快一年前学过X86汇编，当时是跟着B站小甲鱼的视频将王爽老的第四版汇编语言过了一遍，花了十多天，所以笔者在有些地方会加入自己的理解，若这篇文章有幸被您看见，遇见不对的地方尽可告诉笔者 基础知识指令集一个计算机编程语言中有很多不同的命令，不同的计算机编程语言有不同的命令，而我们的CPU不可能将所有的命令都录入硬件，他只会提供最基础的功能，如加，减，乘，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg">
+<meta property="article:published_time" content="2025-05-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-12T03:47:43.452Z">
+<meta property="article:author" content="GoodBrain">
+<meta property="article:tag" content="ARM汇编语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ARM汇编语言学习笔记",
+  "url": "http://example.com/2025/05/12/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/ARM%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/",
+  "image": "https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg",
+  "datePublished": "2025-05-11T16:00:00.000Z",
+  "dateModified": "2025-05-12T03:47:43.452Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "GoodBrain",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg"><link rel="canonical" href="http://example.com/2025/05/12/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/ARM%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ARM汇编语言学习笔记',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">G00DBrain blog</span></a><a class="nav-page-title" href="/"><span class="site-name">ARM汇编语言学习笔记</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">ARM汇编语言学习笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-05-11T16:00:00.000Z" title="发表于 2025-05-12 00:00:00">2025-05-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-12T03:47:43.452Z" title="更新于 2025-05-12 11:47:43">2025-05-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">汇编语言学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="ARM汇编"><a href="#ARM汇编" class="headerlink" title="ARM汇编"></a>ARM汇编</h1><p><strong>前言</strong></p>
+<p>在学习ARM汇编之前，笔者已经在快一年前学过X86汇编，当时是跟着B站小甲鱼的视频将王爽老的第四版汇编语言过了一遍，花了十多天，所以笔者在有些地方会加入自己的理解，若这篇文章有幸被您看见，遇见不对的地方尽可告诉笔者</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h3><p>一个计算机编程语言中有很多不同的命令，不同的计算机编程语言有不同的命令，而我们的CPU不可能将所有的命令都录入硬件，他只会提供最基础的功能，如加，减，乘，除，异或等等，我们称这为运算指令，而这些简单的指令相互作用却能实现任何复杂的功能，而编译器的作用正是将不同的高级语言编译为CPU可以识别的指令，而这些指令的集合我们就可以叫做指令集</p>
+<p>如今市场上流行的指令集有很多X86指令集，ARM指令集，RISC-V指令集</p>
+<p>他们作用于不同的领域，有着自己独特的优点和缺点</p>
+<table>
+<thead>
+<tr>
+<th align="left">架构</th>
+<th align="left">典型设备</th>
+<th align="left">特点</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>x86</strong></td>
+<td align="left">PC&#x2F;服务器</td>
+<td align="left">CISC、高性能、兼容性强</td>
+<td align="left">Intel Core, AMD Ryzen</td>
+</tr>
+<tr>
+<td align="left"><strong>ARM</strong></td>
+<td align="left">手机&#x2F;嵌入式</td>
+<td align="left">RISC、低功耗、精简指令</td>
+<td align="left">Apple M1, 高通骁龙</td>
+</tr>
+<tr>
+<td align="left"><strong>RISC-V</strong></td>
+<td align="left">新兴领域</td>
+<td align="left">开源、模块化设计</td>
+<td align="left">物联网、科研芯片</td>
+</tr>
+</tbody></table>
+<p>在RAM指令集中一条指令32位，4个字节</p>
+<h3 id="微架构"><a href="#微架构" class="headerlink" title="微架构"></a>微架构</h3><p>微架构又称为处理器架构，总结就是指令集在CPU内部具体硬件电路的实现</p>
+<p>一个指令集可以有不同的微架构，相同的微架构通过不同的配置如（处理器主频、核数、Cache大小等）可以设计出不同的处理器</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250422210022292.png" alt="image-20250422210022292"></p>
+<h3 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h3><p>ARM处理器有多种模式，主要分为用户模式和特权工作模式，程序正常工作的时候，处理器处于用户模式，当处理器遇见中断或者异常时就会跳转到对应的特权工作模式</p>
+<table>
+<thead>
+<tr>
+<th>处理器模式</th>
+<th>模式编码</th>
+<th>模式介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>User mode</td>
+<td>0B10000</td>
+<td>应用程序正常运行时的工作模式</td>
+</tr>
+<tr>
+<td>FIQ mode</td>
+<td>0B10001</td>
+<td>快速中断模式，中断优先级比IRQ高，用于处理高优先级中断请求</td>
+</tr>
+<tr>
+<td>IRQ mode</td>
+<td>0B10010</td>
+<td>中断模式</td>
+</tr>
+<tr>
+<td>Supervisor mode</td>
+<td>0B10011</td>
+<td>管理模式，用于处理中断和异常，复位和软中断时一般会进入该模式</td>
+</tr>
+<tr>
+<td>Abort mode</td>
+<td>0B10111</td>
+<td>用于处理内存访问错误，指令读取失败时会进入该模式</td>
+</tr>
+<tr>
+<td>Undefined mode</td>
+<td>0B11011</td>
+<td>CPU遇到无法识别的、未定义的指令，会进入该模式</td>
+</tr>
+<tr>
+<td>System mode</td>
+<td>0B11111</td>
+<td>类似用户模式，但可以运行特权OS任务，如切换到其他模式</td>
+</tr>
+<tr>
+<td>Monitor mode</td>
+<td>0B10110</td>
+<td>仅限于安全扩展</td>
+</tr>
+</tbody></table>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>在ARM处理器的内部于X86处理器相同，均有ALU（算数逻辑单元实现算术运算和逻辑运算）和控制单元，和一系列实现不同功能的寄存器（通用寄存器，状态寄存器，控制寄存器）不同的是ARM有37个寄存器，但每种模式下最多只能访问18个</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250423200644151.png" alt="image-20250423200644151"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">总结：</span><br><span class="line">1、7个模式中除了user是普通模式以外，其他6个都是特权模式</span><br><span class="line">2、6个特权模式中，除了System模式以外，其他5个都是异常模式</span><br><span class="line">3、模式的切换是通过代码写CPSR寄存器进行主动切换的，或者CPU自动切换</span><br><span class="line">4、各种模式可访问的寄存器数量不同，操作权限不同，方便操作系统的安全等级需求</span><br><span class="line">——引自：CSDN-图南楠：《ARM的工作模式和37个寄存器》</span><br></pre></td></tr></table></figure>
+
+<h4 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h4><p>在ARM处理器中的寄存器也分为通用寄存器和专用寄存器</p>
+<p>除了在FIQ工作模式以外，通用寄存器都是共用，共享的</p>
+<ul>
+<li>R0~R3：一般用于传递函数参数</li>
+<li>R4~R11： 用于保存函数运行中的中间结果和函数的局部变量</li>
+<li>R12：常用于函数调用的临时寄存器</li>
+</ul>
+<h4 id="专用寄存器"><a href="#专用寄存器" class="headerlink" title="专用寄存器"></a>专用寄存器</h4><ul>
+<li>R13：堆栈指针寄存器（StackPointer，SP），与X86SP寄存器（用于存储栈顶）相似的功能，不过R13似乎要求总是指向当前运行函数的栈帧，一般不能用作其他用途</li>
+<li>R14：链接寄存器（Link Register，LR），在函数调用过程中主要用来保存上一级函数调用者的返回地址；</li>
+<li>R15：程序计数器（Program Counter，PC），CPU从内存取指令执行，就是默认从PC保存的地址中取的（所以程序跳转时就是把目标地址代码放到PC中），每取一次指令，PC寄存器的地址值自动增加。这个功能有点类似于X86处理器的IP寄存器</li>
+<li>CPSR：处理器状态寄存器（Current Processor State Register），用来表示处理器的运行状态。除了状态位和标志位，CPSR寄存器里也有一些控制位，用来切换处理器的工作模式。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250423202331528.png" alt="image-20250423202331528"></p>
+<h3 id="异常中断处理"><a href="#异常中断处理" class="headerlink" title="异常中断处理"></a>异常中断处理</h3><h4 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h4><p>什么叫异常？CPU正常工作之外的都叫异常，中断也是异常其中一种，当异或发生的时候会强制打断我们当前程序的执行流程</p>
+<p><strong>异常的中断的区别</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>特性</strong></th>
+<th align="left"><strong>中断（Interrupt）</strong></th>
+<th align="left"><strong>异常（Exception）</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>触发源</strong></td>
+<td align="left">外部硬件设备（如定时器、UART）</td>
+<td align="left">处理器内部事件（指令执行错误、系统调用）</td>
+</tr>
+<tr>
+<td align="left"><strong>同步性</strong></td>
+<td align="left">异步（随时可能发生）</td>
+<td align="left">同步（特定指令或条件触发）</td>
+</tr>
+<tr>
+<td align="left"><strong>是否可屏蔽</strong></td>
+<td align="left">可屏蔽（通过CPSR的I&#x2F;F位）</td>
+<td align="left">不可屏蔽（如复位、硬错误）</td>
+</tr>
+<tr>
+<td align="left"><strong>典型场景</strong></td>
+<td align="left">处理外设数据（按键、网络包）</td>
+<td align="left">除零错误、缺页、系统调用（SVC）</td>
+</tr>
+<tr>
+<td align="left"><strong>优先级</strong></td>
+<td align="left">IRQ&#x2F;FIQ优先级可配置</td>
+<td align="left">异常优先级固定（如复位最高）</td>
+</tr>
+</tbody></table>
+<h4 id="异常向量表"><a href="#异常向量表" class="headerlink" title="异常向量表"></a>异常向量表</h4><p>异常向量表是CPU硬件提供的，当异常发生时，CPU会保存当前的程序的PC值也就是程序执行的地址，当异常处理结束后又会根据PC值跳转回程序继续执行</p>
+<table>
+<thead>
+<tr>
+<th>地址</th>
+<th>异常</th>
+<th>来源</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x00</td>
+<td>复位（Reset）</td>
+<td>复位引脚有效（也是系统刚上电时 CPU 跑到的第一个地址）</td>
+</tr>
+<tr>
+<td>0x04</td>
+<td>未定义指令（Undefined Instruction）</td>
+<td>读到了无法解码的指令</td>
+</tr>
+<tr>
+<td>0x08</td>
+<td>软件中断（SWI，Software Interrupt）</td>
+<td>指令引起的异常</td>
+</tr>
+<tr>
+<td>0x0C</td>
+<td>指令预取中止（Prefetch）</td>
+<td>当程序试图执行一个非法的指令或没有执行权限的指令时，会产生该异常</td>
+</tr>
+<tr>
+<td>0x10</td>
+<td>数据访问终止（DataAbort）</td>
+<td>当程序试图访问一个非法的内存地址或没有访问权限的内存地址时，会产生该异常</td>
+</tr>
+<tr>
+<td>0x14</td>
+<td>无操作（NOP）</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0x18</td>
+<td>外部中断（IRQ）</td>
+<td>当外部设备向处理器发出中断请求时，会产生该异常</td>
+</tr>
+<tr>
+<td>0x1C</td>
+<td>快速中断（FIQ）</td>
+<td>当某些设备需要快速响应时，可以使用该异常，该异常的优先级高于IRQ异常</td>
+</tr>
+</tbody></table>
+<h2 id="ARM汇编特点"><a href="#ARM汇编特点" class="headerlink" title="ARM汇编特点"></a>ARM汇编特点</h2><p>ARM汇编采用的是RISC架构，CPU本身不能直接读取内存中的数据，想要读取内存中的数据只能通过寄存器，先将数据读取进寄存器，再对数据进行操作，所以将数据读取进寄存器和将寄存器中的数据输入进内存我们就可以通过LDR和STR指令组合来实现</p>
+<ul>
+<li>LDR（load register）指令将内存内容加载入通用寄存器。</li>
+<li>STR（store register）指令将寄存器内容存入内存空间中。</li>
+</ul>
+<h2 id="ARM指令集格式标准"><a href="#ARM指令集格式标准" class="headerlink" title="ARM指令集格式标准"></a>ARM指令集格式标准</h2><p>ARM指令格式可以分为两个方面去看，一种是机器指令格式，一种是汇编指令格式</p>
+<h3 id="机器指令格式"><a href="#机器指令格式" class="headerlink" title="机器指令格式"></a>机器指令格式</h3><p>这个是32位的指令集</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250423221155281.png" alt="image-20250423221155281"></p>
+<ul>
+<li><p>条件码：根据状态寄存器判断当前代码是否执行，一般指令都是无条件执行（1110）</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250423221450395.png" alt="image-20250423221450395"></p>
+</li>
+<li><p>指令码：也就是当前指令要执行何种操作，如加（add），减（sub）等等</p>
+</li>
+<li><p>目的寄存器和操作数1寄存器：用于表示操作使用的是哪些寄存器</p>
+</li>
+<li><p>操作数2：用于存放立即数</p>
+</li>
+</ul>
+<h3 id="汇编指令格式"><a href="#汇编指令格式" class="headerlink" title="汇编指令格式"></a>汇编指令格式</h3><p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250423221926529.png" alt="image-20250423221926529"></p>
+<h4 id="1-指令助记符（Opcode）"><a href="#1-指令助记符（Opcode）" class="headerlink" title="1. 指令助记符（Opcode）"></a><strong>1. 指令助记符（Opcode）</strong></h4><ul>
+<li><p><strong>作用</strong>：表示指令的基本操作（如<code>ADD</code>、<code>MOV</code>）。</p>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ADD R1, R2, R3    ; Opcode = ADD</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="2-执行条件（cond，可选）"><a href="#2-执行条件（cond，可选）" class="headerlink" title="2. 执行条件（cond，可选）"></a><strong>2. 执行条件（cond，可选）</strong></h4><ul>
+<li><p><strong>作用</strong>：指定指令执行的条件（基于CPSR标志位）。</p>
+</li>
+<li><p><strong>常见条件码</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>条件码</th>
+<th>含义</th>
+<th>标志位条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>EQ</td>
+<td>相等</td>
+<td>Z&#x3D;1</td>
+</tr>
+<tr>
+<td>NE</td>
+<td>不相等</td>
+<td>Z&#x3D;0</td>
+</tr>
+<tr>
+<td>GT</td>
+<td>有符号大于</td>
+<td>Z&#x3D;0且N&#x3D;V</td>
+</tr>
+<tr>
+<td>LT</td>
+<td>有符号小于</td>
+<td>N≠V</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ADDEQ R1, R2, R3  ; 仅当Z=1时执行加法</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h4 id="3-字符S（S，可选）"><a href="#3-字符S（S，可选）" class="headerlink" title="3. 字符S（S，可选）"></a><strong>3. 字符S（S，可选）</strong></h4><ul>
+<li><p><strong>作用</strong>：控制指令是否更新CPSR状态标志（如Z、N、C、V）。</p>
+<ul>
+<li><strong>S&#x3D;1</strong>：更新标志位。</li>
+<li><strong>S&#x3D;0</strong>（默认）：不更新。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ADDS R1, R2, R3  ; R1=R2+R3，并更新CPSR</span><br><span class="line">ADD R1, R2, R3   ; 不更新CPSR</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h4 id="4-目标寄存器（Rd）"><a href="#4-目标寄存器（Rd）" class="headerlink" title="4. 目标寄存器（Rd）"></a><strong>4. 目标寄存器（Rd）</strong></h4><ul>
+<li><p><strong>作用</strong>：存储指令结果的寄存器。</p>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ADD R0, R1, R2  ; R0 = R1 + R2</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h4 id="5-操作数1的寄存器（Rn）"><a href="#5-操作数1的寄存器（Rn）" class="headerlink" title="5. 操作数1的寄存器（Rn）"></a><strong>5. 操作数1的寄存器（Rn）</strong></h4><ul>
+<li><p><strong>作用</strong>：第一个源操作数寄存器。</p>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ADD R0, R1, R2  ; Rn = R1</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h4 id="6-操作数2（operand2，可选）"><a href="#6-操作数2（operand2，可选）" class="headerlink" title="6. 操作数2（operand2，可选）"></a><strong>6. 操作数2（operand2，可选）</strong></h4><ul>
+<li><p><strong>作用</strong>：第二个源操作数，可以是：</p>
+<ul>
+<li><strong>寄存器</strong>：<code>Rm</code>（如<code>R3</code>）。</li>
+<li><strong>立即数</strong>：<code>#imm</code>（如<code>#0xFF</code>）。</li>
+<li><strong>移位寄存器</strong>：<code>Rm, LSL #n</code>（如<code>R2, LSL #2</code>）。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ADD R0, R1, R2, LSL #1  ; R0 = R1 + (R2&lt;&lt;1)</span><br><span class="line">MOV R0, #0x12           ; R0 = 0x12</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="ARM寻址方式"><a href="#ARM寻址方式" class="headerlink" title="ARM寻址方式"></a>ARM寻址方式</h2><p><strong>寻址（Addressing）</strong> 是指 <strong>CPU 如何获取指令操作数（数据）的方式</strong>。</p>
+<p>寻址的方式有很多种，有寄存器寻址、立即寻址、寄存器偏移寻址、寄存器间接寻址、基址寻址、多寄存器寻址、相对寻址等</p>
+<h3 id="立即数寻址"><a href="#立即数寻址" class="headerlink" title="立即数寻址"></a>立即数寻址</h3><p>ARM指令中立即数是以#开头的，十六进制以0x开头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ADD R1, R1, #1			;将R1寄存器中值加1，并将结果保存到R1中</span><br><span class="line">MOV R1, #0xFF			;将十六进制常数0xFF写到R1寄存器中</span><br><span class="line">MOV R1, #12				;将十进制常数12放到R1寄存器中</span><br></pre></td></tr></table></figure>
+
+<p><strong>小问题</strong></p>
+<p>操作数2只有12位是怎么存储下32的数据的，需要将32位立即数放到寄存器R0中，汇编指令为：<code>MOV R0, #0x0000F200</code>，该指令经过汇编后对应的机器指令码为：<code>E3A00CF2</code>。结合前文所述机器指令的格式，其解释如下：</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250423231803155.png" alt="image-20250423231803155"></p>
+<p>C代表的是什么意思，c的十进制是12，12*2&#x3D;24，我们将F2模拟是在32位中将他右移24位就是我们要的0x0000F200，当然这样有局限性，而真实情况是编译系统为我们提供了伪指令LDR，实现任意立即数直接载入寄存器</p>
+<h3 id="寄存器寻址"><a href="#寄存器寻址" class="headerlink" title="寄存器寻址"></a>寄存器寻址</h3><h4 id="基本方式"><a href="#基本方式" class="headerlink" title="基本方式"></a>基本方式</h4><p>数据保存在寄存器中，直接通过寄存器对数据进行读写</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOV R1,R2</span><br><span class="line">ADD R1,R2,R3  ;将R2和R3的数据相加后给R1</span><br></pre></td></tr></table></figure>
+
+<h4 id="寄存器偏移寻址"><a href="#寄存器偏移寻址" class="headerlink" title="寄存器偏移寻址"></a>寄存器偏移寻址</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MOV R1,R2,LSL #3 ;R2=R1&lt;&lt;3 </span><br></pre></td></tr></table></figure>
+
+<p>这个方式相较于基本方式多了一个移位的操作</p>
+<p>常见的移位方式有以下几种：</p>
+<table>
+<thead>
+<tr>
+<th>移位方式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LSL</td>
+<td>逻辑左移(乘)</td>
+</tr>
+<tr>
+<td>LSR</td>
+<td>逻辑右移(除)</td>
+</tr>
+<tr>
+<td>ASL</td>
+<td>算数左移，和LSL一样</td>
+</tr>
+<tr>
+<td>ASR</td>
+<td>算数右移，分正负来填充右移后的空余位，正0负1</td>
+</tr>
+<tr>
+<td>ROR</td>
+<td>循环右移</td>
+</tr>
+<tr>
+<td>RRX</td>
+<td>带扩展的循环右移，循环右移1位后左端用C填充，这种方式只移位1位，所以无须指定移位位数</td>
+</tr>
+</tbody></table>
+<h4 id="寄存器间接寻址"><a href="#寄存器间接寻址" class="headerlink" title="寄存器间接寻址"></a>寄存器间接寻址</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LDR R1, [R2]	;将R2中的值作为地址，取该内存地址上的数据，保存到R1</span><br><span class="line">STR R1, [R2]	;将R2中的值作为地址，将R1寄存器中的值写入该内存地址</span><br></pre></td></tr></table></figure>
+
+<p>这个方式与汇编语言中的<code>mov ax,[bx]</code>比较想，只不过他写入和写出的操作分别使用的是LDR和STR</p>
+<h4 id="基址加偏移地址寻址"><a href="#基址加偏移地址寻址" class="headerlink" title="基址加偏移地址寻址"></a>基址加偏移地址寻址</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">LDR R1, [R0, #2]			;将R0中的值加2作为新地址，取该内存地址上的数据，保存到R1</span><br><span class="line">LDR R1, [R0, #2]!			;与上一条的不同是：在加载完数据后，R0寄存器的值会增加2。即感叹号表示在执行LDR指令后，更新基址寄存器。</span><br><span class="line">LDR R1, [R0, R2]			;将R0+R2作为新地址，取该内存地址上的数据，保存到R1</span><br><span class="line">LDR R1, [R0, R2, LSL #2]	;将R0+R2&lt;&lt;2作为新地址，取该内存地址上的数据，保存到R1</span><br><span class="line">LDR R1, [R0], #2			;将R0中的值作为地址，取该内存地址上的数据，保存到R1，然后R0寄存器值加2，与第二条的不同在于这里取数据用的是R0地址，最后再更新R0。第二条是先用R0+2作为地址取数据，再更新R0。</span><br><span class="line">STR R1, [R0, #-2]			;将R0中的值减2作为新地址，将R1中的值写入该地址</span><br><span class="line">STR R1, [R0], #-2			;将R0中的值作为地址，将R1中的值写入该地址，然后R0寄存器值减2</span><br></pre></td></tr></table></figure>
+
+<h3 id="多寄存器及块拷贝寻址"><a href="#多寄存器及块拷贝寻址" class="headerlink" title="多寄存器及块拷贝寻址"></a>多寄存器及块拷贝寻址</h3><p>首先要学习指令STM&#x2F;LDM这两个指令属于多寄存器寻址，一次可以给多个寄存器赋值，常常与IA，IB，DA，DB一起使用</p>
+<table>
+<thead>
+<tr>
+<th>指令后缀</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IA (Increment after Operating)</td>
+<td>操作完后地址递增</td>
+</tr>
+<tr>
+<td>IB (Increment before Operating)</td>
+<td>地址先增后完成操作</td>
+</tr>
+<tr>
+<td>DA (Decrement after Operating)</td>
+<td>操作完后地址递减</td>
+</tr>
+<tr>
+<td>DB (Decrement before Operating)</td>
+<td>地址先减后完成操作</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LDMIA R0 &#123;R1-R5&#125;		;以R0为基址读取五字存储单元数据加载至R1-R5，R1=[R0],R2=[R0+4],……</span><br><span class="line">STMIA R6, &#123;R1-R5&#125;		;将R1-R5中数据依次存入R6为起始地址的存储单元</span><br></pre></td></tr></table></figure>
+
+<p>在<code>&#123;&#125;</code>中的 <code>-</code>的意思是从一个寄存器到另一个寄存器，比如：R0-R2表示的是R0，R1，R2</p>
+<p>注意在STM和LDM中第一个寄存器作为基址，第二个寄存器作为要传输的寄存器</p>
+<h3 id="堆栈寻址"><a href="#堆栈寻址" class="headerlink" title="堆栈寻址"></a>堆栈寻址</h3><table>
+<thead>
+<tr>
+<th>堆栈格式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FA（Full Ascending）</td>
+<td>满递增堆栈</td>
+</tr>
+<tr>
+<td>FD（Full Descending）</td>
+<td>满递减堆栈</td>
+</tr>
+<tr>
+<td>EA（Empty Ascending）</td>
+<td>空递增堆栈</td>
+</tr>
+<tr>
+<td>ED（Empty Descending）</td>
+<td>空递减堆栈</td>
+</tr>
+</tbody></table>
+<p><strong>满栈和空栈的区别</strong></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250507210322499.png" alt="image-20250507210322499"></p>
+<p>总而言之，言而总之，区别就在于满栈是SP指向的是栈顶元素，空栈是SP指向栈顶元素的下一个存储单元</p>
+<p>LDM和STM可以和FD，ED，FA，EA组合使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LDMFD SP!, &#123;R0-R2,R14&#125;		;将内存栈中的数据依次弹出到R0, R1, R2, R14</span><br><span class="line">STMFD SP!, &#123;R0-R2,R14&#125; 		;将R14, R2, R1, R0依次压入内存栈</span><br></pre></td></tr></table></figure>
+
+<p>栈的方向是由高地址向低地址</p>
+<p>在ARM中也可以通过PUSH和POP来实现出栈和入栈的操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">STMFD SP!, &#123;R0-R2,R14&#125;		;将R0、R1、R2、R14依次压入栈</span><br><span class="line">LDMFD SP!, &#123;R0-R2,R14&#125;		;将栈中的数据依次弹出到R14、R2、R1、R0</span><br><span class="line">PUSH &#123;R0-R2,R14&#125;			;将R0、R1、R2、R14依次压入栈</span><br><span class="line">POP &#123;R0-R2,R14&#125;				;将栈中的数据依次弹出到R14、R2、R1、R0</span><br></pre></td></tr></table></figure>
+
+<h3 id="相对寻址"><a href="#相对寻址" class="headerlink" title="相对寻址"></a>相对寻址</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">	 ...</span><br><span class="line">	 B LOOP</span><br><span class="line">	 ...</span><br><span class="line">LOOP MOV R0, #1</span><br><span class="line">	 MOV R1,R0</span><br><span class="line">	 ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在X86汇编的学习中我们知道通过标签跳转的原理实际上就是通过相对地址来进行跳转的，相应的在ARM中也是相同的</p>
+<h2 id="ARM汇编指令"><a href="#ARM汇编指令" class="headerlink" title="ARM汇编指令"></a>ARM汇编指令</h2><h3 id="存储访问指令"><a href="#存储访问指令" class="headerlink" title="存储访问指令"></a>存储访问指令</h3><p>在ARM汇编中，常用的指令是LDR&#x2F;STR和LDM&#x2F;STM两对指令，在干刚刚的寻址方式中我们也对两对指令有了初步的认识</p>
+<p>而我们又在多寄存器及块拷贝寻址中了解到一次递增是四个字节，但如果我们想一次只读写一个字节呢，这时候就可以通过LDRB&#x2F;STRB指令来实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LDRB R3, [R2], #1		;以R2为地址读取一字节数据至R3，R2=R2+1</span><br><span class="line">STRH R1, [R0, #2]!		;半字传送，传送R1中低两字节数据至R0+2为地址的存储单元，R0更新</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>后缀 ^</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LDMFD SP!, &#123;R0-R7, PC&#125;^		;将SP指向的一片连续内存空间内的数据依次载入R0至R7以及PC寄存器；^符号表示在加载完成后，要将SPSR的值加载到CPSR中。</span><br></pre></td></tr></table></figure>
+
+<p>这种指令通常用于函数返回时，将之前保存在栈中的寄存器值恢复，以及恢复程序状态寄存器的值，一般用于异常处理的返回</p>
+<h3 id="数据处理类指令"><a href="#数据处理类指令" class="headerlink" title="数据处理类指令"></a>数据处理类指令</h3><h4 id="数据传送指令"><a href="#数据传送指令" class="headerlink" title="数据传送指令"></a>数据传送指令</h4><p>LDR&#x2F;SDR指令用于寄存器和内存之间传输数据，而要实现寄存器和寄存器之间的数据传输就可以使用MOV指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MOV R1, #1		;将立即数1传送到寄存器R1中</span><br><span class="line">MOV R1, R0		;将R0寄存器中的值传送到R1寄存器中</span><br><span class="line">MOV PC, LR		;子程序返回</span><br></pre></td></tr></table></figure>
+
+<h4 id="算数逻辑运算指令"><a href="#算数逻辑运算指令" class="headerlink" title="算数逻辑运算指令"></a>算数逻辑运算指令</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ADD R2, R1, #1		;R2=R1+1</span><br><span class="line">ADC R1, R1, #1		;R1=R1+1+C(其中C为CPSR寄存器中进位)</span><br><span class="line">SUB R1, R1, R2		;R1=R1-R2</span><br><span class="line">SBC R1, R1, R2		;R1=R1-R2-C</span><br><span class="line">AND R0, R0, #立即数		;R0与立即数进行按位与</span><br><span class="line">ORR R0, R0, #立即数		;R0与立即数进行按位或</span><br><span class="line">EOR R0, R0, #立即数		;R0与立即数进行按位异或</span><br><span class="line">BIC R0, R0, #立即数		;R0与立即数的反码进行按位与</span><br></pre></td></tr></table></figure>
+
+<h4 id="比较指令"><a href="#比较指令" class="headerlink" title="比较指令"></a>比较指令</h4><p>与X86汇编相同，比较指令影响的也是状态寄存器，在ARM中是影响CPSR的N，Z，C，V的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CMP R1, #10		;R1-10,运算结果会影响N、Z、C、V位，不会保留运算结果</span><br><span class="line">CMP R1, R2		;R1-R2,比较结果会影响N、Z、C、V位</span><br><span class="line">CMN R0, #1		;R0 -(-1)将立即数取负,然后比较大小</span><br></pre></td></tr></table></figure>
+
+<h3 id="跳转指令"><a href="#跳转指令" class="headerlink" title="跳转指令"></a>跳转指令</h3><p>跳转指令用于控制程序的走向，</p>
+<ul>
+<li>基本跳转指令B</li>
+<li>带返回的跳转指令BL</li>
+<li>带状态切换(ARM与Thumb之间)的跳转指令BX</li>
+<li>带返回和状态切换的跳转指令BLX。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	CMP R2, #0</span><br><span class="line">	BEQ label		;若R2=0,则跳转到label处执行</span><br><span class="line">	...</span><br><span class="line">label</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
+
+<p>**BEQ：Branch if Equal (如果相等则跳转)**检测CPSR的Z标志位是否为1</p>
+<p>相同的还有</p>
+<table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">含义</th>
+<th align="left">跳转条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>BEQ</code></td>
+<td align="left">Branch if Equal</td>
+<td align="left"><code>Z = 1</code> (<code>R2 == 0</code>)</td>
+</tr>
+<tr>
+<td align="left"><code>BNE</code></td>
+<td align="left">Branch if Not Equal</td>
+<td align="left"><code>Z = 0</code> (<code>R2 != 0</code>)</td>
+</tr>
+<tr>
+<td align="left"><code>BGT</code></td>
+<td align="left">Branch if Greater Than</td>
+<td align="left"><code>Z = 0</code> 且 <code>N == V</code> (<code>R2 &gt; 0</code>)</td>
+</tr>
+<tr>
+<td align="left"><code>BLT</code></td>
+<td align="left">Branch if Less Than</td>
+<td align="left"><code>N != V</code> (<code>R2 &lt; 0</code>)</td>
+</tr>
+</tbody></table>
+<h3 id="程序状态寄存器访问指令"><a href="#程序状态寄存器访问指令" class="headerlink" title="程序状态寄存器访问指令"></a>程序状态寄存器访问指令</h3><p>当前程序状态寄存器可分为4个8位独立域：</p>
+<ul>
+<li>CPSR[31:24]：_f(标志域)</li>
+<li>CPSR[23:16]：_s(状态域)</li>
+<li>CPSR[15: 8]：_x(扩展域)</li>
+<li>CPSR[7 : 0]：_c(控制域)</li>
+</ul>
+<h2 id="伪指令"><a href="#伪指令" class="headerlink" title="伪指令"></a>伪指令</h2><p>为了编译方便而产生的指令主要有四种</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ADR R0, LOOP			;将标号LOOP的地址保存到R0寄存器中</span><br><span class="line">ADRL R0, LOOP			;中等范围的地址读取</span><br><span class="line">LDR R0, =0x30008000		;将内存地址0x30008000赋值给R0</span><br><span class="line">NOP						;空操作,用于延时或插入流水线中暂停指令的运行</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40309666/article/details/136149817?spm=1001.2014.3001.5501">到底什么是指令集？什么是微架构？他们是什么关系？-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40309666/article/details/136147962?spm=1001.2014.3001.5502">ARM处理器有哪些工作模式和寄存器？各寄存器作用是什么？ARM异常中断处理流程？_异常中断 lr寄存器-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40309666/article/details/136190638?spm=1001.2014.3001.5501">万字长文带你由浅入深夯实ARM汇编基础——汇编指令及寻址方式最全梳理（附示例）！_arm 与指令-CSDN博客</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">GoodBrain</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/05/12/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/ARM%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/">http://example.com/2025/05/12/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/ARM%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">G00DBrain blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ARM%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">ARM汇编语言</a></div><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/04/17/web/HTTP%E5%AD%A6%E4%B9%A0/" title="HTTP协议学习笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">HTTP协议学习笔记</div></div><div class="info-2"><div class="info-item-1">HTTP协议学习笔记HTTP协议是什么HTTP：（Hyper Text Transfer Protocol：超文本传输协议） 用于万维网的服务器传输超文本到本地浏览器的传输协议 是作用于应用层的协议 1协议： 为了使数据在网络上从源头到达目的，网络通信的参与方必须遵循相同的规则，这套规则称为协议，它最终体现为在网络上传输的数据包的格式。  HTTP的工作流程我们通过浏览器访问一个网站，会向哪个网站发送一个HTTP请求，网站接收到这个请求后会为我们回应一个HTTP响应，在我们实际的访问中不止一次请求和响应 术语：  客户端：主动发起网络请求的一方 服务端：被动接收网络请求的一方 请求：客户端向服务端发送的数据 响应：服务端向客户断发送的数据  重要特点： 一发一收，一问一答  除此之外还有 多发一收：发送大文件时 一发多收：搜索内容时 多发多收：串流 HTTP请求报文和HTTP响应报文示例总览这里我使用的是Burp Suite来抓取报文 123http://example.com/   #官方测试域名    示例请求报文12345678910GET / HTTP/1.1Host:...</div></div></div></a><a class="pagination-related" href="/2025/05/12/web/PHP%E4%BA%86%E8%A7%A3/" title="PHP了解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">PHP了解</div></div><div class="info-2"><div class="info-item-1">PHP学习笔记由于这次学习主要目的只是为了能看懂PHP语言，所以就不深入学习，只学习最基本的 什么是PHPPHP（Hypertext Preprocessor）一种广泛使用的开源服务器端脚本语言，用于web开发 PHP可以嵌入HTML，与多个数据库集成，最常用的是MySQL 环境搭建环境 安装小皮面板(phpstudy) - 让天下没有难配的服务器环境！ 开发工具 安装https://vscode.p2hp.com/ 在vscode中运行记得将php配置到Path环境变量 我这里是 1D:\phpstudy_pro\Extensions\php\php7.3.4nts    语法格式PHP脚本可以放在文件中的任何位置 12345&lt;?php//代码?&gt;  注释php使用的注释方式是 // 打印123&lt;?php	echo &quot;Hello World!&quot;?&gt;  变量语法： 1$变量名=变量值  数据类型12345678String 字符串Integer 整型Float 浮点型Boolean 布尔型Array 数组Object 对象NULL...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">GoodBrain</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="/lkh_258@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">文章插图需搭梯子</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ARM%E6%B1%87%E7%BC%96"><span class="toc-text">ARM汇编</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-text">基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="toc-text">指令集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AE%E6%9E%B6%E6%9E%84"><span class="toc-text">微架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="toc-text">工作模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">寄存器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">通用寄存器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%93%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text">专用寄存器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86"><span class="toc-text">异常中断处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8"><span class="toc-text">异常</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%90%91%E9%87%8F%E8%A1%A8"><span class="toc-text">异常向量表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARM%E6%B1%87%E7%BC%96%E7%89%B9%E7%82%B9"><span class="toc-text">ARM汇编特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARM%E6%8C%87%E4%BB%A4%E9%9B%86%E6%A0%BC%E5%BC%8F%E6%A0%87%E5%87%86"><span class="toc-text">ARM指令集格式标准</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="toc-text">机器指令格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="toc-text">汇编指令格式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%8C%87%E4%BB%A4%E5%8A%A9%E8%AE%B0%E7%AC%A6%EF%BC%88Opcode%EF%BC%89"><span class="toc-text">1. 指令助记符（Opcode）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%89%A7%E8%A1%8C%E6%9D%A1%E4%BB%B6%EF%BC%88cond%EF%BC%8C%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">2. 执行条件（cond，可选）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%AD%97%E7%AC%A6S%EF%BC%88S%EF%BC%8C%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">3. 字符S（S，可选）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E7%9B%AE%E6%A0%87%E5%AF%84%E5%AD%98%E5%99%A8%EF%BC%88Rd%EF%BC%89"><span class="toc-text">4. 目标寄存器（Rd）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%93%8D%E4%BD%9C%E6%95%B01%E7%9A%84%E5%AF%84%E5%AD%98%E5%99%A8%EF%BC%88Rn%EF%BC%89"><span class="toc-text">5. 操作数1的寄存器（Rn）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E6%93%8D%E4%BD%9C%E6%95%B02%EF%BC%88operand2%EF%BC%8C%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">6. 操作数2（operand2，可选）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARM%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-text">ARM寻址方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%8B%E5%8D%B3%E6%95%B0%E5%AF%BB%E5%9D%80"><span class="toc-text">立即数寻址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E5%AF%BB%E5%9D%80"><span class="toc-text">寄存器寻址</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%96%B9%E5%BC%8F"><span class="toc-text">基本方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E5%81%8F%E7%A7%BB%E5%AF%BB%E5%9D%80"><span class="toc-text">寄存器偏移寻址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80"><span class="toc-text">寄存器间接寻址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E5%9D%80%E5%8A%A0%E5%81%8F%E7%A7%BB%E5%9C%B0%E5%9D%80%E5%AF%BB%E5%9D%80"><span class="toc-text">基址加偏移地址寻址</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%AF%84%E5%AD%98%E5%99%A8%E5%8F%8A%E5%9D%97%E6%8B%B7%E8%B4%9D%E5%AF%BB%E5%9D%80"><span class="toc-text">多寄存器及块拷贝寻址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A0%86%E6%A0%88%E5%AF%BB%E5%9D%80"><span class="toc-text">堆栈寻址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%AF%B9%E5%AF%BB%E5%9D%80"><span class="toc-text">相对寻址</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARM%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4"><span class="toc-text">ARM汇编指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%AE%BF%E9%97%AE%E6%8C%87%E4%BB%A4"><span class="toc-text">存储访问指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%B1%BB%E6%8C%87%E4%BB%A4"><span class="toc-text">数据处理类指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%81%E6%8C%87%E4%BB%A4"><span class="toc-text">数据传送指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%97%E6%95%B0%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E6%8C%87%E4%BB%A4"><span class="toc-text">算数逻辑运算指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E6%8C%87%E4%BB%A4"><span class="toc-text">比较指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4"><span class="toc-text">跳转指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E7%8A%B6%E6%80%81%E5%AF%84%E5%AD%98%E5%99%A8%E8%AE%BF%E9%97%AE%E6%8C%87%E4%BB%A4"><span class="toc-text">程序状态寄存器访问指令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E6%8C%87%E4%BB%A4"><span class="toc-text">伪指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-text">参考文章</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/12/web/PHP%E4%BA%86%E8%A7%A3/" title="PHP了解">PHP了解</a><time datetime="2025-05-12T03:38:07.027Z" title="发表于 2025-05-12 11:38:07">2025-05-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/12/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/ARM%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/" title="ARM汇编语言学习笔记">ARM汇编语言学习笔记</a><time datetime="2025-05-11T16:00:00.000Z" title="发表于 2025-05-12 00:00:00">2025-05-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/17/web/HTTP%E5%AD%A6%E4%B9%A0/" title="HTTP协议学习笔记">HTTP协议学习笔记</a><time datetime="2025-04-17T14:12:12.740Z" title="发表于 2025-04-17 22:12:12">2025-04-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/09/LLVM/LLVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="LLVM学习笔记">LLVM学习笔记</a><time datetime="2025-04-09T10:47:49.760Z" title="发表于 2025-04-09 18:47:49">2025-04-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/10/%E7%BC%96%E7%A0%81%E5%92%8C%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/TEA%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" title="TEA加密算法">TEA加密算法</a><time datetime="2025-03-10T12:33:12.511Z" title="发表于 2025-03-10 20:33:12">2025-03-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-color: rgba(0, 0, 0, 0);"><div id="footer-wrap"><div class="copyright">&copy;2025 By GoodBrain</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
